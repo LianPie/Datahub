@@ -466,7 +466,7 @@ img {
     text-align: center;
 }
 
-.footer__social {
+/* .footer__social {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -486,7 +486,7 @@ img {
 .footer__social-link:hover {
     background-color: #0f4c75;
     transform: translateY(-3px);
-}
+} */
 
 .footer__copy {
     text-align: center;
@@ -554,3 +554,113 @@ img {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--scroll-thumb-color-alt);
 }
+
+
+/*=============== MEDIA QUERIES ===============*/
+/* For small devices */
+@media screen and (max-width: 340px) {
+  .container {
+    margin-left: var(--mb-1);
+    margin-right: var(--mb-1);
+  }
+  .section__title {
+    font-size: var(--big-font-size);
+  }
+  .home__img {
+    width: 200px;
+    top: -13rem;
+  }
+  .home__title {
+    top: -4rem;
+    font-size: var(--bigger-font-size);
+  }
+  .home__data {
+    padding-top: 1rem;
+  }
+  .home__description {
+    font-size: var(--small-font-size);
+  }
+  
+}
+
+/* For medium devices */
+@media screen and (min-width: 576px) {
+  .home__container {
+    grid-template-columns: .8fr 1fr;
+  }
+  .home__data {
+    padding-top: 2rem;
+  }
+  .home__img {
+    top: 16rem;
+    left: 0;
+  }
+  
+}
+
+@media screen and (min-width: 767px) {
+  body {
+    margin: 0;
+  }
+  .section {
+    padding: 6rem 0 2rem;
+  }
+  .nav {
+    height: calc(var(--header-height) + 1.5rem);
+  }
+  .nav__logo {
+    width: 2rem;
+  }
+  .nav__list {
+    flex-direction: row;
+    column-gap: 3.5rem;
+  }
+  .nav__link {
+    font-size: var(--normal-font-size);
+    text-transform: initial;
+  }
+  .nav__toggle, .nav__close {
+    display: none;
+  }
+  .home__container {
+    position: relative;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .home__img {
+    width: 400px;
+    top: 8rem;
+    left: -2rem;
+  }
+  .home__data {
+    padding-top: 8rem;
+  }
+  
+  .footer__container {
+    grid-template-columns: .4fr .7fr .7fr 1fr;
+  }
+}
+
+/* For large devices */
+@media screen and (min-width: 1024px) {
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .home__img {
+    width: 800px;
+    top: 2rem;
+    left: -12rem;
+  }
+  .home__title {
+    top: -5rem;
+    left: 3.5rem;
+  }
+  .home__description {
+    padding-right: 5rem;
+  }
+  .footer__container {
+    padding-top: 3rem;
+  }
+
+}
+
