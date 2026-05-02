@@ -288,7 +288,9 @@ img {
 }
 
 .button:hover {
-  background-color: var(--black-color-alt);
+  background-color: #0f4c75;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 76, 117, 0.5);
 }
 
 .button__icon {
@@ -661,6 +663,8 @@ img {
   .footer__container {
     padding-top: 3rem;
   }
-
+  .footer__copy {
+    margin-top: 9rem;
+  }
 }
 
