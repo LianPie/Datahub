@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>DataHub</title>
+    <title>Datahub</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
