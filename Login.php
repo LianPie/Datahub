@@ -137,6 +137,6 @@ if (isset($_SESSION["user_id"])) {
          </div>
       </div>
     <!--=============== MAIN JS ===============-->
-      <script src="/Datahub/assets/js/main.js"></script>
+      <script src="/Datahub/assets/js/Login.js"></script>
 </body>
 </html>
