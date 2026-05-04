@@ -112,14 +112,16 @@ if (isset($_SESSION["user_id"])) {
                         </div>
          
                      <div class="login__box">
-                        <input type="email" id="emailCreate" required placeholder=" " class="login__input">
+                        <input type="email" id="emailCreate" required placeholder=" " class="login__input" onkeyup="validateEmailOnInput()">
+                        <small id="emailMsg" class="message"></small>
                         <label for="emailCreate" class="login__label">Email</label>
    
                         <i class="ri-mail-fill login__icon"></i>
                      </div>
    
                      <div class="login__box">
-                        <input type="password" id="passwordCreate" required placeholder=" " class="login__input">
+                        <input type="password" id="passwordCreate" required placeholder=" " class="login__input" onkeyup="validatePasswordOnInput()">
+  <small id="passwordMsg" class="message"></small>
                         <label for="passwordCreate" class="login__label">Password</label>
    
                         <i class="ri-eye-off-fill login__icon login__password" id="loginPasswordCreate"></i>
