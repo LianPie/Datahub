@@ -122,66 +122,98 @@ document.addEventListener('DOMContentLoaded', function() {
     // لاگین
     const loginForm = document.querySelector('#loginAccessRegister .login__access form');
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('#email').value;
-            const password = this.querySelector('#password').value;
-            
-            fetch('/Datahub/Handlers/AuthHandler.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: new URLSearchParams({
-                    'action': 'login',
-                    'email': email,
-                    'password': password
-                })
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = this.querySelector('#email').value;
+        const password = this.querySelector('#password').value;
+        
+        fetch('/Datahub/Handlers/AuthHandler.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({
+                'action': 'login',
+                'email': email,
+                'password': password
             })
-            .then(response => response.json())
-            .then(data => {
+        })
+        .then(function(response) {
+            return response.text();
+        })
+        .then(function(text) {
+            try {
+                var data = JSON.parse(text);
                 if (data.success) {
                     window.location.href = '/Datahub/Dashboard/dashboard.php';
                 } else {
                     alert(data.message);
                 }
-            });
+            } catch(e) {
+                console.error('Invalid JSON:', text);
+                alert('Hmm something went wrong. Please try again later.');
+            }
+        })
+        .catch(function(error) {
+            console.error('Fetch error:', error);
+            alert('Hmm something went wrong. Please check your connection.');
         });
-    }
+    });
+}
     
     // ثبت نام
     const registerForm = document.querySelector('#loginAccessRegister .login__register form');
     if (registerForm) {
-        registerForm.addEventListener('submit', function(e) {
+        registerForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+            
             const username = this.querySelector('#names').value;
             const email = this.querySelector('#emailCreate').value;
             const password = this.querySelector('#passwordCreate').value;
             
-            fetch('/Datahub/Handlers/AuthHandler.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: new URLSearchParams({
-                    'action': 'register',
-                    'username': username,
-                    'email': email,
-                    'password': password
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
+            try {
+                const response = await fetch('/Datahub/Handlers/AuthHandler.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: new URLSearchParams({
+                        'action': 'register',
+                        'username': username,
+                        'email': email,
+                        'password': password
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network error');
+                }
+                
+                const text = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error('Invalid JSON:', text);
+                    alert('Hmm something went wrong. Please try again later.');
+                    return;
+                }
+                
                 if (data.success) {
                     alert('Registration successful! Please login.');
                     document.getElementById('loginButtonAccess')?.click();
                 } else {
                     alert(data.message);
                 }
-            });
-        });
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Hmm something went wrong. Please check your connection and try again.');
+            }
+        })
     }
 });
 
