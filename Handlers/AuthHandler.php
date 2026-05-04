@@ -39,6 +39,17 @@ function handleRegister($username, $email, $password, $conn) {
     }
 }
 
+function checkEmailExists($email, $conn) {
+    $sql = "SELECT id FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    return $result->num_rows > 0;
+}
+
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     header('Content-Type: application/json');
@@ -55,6 +66,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SERVER['HTTP_X_REQUESTED_WIT
         $email = trim($_POST["email"] ?? '');
         $password = trim($_POST["password"] ?? '');
         $response = handleRegister($username, $email, $password, $conn);
+    } elseif ($action === "check_email") {  
+        $email = trim($_POST["email"] ?? '');
+        $exists = checkEmailExists($email, $conn);
+        $response = ["success" => true, "exists" => $exists];
     }
     
     echo json_encode($response);

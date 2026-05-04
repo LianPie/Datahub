@@ -366,3 +366,35 @@ img {
     transform: translate(0rem, 0rem);
   }
 }
+
+
+  .input-group {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .input-group input.error {
+    border-color: #ff4444;
+  }
+  
+  .input-group input.success {
+    border-color: #00c851;
+  }
+  
+  .message {
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+  }
+  
+  .message.error {
+    color: #ff4444;
+  }
+  

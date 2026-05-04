@@ -12,6 +12,111 @@ buttonAccess.addEventListener('click', () => {
    loginAcessRegister.classList.remove('active')
 })
 
+async function validateEmailOnInput() {
+    const email = document.getElementById('emailCreate').value;
+    const msgBox = document.getElementById('emailMsg');
+    const input = document.getElementById('email');
+    
+    if (!email || email.trim() === '') {
+        msgBox.innerHTML = '❌ Email is required';
+        msgBox.className = 'message error';
+        input.className = 'error';
+        return false;
+    }
+    
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    
+    if (!emailRegex.test(email)) {
+        msgBox.innerHTML = '❌ Enter valid email (name@example.com)';
+        msgBox.className = 'message error';
+        input.className = 'error';
+        return false;
+    }
+    
+    // Check database - THIS MUST BE AWAITED
+    try {
+        const exists = await checkEmailExists(email);
+        
+        if (exists) {
+            msgBox.innerHTML = '❌ Email already registered';
+            msgBox.className = 'message error';
+            input.className = 'error';
+            return false;
+        } else {
+            msgBox.innerHTML = '✅';
+            msgBox.className = 'message success';
+            input.className = 'success';
+            return true;
+        }
+    } catch (error) {
+        console.error('Error checking email:', error);
+        msgBox.innerHTML = '❌ Error checking email';
+        msgBox.className = 'message error';
+        input.className = 'error';
+        return false;
+    }
+}
+
+function checkEmailExists(email) {
+    // Make sure the path is correct
+    const url = window.location.origin + '/datahub/Handlers/AuthHandler.php';
+    
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            'action': 'check_email',
+            'email': email
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data.exists;
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        return false;
+    });
+}
+
+function validatePasswordOnInput() {
+  const password = document.getElementById('passwordCreate').value;
+  const msgBox = document.getElementById('passwordMsg');
+  const input = document.getElementById('password');
+  
+  if (!password || password.trim() === '') {
+    msgBox.innerHTML = '❌ Password is required';
+    msgBox.className = 'message error';
+    input.className = 'error';
+    return false;
+  }
+  
+  if (password.length < 8) {
+    msgBox.innerHTML = '❌ Password must be at least 8 characters';
+    msgBox.className = 'message error';
+    input.className = 'error';
+    return false;
+  }
+  
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  
+  if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+    msgBox.innerHTML = '❌ Must contain uppercase, lowercase & numbers';
+    msgBox.className = 'message error';
+    input.className = 'error';
+    return false;
+  }
+  
+  msgBox.innerHTML = '✅';
+  msgBox.className = 'message success';
+  input.className = 'success';
+  return true;
+}
 /*=============== LOGIN & REGISTER AJAX ===============*/
 document.addEventListener('DOMContentLoaded', function() {
     // لاگین
