@@ -12,69 +12,69 @@ buttonAccess.addEventListener("click", () => {
 });
 
 async function validateEmailOnInput() {
-  const email = document.getElementById("emailCreate").value;
-  const msgBox = document.getElementById("emailMsg");
-  const input = document.getElementById("emailCreate");
+    const email = document.getElementById("emailCreate").value;
+    const msgBox = document.getElementById("emailMsg");
+    const input = document.getElementById("emailCreate"); 
 
-  if (!email || email.trim() === "") {
-    msgBox.innerHTML = "❌ Email is required";
-    msgBox.className = "login__message error";
-    input.classList.add("error");
-    input.classList.remove("success");
-    return false;
-  }
-
-  const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    msgBox.innerHTML = "❌ Enter valid email (name@example.com)";
-    msgBox.className = "login__message error";
-    input.classList.add("error");
-    input.classList.remove("success");
-    return false;
-  }
-
-  try {
-    const exists = await checkEmailExists(email);
-    if (exists) {
-      msgBox.innerHTML = "❌ Email already registered";
-      msgBox.className = "login__message error";
-      input.classList.add("error");
-      input.classList.remove("success");
-      return false;
-    } else {
-      msgBox.innerHTML = "✅ Email available";
-      msgBox.className = "login__message success";
-      input.classList.add("success");
-      input.classList.remove("error");
-      return true;
+    if (!email || email.trim() === "") {
+        msgBox.innerHTML = "❌ Email is required";
+        msgBox.className = "login__message error";
+        input.classList.add("error");
+        input.classList.remove("success");
+        return false;
     }
-  } catch (error) {
-    console.error("Error checking email:", error);
-    msgBox.innerHTML = "❌ Error checking email";
-    msgBox.className = "login__message error";
-    input.classList.add("error");
-    input.classList.remove("success");
-    return false;
-  }
+
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        msgBox.innerHTML = "❌ Enter valid email (name@example.com)";
+        msgBox.className = "login__message error";
+        input.classList.add("error");
+        input.classList.remove("success");
+        return false;
+    }
+
+    try {
+        const exists = await checkEmailExists(email);
+        if (exists) {
+            msgBox.innerHTML = "❌ Email already registered";
+            msgBox.className = "login__message error";
+            input.classList.add("error");
+            input.classList.remove("success");
+            return false;
+        } else {
+            msgBox.innerHTML = "✅ Email available";
+            msgBox.className = "login__message success";
+            input.classList.add("success");
+            input.classList.remove("error");
+            return true;
+        }
+    } catch (error) {
+        console.error("Error checking email:", error);
+        msgBox.innerHTML = "❌ Error checking email";
+        msgBox.className = "login__message error";
+        input.classList.add("error");
+        input.classList.remove("success");
+        return false;
+    }
 }
 
 function checkEmailExists(email) {
-  const url = window.location.origin + "/Datahub/Handlers/AuthHandler.php";
-
-  return fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "X-Requested-With": "XMLHttpRequest",
-    },
-    body: new URLSearchParams({
-      action: "check_email",
-      email: email,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      return data.exists;
+    const url = window.location.origin + '/Datahub/Handlers/AuthHandler.php';
+    
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            'action': 'check_email',
+            'email': email
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data.exists;
     })
     .catch((error) => {
       console.error("Fetch error:", error);
@@ -83,43 +83,43 @@ function checkEmailExists(email) {
 }
 
 function validatePasswordOnInput() {
-  const password = document.getElementById("passwordCreate").value;
-  const msgBox = document.getElementById("passwordMsg");
-  const input = document.getElementById("passwordCreate");
+    const password = document.getElementById("passwordCreate").value;
+    const msgBox = document.getElementById("passwordMsg");
+    const input = document.getElementById("passwordCreate"); 
 
-  if (!password || password.trim() === "") {
-    msgBox.innerHTML = "❌ Password is required";
-    msgBox.className = "login__message error";
-    input.classList.add("error");
-    input.classList.remove("success");
-    return false;
-  }
+    if (!password || password.trim() === "") {
+        msgBox.innerHTML = "❌ Password is required";
+        msgBox.className = "login__message error";
+        input.classList.add("error");
+        input.classList.remove("success");
+        return false;
+    }
 
-  if (password.length < 8) {
-    msgBox.innerHTML = "❌ Password must be at least 8 characters";
-    msgBox.className = "login__message error";
-    input.classList.add("error");
-    input.classList.remove("success");
-    return false;
-  }
+    if (password.length < 8) {
+        msgBox.innerHTML = "❌ Password must be at least 8 characters";
+        msgBox.className = "login__message error";
+        input.classList.add("error");
+        input.classList.remove("success");
+        return false;
+    }
 
-  const hasUpperCase = /[A-Z]/.test(password);
-  const hasLowerCase = /[a-z]/.test(password);
-  const hasNumbers = /\d/.test(password);
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
 
-  if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
-    msgBox.innerHTML = "❌ Must contain uppercase, lowercase & numbers";
-    msgBox.className = "login__message error";
-    input.classList.add("error");
-    input.classList.remove("success");
-    return false;
-  }
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+        msgBox.innerHTML = "❌ Must contain uppercase, lowercase & numbers";
+        msgBox.className = "login__message error";
+        input.classList.add("error");
+        input.classList.remove("success");
+        return false;
+    }
 
-  msgBox.innerHTML = "✅ Strong password";
-  msgBox.className = "login__message success";
-  input.classList.add("success");
-  input.classList.remove("error");
-  return true;
+    msgBox.innerHTML = "✅ Strong password";
+    msgBox.className = "login__message success";
+    input.classList.add("success");
+    input.classList.remove("error");
+    return true;
 }
 /*=============== LOGIN & REGISTER AJAX ===============*/
 document.addEventListener("DOMContentLoaded", function () {
