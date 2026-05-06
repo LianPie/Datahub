@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 var data = JSON.parse(text);
                 if (data.success) {
-                    window.location.href = '/Datahub/Dashboard/dashboard.php';
+                    window.location.href = '/Datahub/Dashboard/';
                 } else {
                     alert(data.message);
                 }
