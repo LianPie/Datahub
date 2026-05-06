@@ -28,9 +28,12 @@ function handleLogin($email, $password, $conn) {
 
 function handleRegister($username, $email, $password, $conn) {
     $hashed = password_hash($password, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+    $storage_limit = 524288000; // 500MB in bytes
+    
+    $sql = "INSERT INTO users (username, email, password, storage_limit, storage_used) VALUES (?, ?, ?, ?, 0)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $username, $email, $hashed);
+    $stmt->bind_param("sssi", $username, $email, $hashed, $storage_limit);
+    
 
     if ($stmt->execute()) {
         return ["success" => true, "message" => "Registration successful"];
@@ -73,6 +76,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SERVER['HTTP_X_REQUESTED_WIT
     }
     
     echo json_encode($response);
+    if (isset($conn)) {
+    $conn->close();
+    }
     exit();
+}
+if (isset($conn)) {
+    $conn->close();
 }
 ?>
