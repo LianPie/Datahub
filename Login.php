@@ -100,40 +100,38 @@ if (isset($_SESSION["user_id"])) {
          <!--===== LOGIN REGISTER =====-->
          <div class="login__register">
             <h1 class="login__title">Create new account.</h1>
-
             <div class="login__area">
                <form action="" class="login__form">
-                  <div class="login__content grid">
+                     <div class="login__content grid">
                         <div class="login__box">
                            <input type="text" id="names" required placeholder=" " class="login__input">
                            <label for="names" class="login__label">Username</label>
-      
                            <i class="ri-id-card-fill login__icon"></i>
                         </div>
-         
-                     <div class="login__box">
-                        <input type="email" id="emailCreate" required placeholder=" " class="login__input" onkeyup="validateEmailOnInput()">
-                        <small id="emailMsg" class="message"></small>
-                        <label for="emailCreate" class="login__label">Email</label>
-   
-                        <i class="ri-mail-fill login__icon"></i>
+
+                        <div>
+                           <div class="login__box">
+                                 <input type="email" id="emailCreate" required placeholder=" " class="login__input" onkeyup="validateEmailOnInput()">
+                                 <label for="emailCreate" class="login__label">Email</label>
+                                 <i class="ri-mail-fill login__icon"></i>
+                           </div>
+                           <small id="emailMsg" class="login__message"></small>
+                        </div>
+
+                        <div>
+                           <div class="login__box">
+                                 <input type="password" id="passwordCreate" required placeholder=" " class="login__input" onkeyup="validatePasswordOnInput()">
+                                 <label for="passwordCreate" class="login__label">Password</label>
+                                 <i class="ri-eye-off-fill login__icon login__password" id="loginPasswordCreate"></i>
+                           </div>
+                           <small id="passwordMsg" class="login__message"></small>
+                        </div>
                      </div>
-   
-                     <div class="login__box">
-                        <input type="password" id="passwordCreate" required placeholder=" " class="login__input" onkeyup="validatePasswordOnInput()">
-  <small id="passwordMsg" class="message"></small>
-                        <label for="passwordCreate" class="login__label">Password</label>
-   
-                        <i class="ri-eye-off-fill login__icon login__password" id="loginPasswordCreate"></i>
-                     </div>
-                  </div>
-   
-                  <button type="submit" class="login__button">Create account</button>
+                     <button type="submit" class="login__button">Create account</button>
                </form>
-   
                <p class="login__switch">
-                  Already have an account? 
-                  <button id="loginButtonAccess">Log In</button>
+                     Already have an account? 
+                     <button id="loginButtonAccess">Log In</button>
                </p>
             </div>
          </div>
