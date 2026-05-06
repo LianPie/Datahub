@@ -308,6 +308,29 @@ img {
   pointer-events: initial;
 }
 
+.login__message {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    display: block;
+    font-family: var(--body-font);
+}
+
+.login__message.error {
+    color: #ff4444;
+}
+
+.login__message.success {
+    color: #00c851;
+}
+
+.login__input.error {
+    border-color: #ff4444 !important;
+}
+
+.login__input.success {
+    border-color: #00c851 !important;
+}
 
 /*=============== BREAKPOINTS ===============*/
 /* For small devices */
