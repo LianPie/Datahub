@@ -13,7 +13,7 @@ if (isset($_SESSION["user_id"])) {
     <title>Datahub</title>
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="/Datahub/assets/css/LoginStyles.css">
-
+    <link rel="stylesheet" href="/Datahub/assets/css/toast.css">
     <!--=============== REMIX ICONS ===============-->
     <link href="/Datahub/assets/fonts/remixicon.css" rel="stylesheet">
 
@@ -139,6 +139,7 @@ if (isset($_SESSION["user_id"])) {
          </div>
       </div>
     <!--=============== MAIN JS ===============-->
+      <script src="/Datahub/assets/js/toast.js"></script>  
       <script src="/Datahub/assets/js/Login.js"></script>
 </body>
 </html>
