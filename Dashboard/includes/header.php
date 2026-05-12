@@ -1,4 +1,7 @@
 <?php
+
+require_once dirname(dirname(__DIR__)) . '/includes/init.php';
+
 session_start();
 
 if (!isset($_SESSION["user_id"])) {
@@ -9,11 +12,11 @@ if (!isset($_SESSION["user_id"])) {
 $username = $_SESSION["username"];  
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= getHtmlLang() ?>" dir="<?= getLangDirection() ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataHub - Dashboard</title>
+    <title>DataHub - <?= __('dashboard') ?></title>
 
     <link rel="stylesheet" href="/Datahub/assets/fonts/remixicon.css">
 
@@ -31,7 +34,7 @@ $username = $_SESSION["username"];
                 <span><?php echo htmlspecialchars($username); ?></span>
             </div>
             <a href="/Datahub/Dashboard/Logout.php" class="logout-link">
-                <i class="ri-logout-box-line"></i> Logout
+                <i class="ri-logout-box-line"></i> <?= __('logout') ?>
             </a>
         </div>
     </nav>

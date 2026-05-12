@@ -73,5 +73,15 @@ return [
     'register_success' => 'حساب کاربری با موفقیت ایجاد شد!',
     'register_failed' => 'خطا در ثبت نام. لطفاً دوباره تلاش کنید',
     'connection_error' => 'خطا در اتصال. لطفاً اینترنت خود را بررسی کنید',
+    
+       // ========== dashboard pages ==========
+    'dashboard' => 'داشبرد',
+    'logout' => 'خروج',
+
+    
+    // ========== DASHBOARD DEVELOPMENT PAGE ==========
+    'under_development' => 'در حال توسعه',
+    'dashboard_being_built' => 'این داشبورد در حال ساخت است.',
+    'new_features_soon' => 'به زودی امکانات جدید اضافه خواهد شد.',
 ];
 ?>

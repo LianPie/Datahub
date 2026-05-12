@@ -74,5 +74,17 @@ return [
     'register_success' => 'Account created successfully!',
     'register_failed' => 'Hmm something went wrong Please try again',
     'connection_error' => 'Connection error. Please check your internet',
+
+    
+
+       // ========== dashboard pages ==========
+    'dashboard' => 'Dashboard',
+    'logout' => 'Logout',
+
+    
+    // ========== DASHBOARD DEVELOPMENT PAGE ==========
+    'under_development' => 'Under Development',
+    'dashboard_being_built' => 'This dashboard is currently being built.',
+    'new_features_soon' => 'New features will be available soon.',
 ];
 ?>
