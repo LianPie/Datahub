@@ -16,10 +16,7 @@ require_once 'includes/init.php';
     <!--=============== REMIX ICONS ===============-->
     <link href="/Datahub/assets/fonts/remixicon.css" rel="stylesheet">
 
-    <!-- =============== FAVICON ===============
-    <link rel="shortcut icon" href="" type="image/x-icon"> -->
-
-    <!-- Add RTL support for Persian -->
+    <!-- TODO: Add RTL support for Persian -->
     <?php if ($current_lang == 'fa'): ?>
     <style>
         body {
@@ -35,6 +32,7 @@ require_once 'includes/init.php';
             text-align: right;
         }
     </style>
+
     <?php endif; ?>
     
     <!-- Language Switcher Styles -->
