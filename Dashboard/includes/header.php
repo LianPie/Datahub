@@ -44,5 +44,37 @@ $username = $_SESSION["username"];
     </div>
 </nav>
 
+<div class="dashboard-wrapper">
+
+    <aside class="dashboard-sidebar">
+        <ul class="sidebar-nav">
+            <li>
+                <a href="/Datahub/Dashboard/index.php" <?php echo ($current_page == 'index.php') ? 'class="active"' : ''; ?>>
+                    <i class="ri-dashboard-line"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" >
+                    <i class="ri-folder-line"></i> <span>Files</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" >
+                    <i class="ri-delete-bin-line"></i> <span>Trash</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" >
+                    <i class="ri-settings-line"></i> <span>Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Datahub/Dashboard/Logout.php">
+                    <i class="ri-logout-box-line"></i> <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
 
     <main class="dashboard-main">
