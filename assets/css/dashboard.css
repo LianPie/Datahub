@@ -11,6 +11,10 @@ body {
     color: #e2e8f0;
 }
 
+h2{
+    padding: 10px;
+}
+
 /* ===== Navbar ===== */
 .dashboard-navbar {
     position: fixed;

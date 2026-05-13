@@ -11,13 +11,17 @@ buttonAccess.addEventListener("click", () => {
   loginAcessRegister.classList.remove("active");
 });
 
+function __(key) {
+    return window.translations && window.translations[key] ? window.translations[key] : key;
+}
+
 async function validateEmailOnInput() {
     const email = document.getElementById("emailCreate").value;
     const msgBox = document.getElementById("emailMsg");
     const input = document.getElementById("emailCreate"); 
 
     if (!email || email.trim() === "") {
-        msgBox.innerHTML = "❌ Email is required";
+        msgBox.innerHTML = `❌ ${__('email_required')}`;
         msgBox.className = "login__message error";
         input.classList.add("error");
         input.classList.remove("success");
@@ -26,7 +30,7 @@ async function validateEmailOnInput() {
 
     const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        msgBox.innerHTML = "❌ Enter valid email (name@example.com)";
+        msgBox.innerHTML = `❌ ${__('email_invalid')}`;
         msgBox.className = "login__message error";
         input.classList.add("error");
         input.classList.remove("success");
@@ -36,13 +40,13 @@ async function validateEmailOnInput() {
     try {
         const exists = await checkEmailExists(email);
         if (exists) {
-            msgBox.innerHTML = "❌ Email already registered";
+            msgBox.innerHTML = `❌ ${__('email_exists')}`;
             msgBox.className = "login__message error";
             input.classList.add("error");
             input.classList.remove("success");
             return false;
         } else {
-            msgBox.innerHTML = "✅ Email available";
+            msgBox.innerHTML = `✅ ${__('email_available')}`;
             msgBox.className = "login__message success";
             input.classList.add("success");
             input.classList.remove("error");
@@ -50,7 +54,7 @@ async function validateEmailOnInput() {
         }
     } catch (error) {
         console.error("Error checking email:", error);
-        msgBox.innerHTML = "❌ Error checking email";
+        msgBox.innerHTML = `❌ ${__('email_check_error')}`;
         msgBox.className = "login__message error";
         input.classList.add("error");
         input.classList.remove("success");
@@ -88,7 +92,7 @@ function validatePasswordOnInput() {
     const input = document.getElementById("passwordCreate"); 
 
     if (!password || password.trim() === "") {
-        msgBox.innerHTML = "❌ Password is required";
+        msgBox.innerHTML = `❌ ${__('password_required')}`;
         msgBox.className = "login__message error";
         input.classList.add("error");
         input.classList.remove("success");
@@ -96,7 +100,7 @@ function validatePasswordOnInput() {
     }
 
     if (password.length < 8) {
-        msgBox.innerHTML = "❌ Password must be at least 8 characters";
+        msgBox.innerHTML = `❌ ${__('password_min_length')}`;
         msgBox.className = "login__message error";
         input.classList.add("error");
         input.classList.remove("success");
@@ -108,14 +112,14 @@ function validatePasswordOnInput() {
     const hasNumbers = /\d/.test(password);
 
     if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
-        msgBox.innerHTML = "❌ Must contain uppercase, lowercase & numbers";
+        msgBox.innerHTML = `❌ ${__('password_requirements')}`;
         msgBox.className = "login__message error";
         input.classList.add("error");
         input.classList.remove("success");
         return false;
     }
 
-    msgBox.innerHTML = "✅ Strong password";
+    msgBox.innerHTML = `✅ ${__('password_strong')}`;
     msgBox.className = "login__message success";
     input.classList.add("success");
     input.classList.remove("error");
@@ -152,18 +156,20 @@ document.addEventListener("DOMContentLoaded", function () {
           try {
             var data = JSON.parse(text);
             if (data.success) {
+              showToast(__('login_success'), "success");
               window.location.href = "/Datahub/Dashboard/";
             } else {
-              showToast(data.message, "error");
-            }
+              showToast(__('login_failed'), "error");
+            
+          }
           } catch (e) {
             console.error("Invalid JSON:", text);
-            showToast("Hmm something went wrong. Please try again later.", "error");
+            showToast(__('connection_error'), "error");
           }
         })
         .catch(function (error) {
           console.error("Fetch error:", error);
-          showToast("Hmm something went wrong. Please check your connection.", "error");
+          showToast(__('connection_error'), "error");
         });
     });
   }
@@ -206,12 +212,12 @@ document.addEventListener("DOMContentLoaded", function () {
           data = JSON.parse(text);
         } catch (e) {
           console.error("Invalid JSON:", text);
-          showToast("Hmm something went wrong. Please try again later.", "error");
+          showToast(__('register_failed'), "error");
           return;
         }
 
         if (data.success) {
-          showToast("Registration successful! Please login.", "success");
+          showToast(__('register_success'), "success");
           document.getElementById("loginButtonAccess")?.click();
         } else {
           showToast(data.message);
@@ -219,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } catch (error) {
         console.error("Error:", error);
         showToast(
-          "Hmm something went wrong. Please check your connection and try again.", "error"
+          __('connection_error'), "error"
         );
       }
     });
