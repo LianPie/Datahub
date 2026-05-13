@@ -50,7 +50,7 @@ $username = $_SESSION["username"];
                 </a>
             </li>
             <li>
-                <a href="#" >
+                <a href="/Datahub/Dashboard/Uploads.php" >
                     <i class="ri-folder-line"></i> <span>Files</span>
                 </a>
             </li>
