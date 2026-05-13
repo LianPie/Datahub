@@ -49,7 +49,7 @@ $username = $_SESSION["username"];
     <aside class="dashboard-sidebar">
         <ul class="sidebar-nav">
             <li>
-                <a href="/Datahub/Dashboard/index.php" <?php echo ($current_page == 'index.php') ? 'class="active"' : ''; ?>>
+                <a href="/Datahub/Dashboard/index.php" >
                     <i class="ri-dashboard-line"></i> <span>Dashboard</span>
                 </a>
             </li>
