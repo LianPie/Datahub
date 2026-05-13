@@ -667,3 +667,8 @@ img {
     margin-top: 9rem;
   }
 }
+
+[dir="rtl"] .home__img {
+    right: auto;
+    left: 20rem;
+}
