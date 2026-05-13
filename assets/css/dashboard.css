@@ -221,3 +221,186 @@ body {
     margin-bottom: 25px !important;
 }
 
+/* ===== Dashboard main content ===== */
+
+.dashboard-main {
+    padding: 2rem;
+    background-color: #1b262c;
+    margin: 0;
+}
+
+.dashboard-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== Recent Folders & Files ===== */
+.recent-folders,
+.recent-files,
+.folders-section,
+.files-section {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.folders-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.folder-card {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    border: 1px solid #334155;
+    transition: 0.2s;
+}
+.folder-card:hover {
+    background: #0f4c75;
+    transform: translateY(-2px);
+}
+.folder-card i {
+    font-size: 1.6rem;
+    color: #fed049;
+}
+.folder-card .folder-name {
+    font-weight: 500;
+}
+.folder-card small {
+    color: #94a3b8;
+    font-size: 0.7rem;
+}
+
+.files-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    border-bottom: 1px solid #334155;
+}
+.file-item i {
+    font-size: 1.4rem;
+    color: #fed049;
+}
+.file-item span {
+    flex: 1;
+}
+.file-item small {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+.file-card {
+    background: var(--card-bg, #1e293b);
+    border-radius: 20px;
+    padding: 1rem;
+    border: 1px solid var(--border-color, #334155);
+    transition: 0.3s;
+}
+.file-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent, #fed049);
+}
+.file-icon {
+    font-size: 2.5rem;
+    color: var(--accent, #fed049);
+    margin-bottom: 0.5rem;
+}
+.file-name {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.file-size {
+    font-size: 0.75rem;
+    color: var(--text-dim, #94a3b8);
+    margin: 0.3rem 0;
+}
+.file-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0.8rem;
+}
+.file-actions button, 
+.file-actions a {
+    background: none;
+    border: none;
+    color: var(--text-dim, #94a3b8);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.file-actions button:hover, 
+.file-actions a:hover {
+    color: var(--accent, #fed049);
+}
+
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        grid-template-columns: 80px 1fr;
+    }
+    .sidebar-nav a span {
+        display: none;
+    }
+    .sidebar-nav a {
+        justify-content: center;
+        padding: 12px 0;
+    }
+    .sidebar-nav a i {
+        font-size: 1.5rem;
+        width: auto;
+    }
+
+    .dashboard-navbar {
+        padding: 0 1rem;
+    }
+    .nav-right {
+        gap: 0.5rem;
+    }
+    .btn-custom span,
+    .user-profile span {
+        display: none;
+    }
+    .btn-custom i,
+    .user-profile i {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    .btn-lang {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .folders-list {
+        flex-direction: column;
+    }
+    .files-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-navbar {
+        padding: 0 1rem;
+    }
+}
