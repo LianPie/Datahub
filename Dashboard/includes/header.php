@@ -8,7 +8,7 @@ if (!isset($_SESSION["user_id"])) {
     header("Location: /Datahub/Login.php");
     exit();
 }
-
+$lang = getHtmlLang();
 $username = $_SESSION["username"];
 ?>
 <!DOCTYPE html>
@@ -40,7 +40,11 @@ $username = $_SESSION["username"];
             <i class="ri-user-3-line"></i>
             <span><?php echo htmlspecialchars($username); ?></span>
         </div>
-        <button type="button" class="btn-lang" id="switchLangBtn">Fa</button>
+        <?php if ($current_lang == 'en'): ?>
+            <a href="?lang=fa" type="button" class="btn-lang" id="switchLangBtn">فا</a>
+        <?php else: ?>
+            <a href="?lang=en" type="button" class="btn-lang" id="switchLangBtn">en</a>
+        <?php endif; ?>
 
     </div>
 </nav>
