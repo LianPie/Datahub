@@ -74,11 +74,32 @@ return [
     'register_failed' => 'خطا در ثبت نام. لطفاً دوباره تلاش کنید',
     'connection_error' => 'خطا در اتصال. لطفاً اینترنت خود را بررسی کنید',
     
-       // ========== dashboard pages ==========
-    'dashboard' => 'داشبرد',
+    // ========== DASHBOARD PAGES ==========
+    'dashboard' => 'داشبورد',
+    'files' => 'فایل‌ها',
+    'trash' => 'زباله‌دان',
+    'settings' => 'تنظیمات',
     'logout' => 'خروج',
+    'new_folder' => 'پوشه جدید',
+    'upload' => 'آپلود',
+    'recent_folders' => 'پوشه‌های اخیر',
+    'recently_uploaded_files' => 'فایل‌های آپلود شده اخیر',
+    'create_new_folder' => 'ساخت پوشه جدید',
+    'folder_name' => 'نام پوشه',
+    'cancel' => 'انصراف',
+    'create' => 'ساخت',
+    'upload_file' => 'آپلود فایل',
+    'select_folder_optional' => 'انتخاب پوشه (اختیاری)',
+    'choose_file' => 'انتخاب فایل',
+    'root_no_folder' => 'ریشه (بدون پوشه)',
+    'all_files_folders' => 'همه فایل‌ها و پوشه‌ها',
+    'folders' => 'پوشه‌ها',
+    'files' => 'فایل‌ها',
+    'date' => 'تاریخ',
+    'in' => 'در',
+    'folder_name_placeholder' => 'نام پوشه',
 
-    
+
     // ========== DASHBOARD DEVELOPMENT PAGE ==========
     'under_development' => 'در حال توسعه',
     'dashboard_being_built' => 'این داشبورد در حال ساخت است.',

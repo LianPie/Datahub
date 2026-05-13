@@ -5,7 +5,7 @@ include 'includes/header.php';
 <div class="dashboard-content">
     
     <div class="recent-folders">
-        <h3><i class="ri-folder-line"></i> Recent Folders</h3>
+        <h3><i class="ri-folder-line"></i><?= __('recent_folders') ?></h3>
         <div class="folders-list">
                     <div class="folder-card" data-folder-id="">
                         <i class="ri-folder-line"></i>
@@ -16,7 +16,7 @@ include 'includes/header.php';
     </div>
 
     <div class="recent-files">
-        <h3><i class="ri-file-line"></i> Recently Uploaded Files</h3>
+        <h3><i class="ri-file-line"></i><?= __('recently_uploaded_files') ?></h3>
         <div class="files-grid">
                     <div class="file-card">
                         <div class="file-icon"></div>

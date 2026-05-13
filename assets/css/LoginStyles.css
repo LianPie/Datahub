@@ -421,3 +421,30 @@ img {
     color: #ff4444;
   }
   
+/* Fix RTL login layout  */
+[dir="rtl"] .login__blob {
+    right: 0;
+    left: auto;
+}
+[dir="rtl"] .login__access,
+[dir="rtl"] .login__register {
+    left: 0;
+    right: auto;
+}
+[dir="rtl"] .login__area {
+    margin-left: auto;
+    margin-right:  auto;
+}
+
+@media (max-width: 768px) {
+    [dir="rtl"] .login__access,
+    [dir="rtl"] .login__register {
+        left: 0;
+        right: 0;          
+        text-align: center;
+    }
+    [dir="rtl"] .login__area {
+        margin-right: auto;
+        margin-left: auto;
+    }
+}

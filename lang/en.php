@@ -77,10 +77,30 @@ return [
 
     
 
-       // ========== dashboard pages ==========
+    // ========== DASHBOARD PAGES ==========
     'dashboard' => 'Dashboard',
+    'files' => 'Files',
+    'trash' => 'Trash',
+    'settings' => 'Settings',
     'logout' => 'Logout',
-
+    'new_folder' => 'New Folder',
+    'upload' => 'Upload',
+    'recent_folders' => 'Recent Folders',
+    'recently_uploaded_files' => 'Recently Uploaded Files',
+    'create_new_folder' => 'Create New Folder',
+    'folder_name' => 'Folder name',
+    'cancel' => 'Cancel',
+    'create' => 'Create',
+    'upload_file' => 'Upload File',
+    'select_folder_optional' => 'Select Folder (Optional)',
+    'choose_file' => 'Choose File',
+    'root_no_folder' => 'Root (No folder)',
+    'all_files_folders' => 'All Files & Folders',
+    'folders' => 'Folders',
+    'files' => 'Files',
+    'date' => 'Date',
+    'in' => 'in',
+    'folder_name_placeholder' => 'Folder Name',
     
     // ========== DASHBOARD DEVELOPMENT PAGE ==========
     'under_development' => 'Under Development',
