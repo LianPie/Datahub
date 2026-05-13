@@ -355,6 +355,22 @@ body {
     color: var(--accent, #fed049);
 }
 
+.btn-lang {
+    background:#0c416a;
+    border: 1px solid #334155;
+    color: #e2e8f0;
+    padding: 0.4rem 1rem;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-lang:hover {
+    background-color: #fed049;
+    color: #0f172a;
+}
+
 @media (max-width: 768px) {
     .dashboard-wrapper {
         grid-template-columns: 80px 1fr;
