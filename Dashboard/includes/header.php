@@ -36,6 +36,7 @@ $username = $_SESSION["username"];
             <i class="ri-user-3-line"></i>
             <span><?php echo htmlspecialchars($username); ?></span>
         </div>
+        <button type="button" class="btn-lang" id="switchLangBtn">Fa</button>
 
     </div>
 </nav>
