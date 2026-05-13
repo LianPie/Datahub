@@ -215,7 +215,7 @@ require_once 'includes/init.php';
                 
                 <div class="footer__contact-item">
                     <i class="ri-mail-line"></i>
-                    <span><?php echo __('email'); ?></span>
+                    <span><?php echo __('team_email'); ?></span>
                 </div>
                 
                 <div class="footer__contact-item">
