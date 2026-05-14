@@ -44,5 +44,7 @@
 
 <script src="/Datahub/assets/js/toast.js"></script>
 <script src="/Datahub/assets/js/dashboard.js"></script>
+<script src="/Datahub/assets/js/fileManager.js"></script>
+
 </body>
 </html>

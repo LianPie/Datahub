@@ -1,9 +1,9 @@
 <?php
 session_start();
-ini_set('display_errors', 0);
 error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-require_once __DIR__ . '/../Database/db_config.php';
+require_once __DIR__ . '/../Database/DbConfig.php';
 
 // Check if user is logged in
 if (!isset($_SESSION["user_id"])) {
@@ -98,19 +98,32 @@ function formatSize($bytes) {
     return round($bytes / pow(1024, $i), 2) . ' ' . $units[$i];
 }
 
-// Create folder inside user directory
-function createUserFolder($folder_name, $user_folder) {
+
+// create nested fodlers
+function createUserFolder($folder_name, $user_folder, $subfolder = '') {
     $safe_name = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $folder_name);
-    $new_folder = $user_folder . '/' . $safe_name;
+    
+    $target_dir = $user_folder;
+    if (!empty($subfolder)) {
+        $clean_subfolder = preg_replace('/[^a-zA-Z0-9_\-]/', '/', $subfolder);
+        $target_dir .= '/' . $clean_subfolder;
+    }
+    
+    $new_folder = $target_dir . '/' . $safe_name;
     
     if (!file_exists($new_folder)) {
         mkdir($new_folder, 0755, true);
-        return ["success" => true, "path" => $safe_name];
+        
+        $full_path = $safe_name;
+        if (!empty($subfolder)) {
+            $full_path = $subfolder . '/' . $safe_name;
+        }
+        
+        return ["success" => true, "path" => $full_path];
     } else {
         return ["success" => false, "message" => "Folder already exists"];
     }
 }
-
 // Handle file upload
 function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
     if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -127,12 +140,17 @@ function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
     if ($file['size'] > $max_size) {
         return ["success" => false, "message" => "File too large. Max 50MB per file"];
     }
-    
     $allowed_types = [
+        // Images
         'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+        // Documents
         'application/pdf', 'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'text/plain', 'application/zip', 'application/x-zip-compressed'
+        'text/plain', 'application/zip', 'application/x-zip-compressed',
+        // Videos
+        'video/mp4', 'video/mpeg', 'video/ogg', 'video/webm', 
+        'video/quicktime', 'video/x-msvideo', 'video/x-matroska',
+        'video/mov', 'video/avi', 'video/mkv'
     ];
     
     if (!in_array($file['type'], $allowed_types)) {
@@ -145,7 +163,7 @@ function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
     
     $target_dir = $user_folder;
     if (!empty($subfolder)) {
-        $clean_subfolder = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $subfolder);
+        $clean_subfolder = preg_replace('/[^a-zA-Z0-9_\-]/', '/', $subfolder);
         $target_dir .= '/' . $clean_subfolder;
         
         if (!file_exists($target_dir)) {
@@ -204,6 +222,66 @@ function getUserFiles($user_folder) {
     return $files;
 }
 
+// Get contents of specific folder (not recursive)
+function getFolderContents($user_folder, $subfolder = '') {
+    $target_dir = $user_folder;
+    if (!empty($subfolder)) {
+        $clean_subfolder = preg_replace('/[^a-zA-Z0-9_\-]/', '/', $subfolder);
+        $target_dir .= '/' . $clean_subfolder;
+    }
+    
+    $result = [
+        'folders' => [],
+        'files' => [],
+        'current_path' => $subfolder
+    ];
+    
+    if (!is_dir($target_dir)) {
+        return $result;
+    }
+    
+    $items = scandir($target_dir);
+    
+    foreach ($items as $item) {
+        if ($item == '.' || $item == '..') {
+            continue;
+        }
+        
+        $item_path = $target_dir . '/' . $item;
+        
+        if (is_dir($item_path)) {
+            $result['folders'][] = [
+                'name' => $item,
+                'path' => empty($subfolder) ? $item : $subfolder . '/' . $item,
+                'type' => 'folder',
+                'modified' => date('Y-m-d H:i:s', filemtime($item_path))
+            ];
+        } else {
+            $size = filesize($item_path);
+            $result['files'][] = [
+                'name' => $item,
+                'path' => empty($subfolder) ? $item : $subfolder . '/' . $item,
+                'type' => 'file',
+                'size' => $size,
+                'size_formatted' => formatSize($size),
+                'modified' => date('Y-m-d H:i:s', filemtime($item_path)),
+                'extension' => pathinfo($item, PATHINFO_EXTENSION)
+            ];
+        }
+    }
+    
+    // Sort folders first, then files
+    usort($result['folders'], function($a, $b) {
+        return strcmp($a['name'], $b['name']);
+    });
+    
+    usort($result['files'], function($a, $b) {
+        return strcmp($a['name'], $b['name']);
+    });
+    
+    return $result;
+}
+
 // Handle AJAX requests
 if ($_SERVER["REQUEST_METHOD"] == "POST" && 
     isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
@@ -234,10 +312,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
             
         case 'create_folder':
             $folder_name = $_POST["folder_name"] ?? '';
+            $current_path = $_POST["current_path"] ?? ''; 
             if (empty($folder_name)) {
                 $response = ["success" => false, "message" => "Folder name required"];
             } else {
-                $response = createUserFolder($folder_name, $user_folder);
+                $response = createUserFolder($folder_name, $user_folder, $current_path);
             }
             break;
             
@@ -246,10 +325,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
                 $response = ["success" => false, "message" => "No file uploaded"];
             } else {
                 $subfolder = $_POST["subfolder"] ?? '';
-                $response = uploadFile($_FILES['file'], $user_folder, $subfolder);
+                $response = uploadFile($_FILES['file'], $user_folder,  $conn,$user_id, $subfolder);
             }
             break;
             
+        case 'get_folder_contents':
+            $folder_path = $_POST["folder_path"] ?? '';
+            $contents = getFolderContents($user_folder, $folder_path);
+            $response = ["success" => true, "data" => $contents];
+            break;
         default:
             $response = ["success" => false, "message" => "Invalid action"];
     }
