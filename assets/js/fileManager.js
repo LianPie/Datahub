@@ -422,37 +422,97 @@ class FileManager {
     }
     
     // ============ FILE ACTIONS ============
-    previewFile(filePath) {
-        // For images, show preview modal
-        const ext = filePath.split('.').pop().toLowerCase();
-        const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        
-        if (imageExts.includes(ext)) {
-            const previewUrl = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
-            const previewModal = document.createElement('div');
-            previewModal.className = 'custom-modal';
-            previewModal.style.display = 'flex';
-            previewModal.innerHTML = `
-                <div class="custom-modal-content" style="max-width: 80%; max-height: 80%;">
-                    <div class="custom-modal-header">
-                        <h3>Image Preview</h3>
-                        <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
-                    </div>
-                    <div class="custom-modal-body" style="text-align: center;">
-                        <img src="${previewUrl}" style="max-width: 100%; max-height: 70vh;">
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(previewModal);
-            
-            previewModal.addEventListener('click', (e) => {
-                if (e.target === previewModal) previewModal.remove();
-            });
-        } else {
-            // Download for other files
-            window.location.href = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
-        }
+previewFile(filePath) {
+    const ext = filePath.split('.').pop().toLowerCase();
+    const previewUrl = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
+    
+    let previewContent = '';
+    let modalTitle = 'Preview';
+    
+    // Image files
+    const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+    if (imageExts.includes(ext)) {
+        previewContent = `<img src="${previewUrl}" style="max-width: 100%; max-height: 70vh; display: block; margin: 0 auto;">`;
+        modalTitle = 'Image Preview';
     }
+    // PDF files
+    else if (ext === 'pdf') {
+        previewContent = `<iframe src="${previewUrl}" width="100%" height="500px" style="border: none;"></iframe>`;
+        modalTitle = 'PDF Preview';
+    }
+    // Video files
+    else if (['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'].includes(ext)) {
+        previewContent = `<video controls style="max-width: 100%; max-height: 70vh;">
+                            <source src="${previewUrl}" type="video/${ext}">
+                            Your browser does not support the video tag.
+                          </video>`;
+        modalTitle = 'Video Preview';
+    }
+    // Audio files
+    else if (['mp3', 'wav', 'ogg', 'm4a'].includes(ext)) {
+        previewContent = `<audio controls style="width: 100%;">
+                            <source src="${previewUrl}" type="audio/${ext}">
+                            Your browser does not support the audio element.
+                          </audio>`;
+        modalTitle = 'Audio Preview';
+    }
+    // Text files (txt, html, css, js, json, xml)
+    else if (['txt', 'html', 'css', 'js', 'json', 'xml', 'md'].includes(ext)) {
+        // Fetch text content via AJAX
+        fetch(previewUrl)
+            .then(response => response.text())
+            .then(text => {
+                const previewModal = document.querySelector('.custom-modal.preview-modal');
+                if (previewModal) {
+                    const body = previewModal.querySelector('.custom-modal-body');
+                    body.innerHTML = `<pre style="white-space: pre-wrap; word-wrap: break-word; background: #0f172a; padding: 1rem; border-radius: 8px; color: #e2e8f0;">${this.escapeHtml(text)}</pre>`;
+                }
+            })
+            .catch(() => {
+                this.showError('Could not load text content');
+            });
+        previewContent = '<div class="loading-preview">Loading content...</div>';
+        modalTitle = 'Text Preview';
+    }
+    // Unsupported files – show download link
+    else {
+        previewContent = `<div class="unsupported-preview">
+                            <i class="ri-file-line" style="font-size: 4rem;"></i>
+                            <p>Preview not available for this file type.</p>
+                            <a href="${previewUrl}" download class="btn-primary" style="display: inline-block; margin-top: 1rem;">Download File</a>
+                          </div>`;
+        modalTitle = 'Preview Unavailable';
+    }
+    
+    // Create modal (if not already open for text files, we may reuse)
+    if (!document.querySelector('.custom-modal.preview-modal')) {
+        const modal = document.createElement('div');
+        modal.className = 'custom-modal preview-modal';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="custom-modal-content" style="max-width: 80%; max-height: 80%; width: auto;">
+                <div class="custom-modal-header">
+                    <h3>${modalTitle}</h3>
+                    <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
+                </div>
+                <div class="custom-modal-body" style="text-align: center; overflow: auto;">
+                    ${previewContent}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Close when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+    }
+    
+    // For text files, we already started fetching; for others, content is static
+    if (['txt', 'html', 'css', 'js', 'json', 'xml', 'md'].includes(ext)) {
+        // The fetch will update the modal content when ready
+    }
+}
     
     deleteItem(itemPath, isFolder) {
         if (!confirm(`Are you sure you want to delete this ${isFolder ? 'folder' : 'file'}?`)) {

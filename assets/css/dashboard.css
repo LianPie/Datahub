@@ -225,6 +225,73 @@ h2{
     margin-bottom: 25px !important;
 }
 
+/* Preview modal enhancements */
+.custom-modal .custom-modal-body pre {
+    background: #0f172a;
+    padding: 1rem;
+    border-radius: 12px;
+    color: #e2e8f0;
+    font-family: monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 70vh;
+}
+
+.loading-preview {
+    text-align: center;
+    padding: 2rem;
+    color: #94a3b8;
+}
+
+.unsupported-preview {
+    text-align: center;
+    padding: 2rem;
+}
+
+.unsupported-preview i {
+    font-size: 4rem;
+    color: #fed049;
+    margin-bottom: 1rem;
+}
+
+.custom-modal video {
+    max-width: 100%;
+    max-height: 70vh;
+    outline: none;
+}
+
+.custom-modal iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
+/* Override for preview modal to fit images/videos */
+.preview-modal .custom-modal-content {
+    width: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: 0;
+}
+
+.preview-modal .custom-modal-body {
+    padding: 1rem;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-modal img,
+.preview-modal video {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
 /* ===== Dashboard main content ===== */
 
 .dashboard-main {
