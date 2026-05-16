@@ -15,6 +15,7 @@ $username = $_SESSION["username"];
 <html lang="<?= getHtmlLang() ?>" dir="<?= getLangDirection() ?>">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DataHub - <?= __('dashboard') ?></title>
 
     <link rel="stylesheet" href="/Datahub/assets/fonts/remixicon.css">
@@ -69,7 +70,7 @@ $username = $_SESSION["username"];
                 </a>
             </li>
             <li>
-                <a href="#" >
+                <a href="/Datahub/Dashboard/Profile.php" >
                     <i class="ri-settings-line"></i> <span><?= __('settings') ?></span>
                 </a>
             </li>

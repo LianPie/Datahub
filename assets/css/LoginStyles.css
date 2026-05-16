@@ -448,3 +448,36 @@ img {
         margin-left: auto;
     }
 }
+
+
+.btn-lang {
+   position: fixed;
+   top: 20px;
+   left: 20px;
+   z-index: 1000;
+   background: #0c416a;
+   border: 1px solid #334155;
+   color: #e2e8f0;
+   padding: 0.4rem 1rem;
+   border-radius: 40px;
+   font-size: 0.9rem;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   font-family: var(--body-font);
+}
+.btn-lang:hover {
+    background-color: #fed049;
+    color: #0f172a;
+    border-color: #fed049;
+}
+[dir="rtl"] .btn-lang {
+    left: auto;
+    right: 20px;
+}
+[dir="rtl"] .login__title, .login__label, .login__switch, .login__social-title {
+    text-align: right;
+}
+.login__box {
+    text-align: right;
+}

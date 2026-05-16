@@ -672,3 +672,50 @@ img {
     right: auto;
     left: 20rem;
 }
+
+
+.btn-lang {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #0c416a;
+  border: 1px solid #334155;
+  color: #e2e8f0;
+  padding: 0.4rem 1rem;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-family: var(--body-font, 'Poppins', sans-serif);
+}
+.btn-lang:hover {
+    background-color: #fed049;
+    color: #0f172a;
+    border-color: #fed049;
+}
+
+[dir="rtl"] .btn-lang {
+    right: auto;
+    left: 20px;
+}
+
+@media (max-width: 767px) {
+    .btn-lang {
+        padding: 0.2rem 0.6rem;
+        font-size: 0.7rem;
+        top: 10px;
+        left: auto;
+        right: 10px;
+    }
+    [dir="rtl"] .btn-lang {
+        right: auto;
+        left: 10px;
+    }
+}
+
+body.menu-open .btn-lang {
+    display: none !important;
+}

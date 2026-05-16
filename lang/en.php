@@ -101,9 +101,15 @@ return [
     'in' => 'in',
     'folder_name_placeholder' => 'Folder Name',
     
-    // ========== DASHBOARD DEVELOPMENT PAGE ==========
-    'under_development' => 'Under Development',
-    'dashboard_being_built' => 'This dashboard is currently being built.',
-    'new_features_soon' => 'New features will be available soon.',
+    // ========== Profile Page ==========
+    'account_information' => 'Account Information',
+    'email_cannot_be_changed' => 'Email cannot be changed',
+    'update_username' => 'Update Username',
+    'change_password' => 'Change Password',
+    'current_password' => 'Current Password',
+    'new_password' => 'New Password',
+    'confirm_new_password' => 'Confirm New Password',
+    'change_password_btn' => 'Change Password',
+    'network_error' => 'Network error. Please try again.',
 ];
 ?>
