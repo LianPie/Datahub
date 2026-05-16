@@ -225,6 +225,73 @@ h2{
     margin-bottom: 25px !important;
 }
 
+/* Preview modal enhancements */
+.custom-modal .custom-modal-body pre {
+    background: #0f172a;
+    padding: 1rem;
+    border-radius: 12px;
+    color: #e2e8f0;
+    font-family: monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 70vh;
+}
+
+.loading-preview {
+    text-align: center;
+    padding: 2rem;
+    color: #94a3b8;
+}
+
+.unsupported-preview {
+    text-align: center;
+    padding: 2rem;
+}
+
+.unsupported-preview i {
+    font-size: 4rem;
+    color: #fed049;
+    margin-bottom: 1rem;
+}
+
+.custom-modal video {
+    max-width: 100%;
+    max-height: 70vh;
+    outline: none;
+}
+
+.custom-modal iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
+/* Override for preview modal to fit images/videos */
+.preview-modal .custom-modal-content {
+    width: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: 0;
+}
+
+.preview-modal .custom-modal-body {
+    padding: 1rem;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-modal img,
+.preview-modal video {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
 /* ===== Dashboard main content ===== */
 
 .dashboard-main {
@@ -422,5 +489,123 @@ h2{
 @media (max-width: 640px) {
     .dashboard-navbar {
         padding: 0 1rem;
+    }
+}
+
+
+/* ===== Enhanced Profile Page ===== */
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.profile-card {
+    background: #1e293b;
+    border-radius: 24px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid #334155;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.profile-card:hover {
+    border-color: #fed049;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.profile-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.8rem;
+    color: #fed049;
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding-left: 1rem;
+}
+
+.profile-card h3 i {
+    font-size: 1.5rem;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #fed049;
+    box-shadow: 0 0 0 2px rgba(254, 208, 73, 0.2);
+}
+
+.form-group input[readonly] {
+    background: #1e293b;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.form-note {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-top: 0.3rem;
+    display: block;
+}
+
+/* Button styles (if .btn-primary not defined) */
+.btn-primary {
+    background: #0f4c75;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background: #0a3a5a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 76, 117, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .profile-container {
+        padding: 0.5rem;
+    }
+    .profile-card {
+        padding: 1.2rem;
+    }
+    .profile-card h3 {
+        font-size: 1.2rem;
     }
 }

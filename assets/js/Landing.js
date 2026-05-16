@@ -1,13 +1,17 @@
 /*=============== SHOW MENU ===============*/
 const navMenu = document.getElementById('nav-menu'),
       navToggle = document.getElementById('nav-toggle'),
-      navClose = document.getElementById('nav-close')
+      navClose = document.getElementById('nav-close');
+const langBtn = document.querySelector('.btn-lang'); // get the button
+
 
 /*===== MENU SHOW (Click)=====*/
 /* Validate if constant exists */
 if(navToggle){
     navToggle.addEventListener('click', () =>{
-        navMenu.classList.add('show-menu')
+        navMenu.classList.add('show-menu');
+        if (langBtn) langBtn.style.display = 'none'; // hide button
+
     })
 }
 
@@ -15,7 +19,9 @@ if(navToggle){
 /* Validate if constant exists */
 if(navClose){
     navClose.addEventListener('click', () =>{
-        navMenu.classList.remove('show-menu')
+        navMenu.classList.remove('show-menu');
+        if (langBtn) langBtn.style.display = ''; // restore button
+
     })
 }
 

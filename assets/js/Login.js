@@ -261,3 +261,15 @@ const passwordRegister = (loginPass, loginEye) => {
   });
 };
 passwordRegister("passwordCreate", "loginPasswordCreate");
+
+/*=============== LANGUAGE SWITCHER ===============*/
+const langBtn = document.getElementById('switchLangBtnLogin');
+if (langBtn) {
+    langBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        let currentLang = document.documentElement.lang;
+        let newLang = (currentLang === 'en') ? 'fa' : 'en';
+        document.cookie = `lang=${newLang}; path=/; max-age=${60 * 60 * 24 * 30}`;
+        location.reload();
+    });
+}
