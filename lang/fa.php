@@ -98,10 +98,15 @@ return [
     'in' => 'در',
     'folder_name_placeholder' => 'نام پوشه',
 
-
-    // ========== DASHBOARD DEVELOPMENT PAGE ==========
-    'under_development' => 'در حال توسعه',
-    'dashboard_being_built' => 'این داشبورد در حال ساخت است.',
-    'new_features_soon' => 'به زودی امکانات جدید اضافه خواهد شد.',
+    // ========== Profile Page ==========
+    'account_information' => 'اطلاعات حساب',
+    'email_cannot_be_changed' => 'ایمیل قابل تغییر نیست',
+    'update_username' => 'به‌روزرسانی نام کاربری',
+    'change_password' => 'تغییر رمز عبور',
+    'current_password' => 'رمز عبور فعلی',
+    'new_password' => 'رمز عبور جدید',
+    'confirm_new_password' => 'تکرار رمز عبور جدید',
+    'change_password_btn' => 'تغییر رمز عبور',
+    'network_error' => 'خطا در ارتباط. لطفاً دوباره تلاش کنید.',
 ];
 ?>

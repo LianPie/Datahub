@@ -70,7 +70,7 @@ $username = $_SESSION["username"];
                 </a>
             </li>
             <li>
-                <a href="#" >
+                <a href="/Datahub/Dashboard/Profile.php" >
                     <i class="ri-settings-line"></i> <span><?= __('settings') ?></span>
                 </a>
             </li>
