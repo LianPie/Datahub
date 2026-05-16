@@ -44,6 +44,9 @@
 
 <script src="/Datahub/assets/js/toast.js"></script>
 <script src="/Datahub/assets/js/dashboard.js"></script>
+
+<script src="/Datahub/assets/js/FileManagerCore.js"></script>
+<script src="/Datahub/assets/js/FileManagerActions.js"></script>
 <script src="/Datahub/assets/js/fileManager.js"></script>
 
 </body>
