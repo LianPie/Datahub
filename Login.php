@@ -14,48 +14,6 @@ if (isset($_SESSION["user_id"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datahub - <?= __('login') ?></title>
     
-    <!-- Language Switcher Styles -->
-    <style>
-        .lang-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(0,0,0,0.7);
-            padding: 8px 15px;
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            display: flex;
-            gap: 10px;
-        }
-        .lang-switcher a {
-            color: white;
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 20px;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        .lang-switcher a.active {
-            background: #fed049;
-            color: #333;
-        }
-        .lang-switcher a:hover {
-            background: rgba(255,255,255,0.2);
-        }
-        <?php if ($current_lang == 'fa'): ?>
-        .lang-switcher {
-            left: 20px;
-            right: auto;
-        }
-        .login__title, .login__label, .login__switch, .login__social-title {
-            text-align: right;
-        }
-        .login__box {
-            text-align: right;
-        }
-        <?php endif; ?>
-    </style>
     
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="/Datahub/assets/css/LoginStyles.css">
@@ -66,11 +24,7 @@ if (isset($_SESSION["user_id"])) {
 <body>
 
     <!-- Language Switcher -->
-    <div class="lang-switcher">
-        <a href="?lang=en" class="<?= $current_lang == 'en' ? 'active' : '' ?>">English</a>
-        <a href="?lang=fa" class="<?= $current_lang == 'fa' ? 'active' : '' ?>">فارسی</a>
-    </div>
-
+    <a href="?lang=<?= $current_lang == 'en' ? 'fa' : 'en' ?>" class="btn-lang"><?= $current_lang == 'en' ? 'فا' : 'En' ?></a>
     <!--=============== LOGIN IMAGE ===============-->
     <svg class="login__blob" viewBox="0 0 566 840" xmlns="http://www.w3.org/2000/svg">
         <mask id="mask0" mask-type="alpha">
