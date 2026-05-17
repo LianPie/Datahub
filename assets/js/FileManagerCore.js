@@ -122,12 +122,36 @@ class FileManagerCore {
         }
     }
     
+    
+    openFolder(folderPath) {
+        this.loadFolderContents(folderPath);
+        
+        // Update page title with folder name
+        const pageTitle = document.querySelector('.dashboard-content h2');
+        if (pageTitle) {
+            const folderName = folderPath.split('/').pop();
+            pageTitle.innerHTML = `${this.escapeHtml(folderName)} <i class="ri-folder-line"></i> `;
+            
+            // Add back button if not already there
+            if (!pageTitle.querySelector('.back-btn')) {
+                const backBtn = document.createElement('button');
+                backBtn.innerHTML = '← Back';
+                backBtn.className = 'back-btn';
+                backBtn.onclick = () => this.goBack();
+                backBtn.style.marginLeft = '10px';
+                pageTitle.appendChild(backBtn);
+            }
+        }
+    }
+    
+    
     openFolder(folderPath) {
         this.loadFolderContents(folderPath);
         const pageTitle = document.querySelector('.dashboard-content h2');
         if (pageTitle) {
             const folderName = folderPath.split('/').pop();
-            pageTitle.innerHTML = `${this.escapeHtml(folderName)} <i class="ri-folder-line"></i>`;
+            pageTitle.innerHTML = `${this.escapeHtml(folderName)} <i class="ri-folder-line"></i> `;
+            
             if (!pageTitle.querySelector('.back-btn')) {
                 const backBtn = document.createElement('button');
                 backBtn.innerHTML = '← Back';
@@ -141,9 +165,11 @@ class FileManagerCore {
     
     goBack() {
         if (!this.currentPath) return;
+        
         const pathParts = this.currentPath.split('/');
-        pathParts.pop();
+        pathParts.pop(); 
         const parentPath = pathParts.join('/');
+        
         this.loadFolderContents(parentPath);
         
         const pageTitle = document.querySelector('.dashboard-content h2');
@@ -151,8 +177,17 @@ class FileManagerCore {
             if (parentPath) {
                 const folderName = parentPath.split('/').pop();
                 pageTitle.innerHTML = `${this.escapeHtml(folderName)} <i class="ri-folder-line"></i>`;
+                
+                if (!pageTitle.querySelector('.back-btn')) {
+                    const backBtn = document.createElement('button');
+                    backBtn.innerHTML = '← Back';
+                    backBtn.className = 'back-btn';
+                    backBtn.onclick = () => this.goBack();
+                    backBtn.style.marginLeft = '10px';
+                    pageTitle.appendChild(backBtn);
+                }
             } else {
-                pageTitle.innerHTML = __('all_files_folders');
+                pageTitle.innerHTML = 'All Files & Folders';
                 const backBtn = pageTitle.querySelector('.back-btn');
                 if (backBtn) backBtn.remove();
             }
