@@ -16,11 +16,11 @@ class FileManagerActions extends FileManagerCore {
     async createFolder() {
         const folderName = document.getElementById('folderNameInput')?.value;
         if (!folderName || folderName.trim() === '') {
-            this.showError('Please enter a folder name');
+            this.showError(__('please_enter_folder_name'));
             return;
         }
         if (!/^[a-zA-Z0-9_\-]+$/.test(folderName)) {
-            this.showError('Folder name can only contain letters, numbers, underscores, and hyphens');
+            this.showError(__('invalid_folder_name'));
             return;
         }
         
@@ -34,14 +34,14 @@ class FileManagerActions extends FileManagerCore {
             const data = JSON.parse(text);
             
             if (data.success) {
-                this.showMessage('Folder created successfully', 'success');
+                this.showMessage(__('folder_created_success'), 'success');
                 this.closeModals();
                 this.loadFolderContents(this.currentPath);
             } else {
-                this.showError(data.message);
+                this.showError(data.message || __('failed_to_create_folder'));
             }
         } catch(e) {
-            this.showError('Failed to create folder');
+            this.showError(__('failed_to_create_folder'));
         }
     }
     
@@ -57,11 +57,11 @@ class FileManagerActions extends FileManagerCore {
         }
         
         if (!file) {
-            this.showError('Please select a file');
+            this.showError(__('please_select_file'));
             return;
         }
         if (file.size > 50 * 1024 * 1024) {
-            this.showError('File too large. Max 50MB');
+            this.showError(__('file_too_large'));
             return;
         }
         
@@ -73,7 +73,7 @@ class FileManagerActions extends FileManagerCore {
         const confirmBtn = document.getElementById('confirmUploadBtn');
         const originalText = confirmBtn?.textContent || 'Upload';
         if (confirmBtn) {
-            confirmBtn.textContent = 'Uploading...';
+            confirmBtn.textContent = __('uploading');
             confirmBtn.disabled = true;
         }
         
@@ -87,7 +87,7 @@ class FileManagerActions extends FileManagerCore {
             const data = JSON.parse(text);
             
             if (data.success) {
-                this.showMessage(`File uploaded successfully`, 'success');
+                this.showMessage(__('file_uploaded_success'), 'success');
                 this.closeModals();
                 
                 this.redirectToUploadsPage();
@@ -98,7 +98,7 @@ class FileManagerActions extends FileManagerCore {
                 this.showError(data.message);
             }
         } catch(e) {
-            this.showError('Failed to upload file');
+            this.showError(__('failed_to_upload_file'));
         } finally {
             if (confirmBtn) {
                 confirmBtn.textContent = originalText;
@@ -121,7 +121,7 @@ class FileManagerActions extends FileManagerCore {
             if (data.success && data.data.folders) {
                 const select = document.getElementById('uploadFolderSelect');
                 if (select) {
-                    let options = '<option value="">Root (No Folder)</option>';
+                    let options = `<option value="">${__('root_no_folder')}</option>`;
                     data.data.folders.forEach(folder => {
                         options += `<option value="${folder.name}">📁 ${folder.name}</option>`;
                     });
@@ -161,19 +161,18 @@ class FileManagerActions extends FileManagerCore {
     const ext = filePath.split('.').pop().toLowerCase();
     const previewUrl = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
     
-    // تصاویر
+    //image
     const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'ico'];
     
-    // ویدیوها
+    //video
     const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'm4v', 'mpg', 'mpeg'];
     
-    // موزیک / صدا
+    //audio
     const audioExts = ['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac', 'wma', 'opus'];
     
     // PDF
     const pdfExts = ['pdf'];
     
-    // ========== نمایش تصویر ==========
     if (imageExts.includes(ext)) {
         const previewModal = document.createElement('div');
         previewModal.className = 'custom-modal';
@@ -181,7 +180,7 @@ class FileManagerActions extends FileManagerCore {
         previewModal.innerHTML = `
             <div class="custom-modal-content" style="max-width: 90%; max-height: 90%;">
                 <div class="custom-modal-header">
-                    <h3>Image Preview</h3>
+                    <h3>${__('image_preview')}</h3>
                     <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
                 </div>
                 <div class="custom-modal-body" style="text-align: center;">
@@ -195,7 +194,6 @@ class FileManagerActions extends FileManagerCore {
         });
     }
     
-    // ========== نمایش ویدیو ==========
     else if (videoExts.includes(ext)) {
         const previewModal = document.createElement('div');
         previewModal.className = 'custom-modal';
@@ -203,13 +201,13 @@ class FileManagerActions extends FileManagerCore {
         previewModal.innerHTML = `
             <div class="custom-modal-content" style="max-width: 90%; max-height: 90%;">
                 <div class="custom-modal-header">
-                    <h3>Video Player</h3>
+                    <h3>${__('video_player')}</h3>
                     <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
                 </div>
                 <div class="custom-modal-body" style="text-align: center;">
                     <video controls autoplay style="max-width: 100%; max-height: 70vh;">
                         <source src="${previewUrl}" type="video/${ext === 'mp4' ? 'mp4' : ext === 'webm' ? 'webm' : 'ogg'}">
-                        Your browser does not support the video tag.
+                        ${__('browser_no_video_support')}
                     </video>
                 </div>
             </div>
@@ -220,7 +218,6 @@ class FileManagerActions extends FileManagerCore {
         });
     }
     
-    // ========== پخش موزیک ==========
     else if (audioExts.includes(ext)) {
         const previewModal = document.createElement('div');
         previewModal.className = 'custom-modal';
@@ -228,7 +225,7 @@ class FileManagerActions extends FileManagerCore {
         previewModal.innerHTML = `
             <div class="custom-modal-content" style="max-width: 500px;">
                 <div class="custom-modal-header">
-                    <h3>Music Player</h3>
+                <h3>${__('music_player')}</h3>
                     <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
                 </div>
                 <div class="custom-modal-body" style="text-align: center; padding: 20px;">
@@ -236,7 +233,7 @@ class FileManagerActions extends FileManagerCore {
                     <p><strong>${this.escapeHtml(filePath.split('/').pop())}</strong></p>
                     <audio controls autoplay style="width: 100%;">
                         <source src="${previewUrl}" type="audio/${ext === 'mp3' ? 'mpeg' : ext === 'wav' ? 'wav' : 'ogg'}">
-                        Your browser does not support the audio tag.
+                        ${__('browser_no_audio_support')}
                     </audio>
                 </div>
             </div>
@@ -247,7 +244,6 @@ class FileManagerActions extends FileManagerCore {
         });
     }
     
-    // ========== نمایش PDF ==========
     else if (pdfExts.includes(ext)) {
         const previewModal = document.createElement('div');
         previewModal.className = 'custom-modal';
@@ -255,7 +251,7 @@ class FileManagerActions extends FileManagerCore {
         previewModal.innerHTML = `
             <div class="custom-modal-content" style="max-width: 90%; max-height: 90%;">
                 <div class="custom-modal-header">
-                    <h3>PDF Preview</h3>
+                    <h3>${__('pdf_preview')}</h3>
                     <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
                 </div>
                 <div class="custom-modal-body" style="text-align: center;">
@@ -269,9 +265,8 @@ class FileManagerActions extends FileManagerCore {
         });
     }
     
-    // ========== بقیه فایل‌ها: دانلود مستقیم ==========
-    else {
-        if (confirm('This file type cannot be previewed. Do you want to download it?')) {
+    else { 
+        if (confirm(window.__('cannot_preview_download'))) {
             window.location.href = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
         }
     }

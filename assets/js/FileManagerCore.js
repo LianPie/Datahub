@@ -33,7 +33,7 @@ class FileManagerCore {
             }
         } catch(e) {
             console.error('Error:', e);
-            this.showError('Failed to load files');
+            this.showError(__('error_loading_files'));
             return null;
         }
     }
@@ -48,7 +48,7 @@ class FileManagerCore {
         if (!foldersList) return;
         
         if (folders.length === 0) {
-            foldersList.innerHTML = '<div class="empty-message">No folders yet</div>';
+            foldersList.innerHTML = `<div class="empty-message">${__('no_folders_yet')}</div>`;
             return;
         }
         
@@ -68,7 +68,7 @@ class FileManagerCore {
         if (!filesGrid) return;
         
         if (files.length === 0) {
-            filesGrid.innerHTML = '<div class="empty-message">No files yet</div>';
+            filesGrid.innerHTML = `<div class="empty-message">${__('no_files_yet')}</div>`;
             return;
         }
         
@@ -76,13 +76,13 @@ class FileManagerCore {
         files.forEach(file => {
             const icon = this.getFileIcon(file.name);
             const fileSize = file.size_formatted || this.formatBytes(file.size);
-            const folderName = this.currentPath || 'Root';
+            const folderName = this.currentPath || __('root');
             
             html += `<div class="file-card">
                         <div class="file-icon"><i class="${icon}"></i></div>
                         <div class="file-name">${this.escapeHtml(file.name)}</div>
                         <div class="file-size">${fileSize}</div>
-                        <div class="file-folder"><small>in "${this.escapeHtml(folderName)}"</small></div>
+                        <div class="file-folder"><small>${__('location_in')} "${this.escapeHtml(folderName)}"</small></div>
                         <div class="file-actions">
                             <button class="preview-btn" onclick="fileManager.previewFile('${file.path}')"><i class="ri-eye-line"></i></button>
                             <a href="${this.baseUrl}?download=1&path=${encodeURIComponent(file.path)}" download><i class="ri-download-line"></i></a>
@@ -152,7 +152,7 @@ class FileManagerCore {
                 const folderName = parentPath.split('/').pop();
                 pageTitle.innerHTML = `${this.escapeHtml(folderName)} <i class="ri-folder-line"></i>`;
             } else {
-                pageTitle.innerHTML = 'All Files & Folders';
+                pageTitle.innerHTML = __('all_files_folders');
                 const backBtn = pageTitle.querySelector('.back-btn');
                 if (backBtn) backBtn.remove();
             }
