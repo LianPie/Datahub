@@ -44,7 +44,12 @@
 
 <script src="/Datahub/assets/js/toast.js"></script>
 <script src="/Datahub/assets/js/dashboard.js"></script>
-
+<script>
+    
+function __(key) {
+    return window.translations && window.translations[key] ? window.translations[key] : key;
+}
+</script>
 <script src="/Datahub/assets/js/FileManagerCore.js"></script>
 <script src="/Datahub/assets/js/FileManagerActions.js"></script>
 <script src="/Datahub/assets/js/fileManager.js"></script>

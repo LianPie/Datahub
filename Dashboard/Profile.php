@@ -74,9 +74,6 @@ $current_email = $_SESSION['email'] ?? '';
         'username_required': '<?= __('username_required') ?>'
     };
     
-function __(key) {
-    return window.translations && window.translations[key] ? window.translations[key] : key;
-}
 </script>
 
 <?php include 'Includes/footer.php'; ?>
