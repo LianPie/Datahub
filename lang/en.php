@@ -137,5 +137,33 @@ return [
     'confirm_new_password' => 'Confirm New Password',
     'change_password_btn' => 'Change Password',
     'network_error' => 'Network error. Please try again.',
+
+    'updating' => 'Updating...',
+    'current_password_required' => 'Current password is required',
+    'new_password_required' => 'New password is required',
+    'passwords_match' => 'Passwords match',
+    'password_medium' => 'Medium strength',
+    'password_strong' => 'Strong password',
+    'connection_error' => 'Connection error. Please try again',
+
+    // All error messages from the handler
+    'not_authenticated' => 'Please login to continue',
+    'username_exists' => 'Username already exists',
+    'username_length' => 'Username must be between 3 and 50 characters',
+    'username_invalid' => 'Username can only contain letters, numbers, and underscores',
+    'username_updated' => 'Username updated successfully',
+    'password_updated' => 'Password updated successfully',
+    'wrong_password' => 'Current password is incorrect',
+    'passwords_do_not_match' => 'New passwords do not match',
+    'all_fields_required' => 'All password fields are required',
+    'same_as_current' => 'New password cannot be the same as current password',
+    'same_as_old' => 'New password cannot be the same as old password',
+    'password_too_short' => 'Password must be at least 8 characters',
+    'password_weak' => 'Password must contain uppercase, lowercase, and numbers',
+    'user_not_found' => 'User not found',
+    'database_error' => 'Database error occurred',
+    'update_failed' => 'Failed to update. Please try again',
+    'invalid_request' => 'Invalid request',
+    'username_required' => 'Username is required',
 ];
 ?>

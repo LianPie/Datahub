@@ -133,5 +133,33 @@ return [
     'confirm_new_password' => 'تکرار رمز عبور جدید',
     'change_password_btn' => 'تغییر رمز عبور',
     'network_error' => 'خطا در ارتباط. لطفاً دوباره تلاش کنید.',
-];
+    
+    'updating' => 'در حال به‌روزرسانی...',
+    'current_password_required' => 'رمز عبور فعلی الزامی است',
+    'new_password_required' => 'رمز عبور جدید الزامی است',
+    'passwords_match' => 'رمزهای عبور مطابقت دارند',
+    'password_medium' => 'قدرت متوسط',
+    'password_strong' => 'رمز عبور قوی',
+    'connection_error' => 'خطا در اتصال. لطفاً دوباره تلاش کنید',
+
+    // All error messages from the handler
+    'not_authenticated' => 'لطفاً برای ادامه وارد شوید',
+    'username_exists' => 'این نام کاربری قبلاً ثبت شده است',
+    'username_length' => 'نام کاربری باید بین ۳ تا ۵۰ کاراکتر باشد',
+    'username_invalid' => 'نام کاربری فقط می‌تواند شامل حروف، اعداد و زیرخط باشد',
+    'username_updated' => 'نام کاربری با موفقیت به‌روزرسانی شد',
+    'password_updated' => 'رمز عبور با موفقیت تغییر کرد',
+    'wrong_password' => 'رمز عبور فعلی اشتباه است',
+    'passwords_do_not_match' => 'رمزهای عبور جدید مطابقت ندارند',
+    'all_fields_required' => 'تمامی فیلدهای رمز عبور الزامی هستند',
+    'same_as_current' => 'رمز عبور جدید نمی‌تواند با رمز فعلی یکسان باشد',
+    'same_as_old' => 'رمز عبور جدید نمی‌تواند با رمز قدیمی یکسان باشد',
+    'password_too_short' => 'رمز عبور باید حداقل ۸ کاراکتر باشد',
+    'password_weak' => 'رمز عبور باید شامل حروف بزرگ، کوچک و اعداد باشد',
+    'user_not_found' => 'کاربر یافت نشد',
+    'database_error' => 'خطا در پایگاه داده',
+    'update_failed' => 'به‌روزرسانی ناموفق. لطفاً دوباره تلاش کنید',
+    'invalid_request' => 'درخواست نامعتبر',
+    'username_required' => 'نام کاربری الزامی است',
+]
 ?>

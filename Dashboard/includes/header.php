@@ -39,7 +39,7 @@ $username = $_SESSION["username"];
 
         <div class="user-profile">
             <i class="ri-user-3-line"></i>
-            <span><?php echo htmlspecialchars($username); ?></span>
+            <span class="user-name"><?php echo htmlspecialchars($username); ?></span>
         </div>
         <?php if ($current_lang == 'en'): ?>
             <a href="?lang=fa" type="button" class="btn-lang" id="switchLangBtn">فا</a>
