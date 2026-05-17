@@ -1,0 +1,42 @@
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/Datahub/Handlers/UploadHandler.php', {
+        method: 'POST',
+        headers: {'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'action=get_recent_items'
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) return;
+        
+        let foldersHtml = '';
+        data.recent_folders.forEach(folder => {
+            foldersHtml += `
+                <div class="folder-card" onclick="window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('redirectFolder', '${folder.path}')">
+                    <i class="ri-folder-line"></i>
+                    <span class="folder-name">${folder.name}</span>
+                    <small>${folder.modified_formatted}</small>
+                </div>
+            `;
+        });
+        document.querySelector('.recent-folders .folders-list').innerHTML = foldersHtml || '<div class="empty-message">No folders yet</div>';
+        
+        let filesHtml = '';
+        data.recent_files.forEach(file => {
+            filesHtml += `
+                <div class="file-card">
+                    <div class="file-icon"><i class="ri-file-fill"></i></div>
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${file.size_formatted}</div>
+                    <div class="file-actions">
+                        <button class="preview-btn" onclick="fileManager.previewFile('${file.path}')"; window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('previewFile', '${file.path}')"><i class="ri-eye-line"></i></button>
+                        <a href="/Datahub/Handlers/UploadHandler.php?download=1&path=${encodeURIComponent(file.path)}" download onclick="event.stopPropagation()"><i class="ri-download-line"></i></a>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteFile('${file.path}', this)"><i class="ri-delete-bin-line"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        document.querySelector('.recent-files .files-grid').innerHTML = filesHtml || '<div class="empty-message">No files yet</div>';
+    });
+    
+});
