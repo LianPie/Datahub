@@ -21,6 +21,17 @@ $username = $_SESSION["username"];
     <link rel="stylesheet" href="/Datahub/assets/fonts/remixicon.css">
     <link rel="stylesheet" href="/Datahub/assets/css/dashboard.css">
     <link rel="stylesheet" href="/Datahub/assets/css/toast.css">
+
+    
+    <?php if ($current_lang == 'fa'): ?>
+    <style>
+        .skipbtns {
+            direction: ltr;
+        }
+    </style>
+
+    <?php endif; ?>
+
 </head>
 <body>
 
