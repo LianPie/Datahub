@@ -8,6 +8,31 @@ class FileManagerCore {
     async loadFolderContents(path = '') {
         this.currentPath = path;
         
+        // Show loader in both folders and files containers
+        const foldersList = document.querySelector('.folders-list');
+        const filesGrid = document.querySelector('.files-grid');
+        
+        if (foldersList) {
+            foldersList.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; padding: 40px;">
+                    <div class="loader-spinner"></div>
+                    <span style="margin-left: 10px;">${__('loading') || 'Loading folders...'}</span>
+                </div>
+            `;
+        }
+        
+        if (filesGrid) {
+            filesGrid.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; padding: 40px;">
+                    <div class="loader-spinner"></div>
+                    <span style="margin-left: 10px;">${__('loading') || 'Loading files...'}</span>
+                </div>
+            `;
+        }
+        
+        const minLoaderTime = 100;
+        const startTime = Date.now();
+        
         try {
             const response = await fetch(this.baseUrl, {
                 method: 'POST',
@@ -24,16 +49,32 @@ class FileManagerCore {
             const text = await response.text();
             const data = JSON.parse(text);
             
+            const elapsed = Date.now() - startTime;
+            const delay = Math.max(0, minLoaderTime - elapsed);
+
             if (data.success) {
-                this.renderUI(data.data);
-                return data.data;
+                  setTimeout(() => {
+                        this.renderUI(data.data);
+                    }, delay);
+                    return data.data;
             } else {
-                this.showError(data.message);
+                 setTimeout(() => {
+                    this.showError(data.message);
+                    if (foldersList) foldersList.innerHTML = `<div class="empty-message">${data.message || __('error_loading_folders')}</div>`;
+                    if (filesGrid) filesGrid.innerHTML = `<div class="empty-message">${data.message || __('error_loading_files')}</div>`;
+                }, delay);
                 return null;
             }
         } catch(e) {
             console.error('Error:', e);
-            this.showError(__('error_loading_files'));
+            const elapsed = Date.now() - startTime;
+            const delay = Math.max(0, minLoaderTime - elapsed);
+
+            setTimeout(() => {
+                this.showError(__('error_loading_files'));
+                if (foldersList) foldersList.innerHTML = `<div class="empty-message">${__('error_loading_folders')}</div>`;
+                if (filesGrid) filesGrid.innerHTML = `<div class="empty-message">${__('error_loading_files')}</div>`;
+            }, delay);
             return null;
         }
     }
@@ -187,7 +228,7 @@ class FileManagerCore {
                     pageTitle.appendChild(backBtn);
                 }
             } else {
-                pageTitle.innerHTML = 'All Files & Folders';
+                pageTitle.innerHTML =  __('all_files_folders');
                 const backBtn = pageTitle.querySelector('.back-btn');
                 if (backBtn) backBtn.remove();
             }

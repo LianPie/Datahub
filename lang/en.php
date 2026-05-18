@@ -165,5 +165,13 @@ return [
     'update_failed' => 'Failed to update. Please try again',
     'invalid_request' => 'Invalid request',
     'username_required' => 'Username is required',
+
+    'loading' => 'loading...',
+    'error_loading_image' => 'Failed to load image.',
+    'error_loading_video' => 'Failed to load video',
+    'error_loading_audio' => 'Failed to load audio',
+    'error_loading_folders' => 'Failed to load folders',
+    
+
 ];
 ?>

@@ -161,5 +161,13 @@ return [
     'update_failed' => 'به‌روزرسانی ناموفق. لطفاً دوباره تلاش کنید',
     'invalid_request' => 'درخواست نامعتبر',
     'username_required' => 'نام کاربری الزامی است',
+    
+    'loading' => 'درحال بارگذاری...',
+    'error_loading_image' => 'خطا در بارگذاری تصویر',
+    'error_loading_video' => 'خطا در بارگذاری ویدیو',
+    'error_loading_audio' => 'خطا در بارگذاری فایل صوتی',
+    'error_loading_folders' => 'خطا در بارگذاری پوشه ها',
+
+    
 ]
 ?>

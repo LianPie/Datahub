@@ -156,121 +156,176 @@ class FileManagerActions extends FileManagerCore {
             this.showError('Failed to delete');
         }
     }
-    
-    previewFile(filePath) {
-    const ext = filePath.split('.').pop().toLowerCase();
-    const previewUrl = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
-    
-    //image
-    const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'ico'];
-    
-    //video
-    const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'm4v', 'mpg', 'mpeg'];
-    
-    //audio
-    const audioExts = ['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac', 'wma', 'opus'];
-    
-    // PDF
-    const pdfExts = ['pdf'];
-    
-    if (imageExts.includes(ext)) {
+
+        previewFile(filePath) {
+        const ext = filePath.split('.').pop().toLowerCase();
+        const previewUrl = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
+        
+        //image
+        const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'ico'];
+        
+        //video
+        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'm4v', 'mpg', 'mpeg'];
+        
+        //audio
+        const audioExts = ['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac', 'wma', 'opus'];
+        
+        // PDF
+        const pdfExts = ['pdf'];
+        
+        // Create modal and loader
         const previewModal = document.createElement('div');
         previewModal.className = 'custom-modal';
         previewModal.style.display = 'flex';
+        
+        // Add loader HTML
         previewModal.innerHTML = `
-            <div class="custom-modal-content" style="max-width: 90%; max-height: 90%;">
+            <div class="custom-modal-content" style="max-width: 90%; max-height: 90%; position: relative;">
                 <div class="custom-modal-header">
-                    <h3>${__('image_preview')}</h3>
+                    <h3>${__('loading') || 'Loading...'}</h3>
                     <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
                 </div>
-                <div class="custom-modal-body" style="text-align: center;">
-                    <img src="${previewUrl}" style="max-width: 100%; max-height: 70vh;">
+                <div class="custom-modal-body" style="text-align: center; min-height: 200px; display: flex; align-items: center; justify-content: center;">
+                    <div class="loader-spinner"></div>
                 </div>
             </div>
         `;
         document.body.appendChild(previewModal);
+        
         previewModal.addEventListener('click', (e) => { 
             if (e.target === previewModal) previewModal.remove(); 
         });
-    }
-    
-    else if (videoExts.includes(ext)) {
-        const previewModal = document.createElement('div');
-        previewModal.className = 'custom-modal';
-        previewModal.style.display = 'flex';
-        previewModal.innerHTML = `
-            <div class="custom-modal-content" style="max-width: 90%; max-height: 90%;">
-                <div class="custom-modal-header">
-                    <h3>${__('video_player')}</h3>
-                    <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
-                </div>
-                <div class="custom-modal-body" style="text-align: center;">
-                    <video controls autoplay style="max-width: 100%; max-height: 70vh;">
-                        <source src="${previewUrl}" type="video/${ext === 'mp4' ? 'mp4' : ext === 'webm' ? 'webm' : 'ogg'}">
-                        ${__('browser_no_video_support')}
-                    </video>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(previewModal);
-        previewModal.addEventListener('click', (e) => { 
-            if (e.target === previewModal) previewModal.remove(); 
-        });
-    }
-    
-    else if (audioExts.includes(ext)) {
-        const previewModal = document.createElement('div');
-        previewModal.className = 'custom-modal';
-        previewModal.style.display = 'flex';
-        previewModal.innerHTML = `
-            <div class="custom-modal-content" style="max-width: 500px;">
-                <div class="custom-modal-header">
-                <h3>${__('music_player')}</h3>
-                    <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
-                </div>
-                <div class="custom-modal-body" style="text-align: center; padding: 20px;">
-                    <i class="ri-music-fill" style="font-size: 80px; color: #6c757d;"></i>
-                    <p><strong>${this.escapeHtml(filePath.split('/').pop())}</strong></p>
-                    <audio controls autoplay style="width: 100%;">
-                        <source src="${previewUrl}" type="audio/${ext === 'mp3' ? 'mpeg' : ext === 'wav' ? 'wav' : 'ogg'}">
-                        ${__('browser_no_audio_support')}
-                    </audio>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(previewModal);
-        previewModal.addEventListener('click', (e) => { 
-            if (e.target === previewModal) previewModal.remove(); 
-        });
-    }
-    
-    else if (pdfExts.includes(ext)) {
-        const previewModal = document.createElement('div');
-        previewModal.className = 'custom-modal';
-        previewModal.style.display = 'flex';
-        previewModal.innerHTML = `
-            <div class="custom-modal-content" style="max-width: 90%; max-height: 90%;">
-                <div class="custom-modal-header">
-                    <h3>${__('pdf_preview')}</h3>
-                    <span class="modal-close" onclick="this.closest('.custom-modal').remove()">&times;</span>
-                </div>
-                <div class="custom-modal-body" style="text-align: center;">
+        
+        const minLoaderTime = 100;
+        const startTime = Date.now();
+        
+        if (imageExts.includes(ext)) {
+            const img = new Image();
+            
+            img.onload = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-header h3').textContent = __('image_preview');
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <img src="${previewUrl}" style="max-width: 100%; max-height: 70vh;">
+                    `;
+                }, delay);
+            };
+            
+            img.onerror = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="color: red; padding: 40px;">
+                            <i class="ri-error-warning-line" style="font-size: 48px;"></i>
+                            <p>${__('error_loading_image') || 'Failed to load image'}</p>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            img.src = previewUrl;
+        }
+        
+        else if (videoExts.includes(ext)) {
+            const video = document.createElement('video');
+            
+            video.oncanplay = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-header h3').textContent = __('video_player');
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <video controls autoplay style="max-width: 100%; max-height: 70vh;">
+                            <source src="${previewUrl}" type="video/${ext === 'mp4' ? 'mp4' : ext === 'webm' ? 'webm' : 'ogg'}">
+                            ${__('browser_no_video_support')}
+                        </video>
+                    `;
+                }, delay);
+            };
+            
+            video.onerror = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="color: red; padding: 40px;">
+                            <i class="ri-error-warning-line" style="font-size: 48px;"></i>
+                            <p>${__('error_loading_video') || 'Failed to load video'}</p>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            video.src = previewUrl;
+        }
+        
+        else if (audioExts.includes(ext)) {
+            const audio = document.createElement('audio');
+            
+            audio.oncanplay = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-header h3').textContent = __('music_player');
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="ri-music-fill" style="font-size: 80px; color: #6c757d;"></i>
+                            <p><strong>${this.escapeHtml(filePath.split('/').pop())}</strong></p>
+                            <audio controls autoplay style="width: 100%;">
+                                <source src="${previewUrl}" type="audio/${ext === 'mp3' ? 'mpeg' : ext === 'wav' ? 'wav' : 'ogg'}">
+                                ${__('browser_no_audio_support')}
+                            </audio>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            audio.onerror = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="color: red; padding: 40px;">
+                            <i class="ri-error-warning-line" style="font-size: 48px;"></i>
+                            <p>${__('error_loading_audio') || 'Failed to load audio'}</p>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            audio.src = previewUrl;
+        }
+        
+        else if (pdfExts.includes(ext)) {
+            const elapsed = Date.now() - startTime;
+            const delay = Math.max(0, minLoaderTime - elapsed);
+            
+            setTimeout(() => {
+                previewModal.querySelector('.custom-modal-header h3').textContent = __('pdf_preview');
+                previewModal.querySelector('.custom-modal-body').innerHTML = `
                     <iframe src="${previewUrl}" style="width: 100%; height: 70vh;" frameborder="0"></iframe>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(previewModal);
-        previewModal.addEventListener('click', (e) => { 
-            if (e.target === previewModal) previewModal.remove(); 
-        });
-    }
-    
-    else { 
-        if (confirm(window.__('cannot_preview_download'))) {
-            window.location.href = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
+                `;
+            }, delay);
+        }
+        
+        else { 
+            // Remove modal if it's not previewable
+            previewModal.remove();
+            
+            if (confirm(window.__('cannot_preview_download'))) {
+                window.location.href = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
+            }
         }
     }
-}
     
     shareFile(filePath) {
         const shareUrl = `${window.location.origin}/Datahub/share.php?file=${encodeURIComponent(filePath)}`;

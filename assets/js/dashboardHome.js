@@ -1,5 +1,30 @@
 
 document.addEventListener('DOMContentLoaded', function() {
+
+      const foldersContainer = document.querySelector('.recent-folders .folders-list');
+    const filesContainer = document.querySelector('.recent-files .files-grid');
+    
+    if (foldersContainer) {
+        foldersContainer.innerHTML = `
+            <div style="display: flex; justify-content: center; align-items: center; padding: 40px;">
+                <div class="loader-spinner"></div>
+                <span style="margin-left: 10px;">${__('loading')}</span>
+            </div>
+        `;
+    }
+    
+    if (filesContainer) {
+        filesContainer.innerHTML = `
+            <div style="display: flex; justify-content: center; align-items: center; padding: 40px;">
+                <div class="loader-spinner"></div>
+                <span style="margin-left: 10px;">${__('loading')}</span>
+            </div>
+        `;
+    }
+    
+    const minLoaderTime = 100;
+    const startTime = Date.now();
+    
     fetch('/Datahub/Handlers/UploadHandler.php', {
         method: 'POST',
         headers: {'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded'},
@@ -7,8 +32,16 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(res => res.json())
     .then(data => {
-        if (!data.success) return;
         
+        const elapsed = Date.now() - startTime;
+        const delay = Math.max(0, minLoaderTime - elapsed);
+
+        setTimeout(() => {
+          if (!data.success) {
+                if (foldersContainer) foldersContainer.innerHTML = `<div class="empty-message">${__('error_loading_folders')}</div>`;
+                if (filesContainer) filesContainer.innerHTML = `<div class="empty-message">${__('error_loading_files')}</div>`;
+                return;
+            }
         let foldersHtml = '';
         data.recent_folders.forEach(folder => {
             foldersHtml += `
@@ -19,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         });
-        document.querySelector('.recent-folders .folders-list').innerHTML = foldersHtml || '<div class="empty-message">No folders yet</div>';
+        document.querySelector('.recent-folders .folders-list').innerHTML = foldersHtml || `<div class="empty-message">${__('no_folders_yet')}</div>`;
         
         let filesHtml = '';
         data.recent_files.forEach(file => {
@@ -36,7 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         });
-        document.querySelector('.recent-files .files-grid').innerHTML = filesHtml || '<div class="empty-message">No files yet</div>';
+        document.querySelector('.recent-files .files-grid').innerHTML = filesHtml || `<div class="empty-message">${__('no_files_yet')}</div>`;
+        
+        }, delay)
     });
-    
+
 });
