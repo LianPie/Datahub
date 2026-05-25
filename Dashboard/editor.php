@@ -18,7 +18,7 @@ include 'includes/header.php';
                 <input type="text" id="docName" class="doc-name-input" placeholder="<?= __('document_name') ?>">
                 <div class="Custom-btn-group">
                     <button class="btn-primary" id="saveBtn"><i class="ri-save-line"></i> <?= __('save') ?></button>
-                    <button class="btn-secondary" id="viewToggleBtn"><i class="ri-eye-line"></i> <?= __('view') ?></button>
+                    <button class="btn-custom" id="viewToggleBtn"><i class="ri-eye-line"></i> <?= __('view') ?></button>
                 </div>
             </div>
             <textarea id="summernote"></textarea>

@@ -3,7 +3,7 @@ include 'includes/header.php';
 ?>
 
 <div class="dashboard-content">
-    <h2><?= __('all_files_folders'); ?></h2>
+    <h2><?= __('all_docs'); ?></h2>
 
 
     <!-- Documents Section -->
