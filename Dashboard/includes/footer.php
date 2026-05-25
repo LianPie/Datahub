@@ -45,7 +45,8 @@
 <script src="/Datahub/assets/js/toast.js"></script>
 <script src="/Datahub/assets/js/dashboard.js"></script>
 <script>
-      window.translations = {
+      const generalTranslations = {
+        'lan': '<?= $lang ?>',
         'error_loading_files': '<?= __('error_loading_files') ?>',
         'no_folders_yet': '<?= __('no_folders_yet') ?>',
         'no_files_yet': '<?= __('no_files_yet') ?>',
@@ -58,6 +59,13 @@
         'error_loading_audio': '<?= __('error_loading_audio') ?>',
         'error_loading_folders': '<?= __('error_loading_folders') ?>',
     };
+
+    if (window.translations) {
+        window.translations = { ...window.translations, ...generalTranslations };
+    } else {
+        window.translations = generalTranslations;
+    }
+
 function __(key) {
     return window.translations && window.translations[key] ? window.translations[key] : key;
 }
