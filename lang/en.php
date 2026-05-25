@@ -171,7 +171,32 @@ return [
     'error_loading_video' => 'Failed to load video',
     'error_loading_audio' => 'Failed to load audio',
     'error_loading_folders' => 'Failed to load folders',
-    
 
+
+    'all_docs' => 'All Documents',
+    'docs' => 'Documents',
+    
+    // ========== DOCUMENTS SECTION ==========
+    'loading_documents' => 'Loading documents',
+    'error_loading_documents' => 'Failed to load documents',
+    'no_documents_yet' => 'No documents yet',
+    'create_first_document' => 'Create your first document',
+    'unknown_date' => 'Unknown date',
+    'view' => 'View',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'new_document' => 'New Document',
+    'enter_document_name' => 'Enter document name:',
+    'confirm_delete_document' => 'Are you sure you want to delete document: ',
+    'error_deleting_document' => 'Failed to delete document: ',
+    'create_document' => 'Create Document',
+    'edit_document' => 'Edit Document',
+    'document_created' => 'Document created successfully',
+    'document_updated' => 'Document updated successfully',
+    'document_deleted' => 'Document deleted successfully',
+    'confirm_delete_file' => 'Are you sure you want to delete this file?',
+
+    'document_name' => 'Document Name',
+    'type_here' => 'write your text here....',
 ];
 ?>

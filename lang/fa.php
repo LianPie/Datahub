@@ -167,6 +167,32 @@ return [
     'error_loading_video' => 'خطا در بارگذاری ویدیو',
     'error_loading_audio' => 'خطا در بارگذاری فایل صوتی',
     'error_loading_folders' => 'خطا در بارگذاری پوشه ها',
+    
+    'all_docs' => 'تمام اسناد',
+    'docs' => 'اسناد',
+
+    // ========== DOCUMENTS SECTION ==========
+    'loading_documents' => 'در حال بارگذاری اسناد',
+    'error_loading_documents' => 'بارگذاری اسناد انجام نشد',
+    'no_documents_yet' => 'هنوز سندی وجود ندارد',
+    'create_first_document' => 'اولین سند خود را ایجاد کنید',
+    'unknown_date' => 'تاریخ نامشخص',
+    'view' => 'مشاهده',
+    'edit' => 'ویرایش',
+    'delete' => 'حذف',
+    'new_document' => 'سند جدید',
+    'enter_document_name' => 'نام سند را وارد کنید:',
+    'confirm_delete_document' => 'آیا از حذف سند اطمینان دارید: ',
+    'error_deleting_document' => 'حذف سند انجام نشد: ',
+    'create_document' => 'ایجاد سند',
+    'edit_document' => 'ویرایش سند',
+    'document_created' => 'سند با موفقیت ایجاد شد',
+    'document_updated' => 'سند با موفقیت به‌روزرسانی شد',
+    'document_deleted' => 'سند با موفقیت حذف شد',
+    'confirm_delete_file' => 'آیا از حذف این فایل اطمینان دارید؟',
+
+    'document_name' => 'عنوان سند',
+    'type_here' => 'متن خود را اینجا بنویسید...',
 
     
 ]

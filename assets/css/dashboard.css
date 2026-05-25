@@ -69,7 +69,8 @@ h2{
 }
 
 .btn-custom {
-    background: #fed049;     
+    background: #fed049;  
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;   
     border: 1px solid #fed049;
     color: #0f172a;            
     padding: 0.4rem 1rem;
@@ -576,4 +577,330 @@ h2{
 .video-skip-btn:active,
 .audio-skip-btn:active {
     transform: scale(0.98);
+}
+
+
+/* ===== styles for summernote and documents page ===== */
+.documents-section {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    }
+    
+    
+.documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+    
+.document-card {
+    background: var(--card-bg, #1e293b);
+    border-radius: 20px;
+    padding: 1rem;
+    border: 1px solid var(--border-color, #334155);
+    transition: 0.3s;
+    cursor: pointer;
+}
+    
+.document-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+    
+.document-icon {
+    font-size: 48px;
+    color: #fed049;
+    margin-bottom: 15px;
+}
+    
+.document-name {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+    
+.document-meta {
+    font-size: 0.75rem;
+    color: var(--text-dim, #94a3b8);
+    margin: 0.3rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+    
+.document-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0.8rem;
+}
+.document-actions button, .document-actions a {
+    background: none;
+    border: none;
+    color: var(--text-dim, #94a3b8);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.document-actions button:hover, .document-actions a:hover {
+    color: var(--accent, #fed049);
+}
+    
+    
+.documents-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+    
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+    
+.loader-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    text-align: center;
+}
+
+
+#editorMode{
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+#viewMode{
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+.editor-header, .view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #fed049;;
+    gap: 15px;
+}
+
+.doc-name-input {
+    font-size: 20px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    width: 300px;
+}
+
+.Custom-btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.view-content {
+    padding: 40px;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;;
+}
+
+.view-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.note-editor {
+    margin: 20px;
+}
+
+
+.note-editor.note-frame {
+    border: 1px solid #2c3e50 !important;
+    background: #1b262c !important;
+}
+
+.note-editor .note-toolbar {
+    background: #283841 !important;
+    border-bottom: 1px solid #1b262c !important;
+}
+
+.note-editor .note-toolbar .note-btn {
+    background: #0c416a !important;
+    border: 1px solid #0c416a !important;
+    color: #ffffff !important;
+}
+
+.note-editor .note-toolbar .note-btn i {
+    color: #ffffff !important;
+}
+
+.note-editor .note-toolbar .note-btn:hover {
+    background: #2c3e50 !important;
+    border-color: #0c416a !important;
+}
+
+.note-editor .note-toolbar .note-btn.active,
+.note-editor .note-toolbar .note-btn:active {
+    background: #0c416a !important;
+    border-color: #ecf0f1 !important;
+}
+
+.note-editor .note-toolbar .dropdown-menu {
+    background: #1b262c !important;
+    border: 1px solid #2c3e50 !important;
+}
+
+.note-editor .note-toolbar .dropdown-menu a {
+    color: #ecf0f1 !important;
+    background: transparent !important;
+}
+
+.note-editor .note-toolbar .dropdown-menu a:hover {
+    background: #0c416a !important;
+}
+
+.note-editor .note-toolbar .dropdown-toggle::after {
+    color: #ecf0f1 !important;
+}
+
+.note-editor .note-editable {
+    background: #1b262c !important;
+    color: #ecf0f1 !important;
+}
+
+.note-editor .note-editable.note-editable {
+    background: #1b262c !important;
+}
+
+.note-editor .note-editable[placeholder]::before {
+    color: #7f8c8d !important;
+}
+
+.note-editor .note-statusbar {
+    background: #1b262c  !important;
+    border-top: 1px solid #1b262c !important;
+}
+
+.note-editor .note-statusbar .note-resizebar {
+    background: #283841  !important;
+}
+
+.note-editor .note-color-palette {
+    background: #1b262c !important;
+}
+
+.note-editor .note-btn-group .note-btn .note-current-color-button {
+    background: #1b262c !important;
+}
+
+.modal-content{
+    background: #1b262c !important;
+    border: 1px solid #0c416a !important;
+    border-bottom: 1px solid #1b262c !important;
+}
+
+.modal-content .note-modal-header {
+    background: #0c416a !important;
+    color: #ecf0f1 !important;
+}
+
+.modal-content .note-modal-body {
+    background: #1b262c !important;
+    color: #ecf0f1 !important;
+}
+
+.modal-content .note-modal-footer {
+    background: #0c416a !important;
+    border-top: 1px solid #1b262c !important;
+}
+
+.modal-content .form-control {
+    background: #2c3e50 !important;
+    border: 1px solid #0c416a !important;
+    color: #ecf0f1 !important;
+}
+
+.modal-content .btn {
+    background: #0c416a !important;
+    border-color: #1b262c !important;
+    color: #ecf0f1 !important;
+}
+
+.modal-content .btn:hover {
+    background: #1b262c !important;
+}
+
+.modal-content .close {
+    display: none;
+}
+
+.note-popover .popover-content,
+.panel-heading.note-toolbar {
+    background: #0c416a !important;
+}
+
+
+.note-editor .note-codable {
+    background: #1b262c !important;
+    color: #ecf0f1 !important;
+    border: 1px solid #0c416a !important;
+}
+
+
+.note-editor .note-toolbar .note-btn {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+}
+
+.note-editor .note-toolbar .note-btn i {
+    font-size: 14px !important;
+}
+
+
+.note-editor .note-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px !important;
+}
+
+@media (max-width: 768px) {
+    .note-editor .note-toolbar .note-btn {
+        padding: 3px 6px !important;
+        font-size: 11px !important;
+    }
+    
+    .note-editor .note-toolbar .note-btn i {
+        font-size: 12px !important;
+    }
 }
