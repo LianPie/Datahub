@@ -3,8 +3,87 @@
 class FileManagerActions extends FileManagerCore {
     constructor() {
         super();
+        this.initConfirmModal();
+
     }
     
+    // ---------- Custom confirmation modal (Promise-based) ----------
+    initConfirmModal() {
+        if (document.getElementById('customConfirmModal')) return;
+        
+        const modalHtml = `
+            <div id="customConfirmModal" class="custom-modal confirm-modal" style="display: none;">
+                <div class="custom-modal-content">
+                    <div class="custom-modal-header">
+                        <h3 id="confirmTitle">Confirm Action</h3>
+                        <span class="modal-close" onclick="window.fileManagerActions?.closeConfirmModal()">&times;</span>
+                    </div>
+                    <div class="custom-modal-body">
+                        <p id="confirmMessage">Are you sure?</p>
+                    </div>
+                    <div class="custom-modal-footer">
+                        <button id="confirmCancelBtn" class="modal-btn cancel">Cancel</button>
+                        <button id="confirmOkBtn" class="modal-btn confirm">Yes, Proceed</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        this.confirmResolver = null;
+        
+        // Bind events
+        const modal = document.getElementById('customConfirmModal');
+        const closeBtn = modal.querySelector('.modal-close');
+        const cancelBtn = document.getElementById('confirmCancelBtn');
+        const okBtn = document.getElementById('confirmOkBtn');
+        
+        const closeModal = () => {
+            modal.style.display = 'none';
+            if (this.confirmResolver) {
+                this.confirmResolver(false);
+                this.confirmResolver = null;
+            }
+        };
+        
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        okBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            if (this.confirmResolver) {
+                this.confirmResolver(true);
+                this.confirmResolver = null;
+            }
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        
+        // Expose helper for manual closing (if needed)
+        window.fileManagerActions = this;
+        this.closeConfirmModal = closeModal;
+    }
+    
+    async showConfirm(title, message, okText = 'Yes', cancelText = 'Cancel') {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('customConfirmModal');
+            if (!modal) {
+                // fallback to native confirm if modal somehow missing
+                resolve(confirm(message));
+                return;
+            }
+            
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmMessage').innerHTML = message;
+            document.getElementById('confirmOkBtn').innerText = okText;
+            document.getElementById('confirmCancelBtn').innerText = cancelText;
+            
+            this.confirmResolver = resolve;
+            modal.style.display = 'flex';
+        });
+    }
+
     bindEvents() {
         document.querySelectorAll('.modal-close, .modal-btn.cancel').forEach(btn => {
             btn.addEventListener('click', () => this.closeModals());
@@ -134,8 +213,15 @@ class FileManagerActions extends FileManagerCore {
     }
     
     async deleteItem(itemPath, isFolder) {
-        if (!confirm(`Are you sure you want to delete this ${isFolder ? 'folder' : 'file'}?`)) return;
-        
+        const typeText = isFolder ? 'folder' : 'file';
+        const confirmed = await this.showConfirm(
+            `Delete ${typeText}`,
+            `Are you sure you want to move this ${typeText} to trash? You can restore it later.`,
+            'Move to Trash',
+            'Cancel'
+        );
+        if (!confirmed) return;
+                
         try {
             const response = await fetch(this.baseUrl, {
                 method: 'POST',
