@@ -609,3 +609,66 @@ h2{
         font-size: 1.2rem;
     }
 }
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #334155;
+    border-top: 4px solid #fed049;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.video-skip-btn,
+.audio-skip-btn {
+    background: #334155;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.video-skip-btn:hover,
+.audio-skip-btn:hover {
+    background: #2980b9;
+}
+
+.video-skip-btn:active,
+.audio-skip-btn:active {
+    transform: scale(0.98);
+}
+
+/* Trash Style */
+
+.empty-trash {
+    text-align: center;
+    padding: 3rem;
+    background: #1e293b;
+    border-radius: 20px;
+    margin-top: 2rem;
+}
+.empty-trash i {
+    font-size: 4rem;
+    color: #fed049;
+    margin-bottom: 1rem;
+    display: block;
+}
+.confirm-modal .custom-modal-content {
+    max-width: 450px;
+}
+.confirm-modal .custom-modal-body {
+    padding: 1.5rem;
+    font-size: 1rem;
+    text-align: center;
+}
+.confirm-modal .custom-modal-footer {
+    justify-content: center;
+    gap: 1rem;
+}

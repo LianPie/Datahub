@@ -150,7 +150,12 @@ function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
         // Videos
         'video/mp4', 'video/mpeg', 'video/ogg', 'video/webm', 
         'video/quicktime', 'video/x-msvideo', 'video/x-matroska',
-        'video/mov', 'video/avi', 'video/mkv'
+        'video/mov', 'video/avi', 'video/mkv',
+        // Music / Audio
+        'audio/mpeg','audio/mp3',   // mp3
+        'audio/wav', 'audio/x-wav', // wav
+        'audio/ogg','audio/vorbis', // ogg 
+        'audio/opus',        // opus
     ];
     
     if (!in_array($file['type'], $allowed_types)) {
@@ -282,6 +287,79 @@ function getFolderContents($user_folder, $subfolder = '') {
     return $result;
 }
 
+// Get recent files 
+function getRecentFiles($user_folder, $limit = 3) {
+    $recent_files = [];
+    
+    if (!is_dir($user_folder)) {
+        return $recent_files;
+    }
+    
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($user_folder, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
+    
+    foreach ($iterator as $file) {
+        if ($file->isFile()) {
+            $relative_path = str_replace($user_folder . DIRECTORY_SEPARATOR, '', $file->getPathname());
+            $relative_path = str_replace('\\', '/', $relative_path);
+            
+            $recent_files[] = [
+                'name' => $file->getFilename(),
+                'path' => $relative_path,  
+                'size' => $file->getSize(),
+                'size_formatted' => formatSize($file->getSize()),
+                'modified' => $file->getMTime(),
+                'modified_formatted' => date('Y-m-d H:i:s', $file->getMTime()),
+                'extension' => strtolower($file->getExtension())
+            ];
+        }
+    }
+    
+    usort($recent_files, function($a, $b) {
+        return $b['modified'] - $a['modified'];
+    });
+    
+    
+    return array_slice($recent_files, 0, $limit);
+}
+
+function getRecentFolders($user_folder, $limit = 3) {
+    $recent_folders = [];
+    
+    if (!is_dir($user_folder)) {
+        return $recent_folders;
+    }
+    
+    $items = scandir($user_folder);
+    
+    foreach ($items as $item) {
+        if ($item == '.' || $item == '..') {
+            continue;
+        }
+        
+        $item_path = $user_folder . '/' . $item;
+        
+        if (is_dir($item_path)) {
+            $recent_folders[] = [
+                'name' => $item,
+                'path' => $item,
+                'modified' => filemtime($item_path),
+                'modified_formatted' => date('Y-m-d H:i:s', filemtime($item_path)),
+                'item_count' => count(scandir($item_path)) - 2 
+            ];
+        }
+    }
+    
+    usort($recent_folders, function($a, $b) {
+        return $b['modified'] - $a['modified'];
+    });
+    
+    return array_slice($recent_folders, 0, $limit);
+}
+
+
 // Handle AJAX requests
 if ($_SERVER["REQUEST_METHOD"] == "POST" && 
     isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
@@ -334,6 +412,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
             $contents = getFolderContents($user_folder, $folder_path);
             $response = ["success" => true, "data" => $contents];
             break;
+
+        case 'get_recent_items':
+            $recent_files = getRecentFiles($user_folder, 3);
+            $recent_folders = getRecentFolders($user_folder, 3);
+            $response = [
+                "success" => true,
+                "recent_files" => $recent_files,
+                "recent_folders" => $recent_folders
+            ];
+            break;
+
         default:
             $response = ["success" => false, "message" => "Invalid action"];
     }
@@ -358,9 +447,70 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['download'])) {
 
     // Security: ensure file is inside user folder
     if (strpos(realpath($full_path), realpath($user_folder)) === 0 && file_exists($full_path)) {
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . basename($full_path) . '"');
-        readfile($full_path);
+  
+        $file_size = filesize($full_path);
+        $file_extension = strtolower(pathinfo($full_path, PATHINFO_EXTENSION));
+        
+        // MIME types
+        $mime_types = [
+            'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogg' => 'video/ogg',
+            'mp3' => 'audio/mpeg', 'wav' => 'audio/wav', 'm4a' => 'audio/mp4',
+            'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png',
+            'gif' => 'image/gif', 'webp' => 'image/webp', 'pdf' => 'application/pdf'
+        ];
+        
+        $mime_type = $mime_types[$file_extension] ?? 'application/octet-stream';
+        
+        // files with preview modal
+        $inline_types = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mp3', 'wav', 'ogg'];
+        
+        header('Access-Control-Allow-Origin: *');
+        header('Accept-Ranges: bytes');
+        header('Content-Type: ' . $mime_type);
+        
+        if (in_array($file_extension, $inline_types)) {
+            header('Content-Disposition: inline; filename="' . basename($full_path) . '"');
+        } else {
+            header('Content-Disposition: attachment; filename="' . basename($full_path) . '"');
+        }
+        
+        $start = 0;
+        $end = $file_size - 1;
+        
+        if (isset($_SERVER['HTTP_RANGE'])) {
+            $range = $_SERVER['HTTP_RANGE'];
+            $range = str_replace('bytes=', '', $range);
+            $range_parts = explode('-', $range);
+            $start = intval($range_parts[0]);
+            
+            if (isset($range_parts[1]) && !empty($range_parts[1])) {
+                $end = intval($range_parts[1]);
+            }
+            
+            header('HTTP/1.1 206 Partial Content');
+            header('Content-Range: bytes ' . $start . '-' . $end . '/' . $file_size);
+        } else {
+            header('HTTP/1.1 200 OK');
+        }
+        
+        $length = $end - $start + 1;
+        header('Content-Length: ' . $length);
+        
+        $fp = fopen($full_path, 'rb');
+        fseek($fp, $start);
+        
+        $buffer_size = 8192;
+        $bytes_sent = 0;
+        
+        while (!feof($fp) && $bytes_sent < $length) {
+            $remaining = $length - $bytes_sent;
+            $buffer = fread($fp, min($buffer_size, $remaining));
+            echo $buffer;
+            flush();
+            $bytes_sent += strlen($buffer);
+        }
+        
+        fclose($fp);
         exit();
     } else {
         http_response_code(403);
@@ -368,6 +518,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['download'])) {
         exit();
     }
 }
+
+
 
 // Close database connection
 if (isset($conn)) {

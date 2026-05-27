@@ -34,3 +34,5 @@ include 'includes/header.php';
 </div>
 
 <?php include 'includes/footer.php'; ?>
+
+<script src="/Datahub/assets/js/dashboardHome.js"></script>

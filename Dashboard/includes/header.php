@@ -21,6 +21,17 @@ $username = $_SESSION["username"];
     <link rel="stylesheet" href="/Datahub/assets/fonts/remixicon.css">
     <link rel="stylesheet" href="/Datahub/assets/css/dashboard.css">
     <link rel="stylesheet" href="/Datahub/assets/css/toast.css">
+
+    
+    <?php if ($current_lang == 'fa'): ?>
+    <style>
+        .skipbtns {
+            direction: ltr;
+        }
+    </style>
+
+    <?php endif; ?>
+
 </head>
 <body>
 
@@ -39,7 +50,7 @@ $username = $_SESSION["username"];
 
         <div class="user-profile">
             <i class="ri-user-3-line"></i>
-            <span><?php echo htmlspecialchars($username); ?></span>
+            <span class="user-name"><?php echo htmlspecialchars($username); ?></span>
         </div>
         <?php if ($current_lang == 'en'): ?>
             <a href="?lang=fa" type="button" class="btn-lang" id="switchLangBtn">فا</a>
@@ -61,12 +72,12 @@ $username = $_SESSION["username"];
             </li>
             <li>
                 <a href="/Datahub/Dashboard/Uploads.php" >
-                    <i class="ri-folder-line"></i> <span><?= __(key: 'files') ?></span>
+                    <i class="ri-folder-line"></i> <span><?= __('files') ?></span>
                 </a>
             </li>
             <li>
-                <a href="#" >
-                    <i class="ri-delete-bin-line"></i> <span><?= __(key: 'trash') ?></span>
+                <a href="/Datahub/Dashboard/Trash.php" >
+                    <i class="ri-delete-bin-line"></i> <span><?= __('trash') ?></span>
                 </a>
             </li>
             <li>

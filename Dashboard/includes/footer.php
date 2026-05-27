@@ -11,7 +11,7 @@
             <input type="text" id="folderNameInput" placeholder="<?= __('folder_name') ?>" class="modal-input">
         </div>
         <div class="custom-modal-footer">
-            <button class="modal-btn cancel"><?= __(key: 'cancel') ?></button>
+            <button class="modal-btn cancel"><?= __('cancel') ?></button>
             <button class="modal-btn confirm" id="confirmFolderBtn"><?= __('create') ?></button>
         </div>
     </div>
@@ -20,7 +20,7 @@
 <div id="uploadModal" class="custom-modal" style="display: none;">
     <div class="custom-modal-content">
         <div class="custom-modal-header">
-            <h3><?= __(key: 'upload_file') ?></h3>
+            <h3><?= __('upload_file') ?></h3>
             <span class="modal-close">&times;</span>
         </div>
         <div class="custom-modal-body">
@@ -36,14 +36,34 @@
             </div>
         </div>
         <div class="custom-modal-footer">
-            <button class="modal-btn cancel"><?= __(key: 'cancel') ?></button>
-            <button class="modal-btn confirm" id="confirmUploadBtn"><?= __(key: 'upload') ?></button>
+            <button class="modal-btn cancel"><?= __('cancel') ?></button>
+            <button class="modal-btn confirm" id="confirmUploadBtn"><?= __('upload') ?></button>
         </div>
     </div>
 </div>
 
 <script src="/Datahub/assets/js/toast.js"></script>
 <script src="/Datahub/assets/js/dashboard.js"></script>
+<script>
+      window.translations = {
+        'error_loading_files': '<?= __('error_loading_files') ?>',
+        'no_folders_yet': '<?= __('no_folders_yet') ?>',
+        'no_files_yet': '<?= __('no_files_yet') ?>',
+        'root': '<?= __('root') ?>',
+        'location_in': '<?= __('location_in') ?>',
+        'all_files_folders': '<?= __('all_files_folders') ?>',
+        'loading': '<?= __('loading') ?>',
+        'error_loading_image': '<?= __('error_loading_image') ?>',
+        'error_loading_video': '<?= __('error_loading_video') ?>',
+        'error_loading_audio': '<?= __('error_loading_audio') ?>',
+        'error_loading_folders': '<?= __('error_loading_folders') ?>',
+    };
+function __(key) {
+    return window.translations && window.translations[key] ? window.translations[key] : key;
+}
+</script>
+<script src="/Datahub/assets/js/FileManagerCore.js"></script>
+<script src="/Datahub/assets/js/FileManagerActions.js"></script>
 <script src="/Datahub/assets/js/fileManager.js"></script>
 
 </body>
