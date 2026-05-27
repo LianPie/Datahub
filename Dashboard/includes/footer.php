@@ -11,7 +11,7 @@
             <input type="text" id="folderNameInput" placeholder="<?= __('folder_name') ?>" class="modal-input">
         </div>
         <div class="custom-modal-footer">
-            <button class="modal-btn cancel"><?= __(key: 'cancel') ?></button>
+            <button class="modal-btn cancel"><?= __('cancel') ?></button>
             <button class="modal-btn confirm" id="confirmFolderBtn"><?= __('create') ?></button>
         </div>
     </div>
@@ -20,7 +20,7 @@
 <div id="uploadModal" class="custom-modal" style="display: none;">
     <div class="custom-modal-content">
         <div class="custom-modal-header">
-            <h3><?= __(key: 'upload_file') ?></h3>
+            <h3><?= __('upload_file') ?></h3>
             <span class="modal-close">&times;</span>
         </div>
         <div class="custom-modal-body">
@@ -36,8 +36,8 @@
             </div>
         </div>
         <div class="custom-modal-footer">
-            <button class="modal-btn cancel"><?= __(key: 'cancel') ?></button>
-            <button class="modal-btn confirm" id="confirmUploadBtn"><?= __(key: 'upload') ?></button>
+            <button class="modal-btn cancel"><?= __('cancel') ?></button>
+            <button class="modal-btn confirm" id="confirmUploadBtn"><?= __('upload') ?></button>
         </div>
     </div>
 </div>
