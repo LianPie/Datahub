@@ -287,6 +287,79 @@ function getFolderContents($user_folder, $subfolder = '') {
     return $result;
 }
 
+// Get recent files 
+function getRecentFiles($user_folder, $limit = 3) {
+    $recent_files = [];
+    
+    if (!is_dir($user_folder)) {
+        return $recent_files;
+    }
+    
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($user_folder, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
+    
+    foreach ($iterator as $file) {
+        if ($file->isFile()) {
+            $relative_path = str_replace($user_folder . DIRECTORY_SEPARATOR, '', $file->getPathname());
+            $relative_path = str_replace('\\', '/', $relative_path);
+            
+            $recent_files[] = [
+                'name' => $file->getFilename(),
+                'path' => $relative_path,  
+                'size' => $file->getSize(),
+                'size_formatted' => formatSize($file->getSize()),
+                'modified' => $file->getMTime(),
+                'modified_formatted' => date('Y-m-d H:i:s', $file->getMTime()),
+                'extension' => strtolower($file->getExtension())
+            ];
+        }
+    }
+    
+    usort($recent_files, function($a, $b) {
+        return $b['modified'] - $a['modified'];
+    });
+    
+    
+    return array_slice($recent_files, 0, $limit);
+}
+
+function getRecentFolders($user_folder, $limit = 3) {
+    $recent_folders = [];
+    
+    if (!is_dir($user_folder)) {
+        return $recent_folders;
+    }
+    
+    $items = scandir($user_folder);
+    
+    foreach ($items as $item) {
+        if ($item == '.' || $item == '..') {
+            continue;
+        }
+        
+        $item_path = $user_folder . '/' . $item;
+        
+        if (is_dir($item_path)) {
+            $recent_folders[] = [
+                'name' => $item,
+                'path' => $item,
+                'modified' => filemtime($item_path),
+                'modified_formatted' => date('Y-m-d H:i:s', filemtime($item_path)),
+                'item_count' => count(scandir($item_path)) - 2 
+            ];
+        }
+    }
+    
+    usort($recent_folders, function($a, $b) {
+        return $b['modified'] - $a['modified'];
+    });
+    
+    return array_slice($recent_folders, 0, $limit);
+}
+
+
 // Handle AJAX requests
 if ($_SERVER["REQUEST_METHOD"] == "POST" && 
     isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
@@ -339,6 +412,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
             $contents = getFolderContents($user_folder, $folder_path);
             $response = ["success" => true, "data" => $contents];
             break;
+
+        case 'get_recent_items':
+            $recent_files = getRecentFiles($user_folder, 3);
+            $recent_folders = getRecentFolders($user_folder, 3);
+            $response = [
+                "success" => true,
+                "recent_files" => $recent_files,
+                "recent_folders" => $recent_folders
+            ];
+            break;
+
         default:
             $response = ["success" => false, "message" => "Invalid action"];
     }

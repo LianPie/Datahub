@@ -609,3 +609,38 @@ h2{
         font-size: 1.2rem;
     }
 }
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #334155;
+    border-top: 4px solid #fed049;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.video-skip-btn,
+.audio-skip-btn {
+    background: #334155;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.video-skip-btn:hover,
+.audio-skip-btn:hover {
+    background: #2980b9;
+}
+
+.video-skip-btn:active,
+.audio-skip-btn:active {
+    transform: scale(0.98);
+}

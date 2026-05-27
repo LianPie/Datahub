@@ -66,8 +66,5 @@ include 'includes/header.php';
     'pdf_preview': '<?= __('pdf_preview') ?>',
     'cannot_preview_download': '<?= __('cannot_preview_download') ?>'
 };
-function __(key) {
-    return window.translations && window.translations[key] ? window.translations[key] : key;
-}
 </script>
 <?php include 'includes/footer.php'; ?>
