@@ -103,6 +103,10 @@ function formatSize($bytes) {
 function createUserFolder($folder_name, $user_folder, $subfolder = '') {
     $safe_name = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $folder_name);
     
+     if (empty($subfolder) && in_array(strtolower($safe_name), ['docs', 'trash'])) {
+        return ["success" => false, "message" => "This folder name is reserved and cannot be used"];
+    }
+
     $target_dir = $user_folder;
     if (!empty($subfolder)) {
         $clean_subfolder = preg_replace('/[^a-zA-Z0-9_\-]/', '/', $subfolder);
@@ -252,6 +256,10 @@ function getFolderContents($user_folder, $subfolder = '') {
             continue;
         }
         
+        if (empty($subfolder) && ($item == 'docs' || $item == 'trash')) {
+                    continue;
+    }
+
         $item_path = $target_dir . '/' . $item;
         
         if (is_dir($item_path)) {
@@ -270,7 +278,7 @@ function getFolderContents($user_folder, $subfolder = '') {
                 'size' => $size,
                 'size_formatted' => formatSize($size),
                 'modified' => date('Y-m-d H:i:s', filemtime($item_path)),
-                'extension' => pathinfo($item, PATHINFO_EXTENSION)
+                'extension' => pathinfo($item, PATHINFO_EXTENSION),
             ];
         }
     }
@@ -305,6 +313,8 @@ function getRecentFiles($user_folder, $limit = 3) {
             $relative_path = str_replace($user_folder . DIRECTORY_SEPARATOR, '', $file->getPathname());
             $relative_path = str_replace('\\', '/', $relative_path);
             
+            $is_doc = (strpos($relative_path, 'docs/') === 0 && $file->getExtension() == 'html');
+
             $recent_files[] = [
                 'name' => $file->getFilename(),
                 'path' => $relative_path,  
@@ -312,7 +322,8 @@ function getRecentFiles($user_folder, $limit = 3) {
                 'size_formatted' => formatSize($file->getSize()),
                 'modified' => $file->getMTime(),
                 'modified_formatted' => date('Y-m-d H:i:s', $file->getMTime()),
-                'extension' => strtolower($file->getExtension())
+                'extension' => strtolower($file->getExtension()),
+                'is_document' => $is_doc  
             ];
         }
     }
@@ -339,6 +350,9 @@ function getRecentFolders($user_folder, $limit = 3) {
             continue;
         }
         
+        if (($item == 'docs' || $item == 'trash')) {
+            continue;
+    }
         $item_path = $user_folder . '/' . $item;
         
         if (is_dir($item_path)) {
