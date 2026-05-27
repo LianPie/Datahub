@@ -475,9 +475,7 @@ img {
     left: auto;
     right: 20px;
 }
-[dir="rtl"] .login__title, .login__label, .login__switch, .login__social-title {
-    text-align: right;
-}
+
 .login__box {
     text-align: right;
 }
