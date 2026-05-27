@@ -34,7 +34,7 @@ include 'includes/header.php';
 </div>
 
 <script>
-    window.translations = {
+window.translations = {
     'image_preview': '<?= __('image_preview') ?>',
     'video_player': '<?= __('video_player') ?>',
     'browser_no_video_support': '<?= __('browser_no_video_support') ?>',

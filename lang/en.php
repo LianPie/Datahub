@@ -117,7 +117,6 @@ return [
     'uploading' => 'Uploading...',
     'file_uploaded_success' => 'File uploaded successfully',
     'failed_to_upload_file' => 'Failed to upload file',
-    'root_no_folder' => 'Root (No Folder)',
     'image_preview' => 'Image Preview',
     'video_player' => 'Video Player',
     'browser_no_video_support' => 'Your browser does not support the video tag.',
@@ -143,8 +142,6 @@ return [
     'new_password_required' => 'New password is required',
     'passwords_match' => 'Passwords match',
     'password_medium' => 'Medium strength',
-    'password_strong' => 'Strong password',
-    'connection_error' => 'Connection error. Please try again',
 
     // All error messages from the handler
     'not_authenticated' => 'Please login to continue',
@@ -164,18 +161,42 @@ return [
     'database_error' => 'Database error occurred',
     'update_failed' => 'Failed to update. Please try again',
     'invalid_request' => 'Invalid request',
-    'username_required' => 'Username is required',
-
-    'loading' => 'loading...',
     'error_loading_image' => 'Failed to load image.',
     'error_loading_video' => 'Failed to load video',
     'error_loading_audio' => 'Failed to load audio',
     'error_loading_folders' => 'Failed to load folders',
     
-    //Trash 
-    'trash_empty' => 'Trash is empty.',
-    'restore' => 'Restore',
-    'permanent_delete' => 'Permanent Delete',
+    
+    // ========== DELETE/CONFIRMATION DIALOGS ==========
+    'delete_folder' => 'Delete Folder',
+    'delete_file' => 'Delete File',
+    'confirm_delete_folder' => 'Are you sure you want to move this folder to trash? You can restore it later.',
+    'confirm_delete_file' => 'Are you sure you want to move this file to trash? You can restore it later.',
+    'move_to_trash' => 'Move to Trash',
 
+    // ========== DELETE ITEM MESSAGES ==========
+    'invalid_path' => 'Invalid item path',
+    'item_not_found' => 'Item not found',
+    'move_to_trash_failed' => 'Failed to move to trash',
+    'delete_success' => 'Item deleted successfully',
+    'delete_failed' => 'Failed to delete',
+
+     // ========== TRASH MESSAGES ==========
+    'trash_empty' => 'Trash is empty.',
+    'restore' => 'Restore',  
+    'empty_trash' => 'Empty Trash',
+    'delete_permanently' => 'Delete Permanently',
+    'no_items_in_trash' => 'No items in trash',
+    'restore_success' => 'Item restored successfully',
+    'restore_failed' => 'Failed to restore item',
+    'delete_permanent_success' => 'Item permanently deleted',
+    'delete_permanent_failed' => 'Failed to delete permanently',
+    'empty_trash_success' => 'Trash emptied successfully',
+    'empty_trash_failed' => 'Failed to empty trash',
+    'confirm_empty_trash' => 'Are you sure you want to empty trash? This action cannot be undone.',
+    'confirm_delete_permanent' => 'Are you sure you want to permanently delete this item? This action cannot be undone.',
+    'restored_at' => 'Restored at',
+    'deleted_at' => 'Deleted at',
+    'error_loading_trash' => 'Failed to load trash contents',
 ];
 ?>

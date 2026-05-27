@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="file-actions">
                     <button class="preview-btn" onclick="${viewAction}"><i class="ri-eye-line"></i></button>
                     <a href="/Datahub/Handlers/UploadHandler.php?download=1&path=${encodeURIComponent(file.path)}" download onclick="event.stopPropagation()"><i class="ri-download-line"></i></a>
-                        <button class="delete-btn" onclick="event.stopPropagation(); deleteFile('${file.path}', this)"><i class="ri-delete-bin-line"></i></button>
+                    <button class="delete-btn" onclick="fileManager.deleteItem('${file.path}', false)"><i class="ri-delete-bin-line"></i></button>
                     </div>
                 </div>
             `;
