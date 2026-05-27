@@ -168,6 +168,9 @@ return [
     'error_loading_audio' => 'خطا در بارگذاری فایل صوتی',
     'error_loading_folders' => 'خطا در بارگذاری پوشه ها',
 
-    
+    //سطل زباله
+    'trash_empty' => 'زباله‌دان خالی است.',
+    'restore' => 'بازیابی',
+    'permanent_delete' => 'حذف دائمی',
 ]
 ?>

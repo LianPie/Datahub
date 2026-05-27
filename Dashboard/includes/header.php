@@ -72,12 +72,12 @@ $username = $_SESSION["username"];
             </li>
             <li>
                 <a href="/Datahub/Dashboard/Uploads.php" >
-                    <i class="ri-folder-line"></i> <span><?= __(key: 'files') ?></span>
+                    <i class="ri-folder-line"></i> <span><?= __('files') ?></span>
                 </a>
             </li>
             <li>
-                <a href="#" >
-                    <i class="ri-delete-bin-line"></i> <span><?= __(key: 'trash') ?></span>
+                <a href="/Datahub/Dashboard/Trash.php" >
+                    <i class="ri-delete-bin-line"></i> <span><?= __('trash') ?></span>
                 </a>
             </li>
             <li>

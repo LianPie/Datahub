@@ -172,6 +172,10 @@ return [
     'error_loading_audio' => 'Failed to load audio',
     'error_loading_folders' => 'Failed to load folders',
     
+    //Trash 
+    'trash_empty' => 'Trash is empty.',
+    'restore' => 'Restore',
+    'permanent_delete' => 'Permanent Delete',
 
 ];
 ?>

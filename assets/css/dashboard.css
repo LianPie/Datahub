@@ -577,3 +577,31 @@ h2{
 .audio-skip-btn:active {
     transform: scale(0.98);
 }
+
+/* Trash Style */
+
+.empty-trash {
+    text-align: center;
+    padding: 3rem;
+    background: #1e293b;
+    border-radius: 20px;
+    margin-top: 2rem;
+}
+.empty-trash i {
+    font-size: 4rem;
+    color: #fed049;
+    margin-bottom: 1rem;
+    display: block;
+}
+.confirm-modal .custom-modal-content {
+    max-width: 450px;
+}
+.confirm-modal .custom-modal-body {
+    padding: 1.5rem;
+    font-size: 1rem;
+    text-align: center;
+}
+.confirm-modal .custom-modal-footer {
+    justify-content: center;
+    gap: 1rem;
+}
