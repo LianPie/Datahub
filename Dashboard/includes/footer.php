@@ -58,6 +58,18 @@
         'error_loading_video': '<?= __('error_loading_video') ?>',
         'error_loading_audio': '<?= __('error_loading_audio') ?>',
         'error_loading_folders': '<?= __('error_loading_folders') ?>',
+        'root_no_folder': '<?= __('root_no_folder') ?>',
+        'all_files_folders': '<?= __('all_files_folders') ?>',
+        'please_enter_folder_name': '<?= __('please_enter_folder_name') ?>',
+        'invalid_folder_name': '<?= __('invalid_folder_name') ?>',
+        'folder_created_success': '<?= __('folder_created_success') ?>',
+        'failed_to_create_folder': '<?= __('failed_to_create_folder') ?>',
+        'please_select_file': '<?= __('please_select_file') ?>',
+        'file_too_large': '<?= __('file_too_large') ?>',
+        'uploading': '<?= __('uploading') ?>',
+        'file_uploaded_success': '<?= __('file_uploaded_success') ?>',
+        'failed_to_upload_file': '<?= __('failed_to_upload_file') ?>',
+        'failed_to_load_folders': '<?= __('failed_to_load_folders') ?>',
     };
 
     if (window.translations) {

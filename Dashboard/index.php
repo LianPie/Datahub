@@ -33,6 +33,17 @@ include 'includes/header.php';
     </div>
 </div>
 
+<script>
+    window.translations = {
+    'image_preview': '<?= __('image_preview') ?>',
+    'video_player': '<?= __('video_player') ?>',
+    'browser_no_video_support': '<?= __('browser_no_video_support') ?>',
+    'music_player': '<?= __('music_player') ?>',
+    'browser_no_audio_support': '<?= __('browser_no_audio_support') ?>',
+    'pdf_preview': '<?= __('pdf_preview') ?>',
+    'cannot_preview_download': '<?= __('cannot_preview_download') ?>'
+};
+</script>
 <?php include 'includes/footer.php'; ?>
 
 <script src="/Datahub/assets/js/dashboardHome.js"></script>
