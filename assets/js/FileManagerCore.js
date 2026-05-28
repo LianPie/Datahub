@@ -85,24 +85,36 @@ class FileManagerCore {
     }
     
     renderFolders(folders) {
-        const foldersList = document.querySelector('.folders-list');
-        if (!foldersList) return;
-        
-        if (folders.length === 0) {
-            foldersList.innerHTML = `<div class="empty-message">${__('no_folders_yet')}</div>`;
-            return;
-        }
-        
-        let html = '';
-        folders.forEach(folder => {
-            html += `<div class="folder-card" onclick="fileManager.openFolder('${folder.path}')" style="cursor: pointer;">
-                        <i class="ri-folder-line"></i>
-                        <span class="folder-name">${this.escapeHtml(folder.name)}</span>
-                        <small>${folder.modified || ''}</small>
-                    </div>`;
-        });
-        foldersList.innerHTML = html;
+    const foldersList = document.querySelector('.folders-list');
+    if (!foldersList) return;
+
+    if (folders.length === 0) {
+        foldersList.innerHTML = '<div class="empty-message">' + (__('no_folders_yet') || 'No folders yet') + '</div>';
+        return;
     }
+
+    let html = '';
+    folders.forEach(folder => {
+        const folderName = folder.name;
+        const folderPath = folder.path;
+        const createdDate = folder.modified || new Date().toISOString().split('T')[0];
+
+        html += `
+            <div class="folder-card" data-folder-path="${folderPath}">
+                <div class="folder-info" onclick="window.fileManager?.openFolder('${folderPath}')">
+                    <i class="ri-folder-line"></i>
+                    <span class="folder-name">${this.escapeHtml(folderName)}</span>
+                    <small>${createdDate}</small>
+                </div>
+                <button class="folder-delete-btn" onclick="window.fileManagerActions.deleteItem('${folderPath}', true)" title="${__('delete_folder') || 'Delete folder'}">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
+        `;
+    });
+
+    foldersList.innerHTML = html;
+}
     
     renderFiles(files) {
         const filesGrid = document.querySelector('.files-grid');

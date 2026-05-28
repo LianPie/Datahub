@@ -167,47 +167,112 @@ async function loadTrashContents() {
     }
 }
 function renderTrashItems(items) {
-    const container = document.getElementById('trashContainer');
+    const folders = items.filter(item => item.is_folder === true || item.is_folder === 1);
+    const files = items.filter(item => !(item.is_folder === true || item.is_folder === 1));
     
-    let html = `<div class="files-grid">`;
+    let html = '';
     
-    items.forEach(item => {
-        const icon = item.is_folder ? 'ri-folder-line' : getFileIcon(item.original_name);
-        const sizeFormatted = formatBytes(item.size);
-        
-        html += `
-            <div class="file-card">
-                <div class="file-icon">
-                    <i class="${icon}"></i>
-                </div>
-                <div class="file-name">${escapeHtml(item.original_name)}</div>
-                <div class="file-size">${sizeFormatted}</div><div class="file-folder">
-                    <small><i class="ri-folder-line"></i> <?= __('original_location') ?>: <span style="word-break: break-word; overflow-wrap: break-word;">${escapeHtml(item.original_path)}</span></small>
-                </div>
-                <div class="file-actions">
-                    <button class="preview-btn" onclick="restoreItem(${item.id})" title="${__('restore')}">
-                        <i class="ri-arrow-go-back-line"></i>
-                    </button>
-                    <button class="delete-btn" onclick="permanentDeleteItem(${item.id})" title="${__('delete_permanently')}">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-    });
-    
-    html += `</div>`;
-    
-    // Add empty trash button at the top
+    // Empty trash button
     html = `
         <div style="text-align: right; margin-bottom: 20px;">
             <button class="btn-danger" onclick="emptyTrash()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
                 <i class="ri-delete-bin-2-line"></i> ${__('empty_trash')}
             </button>
         </div>
-    ` + html;
+    `;
+    
+    // Folders section
+    if (folders.length) {
+        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-folder-line"></i> Folders</h3>`;
+        html += `<div class="files-grid">`;
+        folders.forEach(item => {
+            html += renderTrashCard(item, true);
+        });
+        html += `</div>`;
+    }
+    
+    // Files section
+    if (files.length) {
+        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-file-line"></i> Files</h3>`;
+        html += `<div class="files-grid">`;
+        files.forEach(item => {
+            html += renderTrashCard(item, false);
+        });
+        html += `</div>`;
+    }
     
     container.innerHTML = html;
+}
+
+// Helper to render a single card (reuse your existing card structure)
+function renderTrashItems(items) {
+    const container = document.getElementById('trashContainer');
+    if (!container) return;
+    
+    // Separate folders and files
+    const folders = items.filter(item => item.is_folder === true || item.is_folder === 1);
+    const files = items.filter(item => !(item.is_folder === true || item.is_folder === 1));
+    
+    let html = '';
+    
+    // Empty trash button (always at top)
+    html += `
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button class="btn-danger" onclick="emptyTrash()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
+                <i class="ri-delete-bin-2-line"></i> ${__('empty_trash')}
+            </button>
+        </div>
+    `;
+    
+    // Folders section
+    if (folders.length > 0) {
+        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-folder-line"></i> ${__('folders')}</h3>`;
+        html += `<div class="files-grid">`;
+        folders.forEach(folder => {
+            html += renderTrashCard(folder, true);
+        });
+        html += `</div>`;
+    }
+    
+    // Files section
+    if (files.length > 0) {
+        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-file-line"></i> ${__('files')}</h3>`;
+        html += `<div class="files-grid">`;
+        files.forEach(file => {
+            html += renderTrashCard(file, false);
+        });
+        html += `</div>`;
+    }
+    
+    // If both empty, show empty message
+    if (folders.length === 0 && files.length === 0) {
+        html = `<div class="empty-trash">
+                    <i class="ri-delete-bin-7-line"></i>
+                    <p>${__('trash_empty')}</p>
+                </div>`;
+    }
+    
+    container.innerHTML = html;
+}
+
+// Helper to render a single card (reuse your existing structure)
+function renderTrashCard(item, isFolder) {
+    const icon = isFolder ? 'ri-folder-line' : getFileIcon(item.original_name);
+    const sizeFormatted = isFolder ? '—' : formatBytes(item.size);
+    return `
+        <div class="file-card">
+            <div class="file-icon"><i class="${icon}"></i></div>
+            <div class="file-name">${escapeHtml(item.original_name)}</div>
+            <div class="file-size">${sizeFormatted}</div>
+            <div class="file-folder">
+                <small><i class="ri-folder-line"></i> ${__('original_location')}: <span style="word-break: break-word;">${escapeHtml(item.original_path)}</span></small>
+            </div>
+            <div class="file-actions">
+                <button class="restore-btn" onclick="restoreItem(${item.id})" title="${__('restore')}"><i class="ri-arrow-go-back-line"></i></button>
+                <button class="delete-btn" onclick="permanentDeleteItem(${item.id})" title="${__('delete_permanently')}"><i class="ri-delete-bin-line"></i></button>
+            </div>
+        </div>
+    `;
 }
 
 async function restoreItem(itemId) {

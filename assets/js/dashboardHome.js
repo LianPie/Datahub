@@ -44,13 +44,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         let foldersHtml = '';
         data.recent_folders.forEach(folder => {
-            foldersHtml += `
-                <div class="folder-card" onclick="window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('redirectFolder', '${folder.path}')">
+        foldersHtml += `
+            <div class="folder-card" data-folder-path="${folder.path}">
+                <div class="folder-info" onclick="window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('redirectFolder', '${folder.path}')">
                     <i class="ri-folder-line"></i>
                     <span class="folder-name">${folder.name}</span>
                     <small>${folder.modified_formatted}</small>
                 </div>
-            `;
+                <button class="folder-delete-btn" onclick="event.stopPropagation(); window.fileManagerActions?.deleteItem('${folder.path}', true)" title="${__('delete_folder') || 'Delete folder'}">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
+        `;
         });
         document.querySelector('.recent-folders .folders-list').innerHTML = foldersHtml || `<div class="empty-message">${__('no_folders_yet')}</div>`;
         
