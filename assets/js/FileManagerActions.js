@@ -213,12 +213,14 @@ class FileManagerActions extends FileManagerCore {
     }
     
     async deleteItem(itemPath, isFolder) {
-        const typeText = isFolder ? 'folder' : 'file';
+        const typeText = isFolder ? __('delete_folder') : __('delete_file');
+        const confirmMessage = isFolder ? __('confirm_delete_folder') : __('confirm_delete_file');
+
         const confirmed = await this.showConfirm(
-            `Delete ${typeText}`,
-            `Are you sure you want to move this ${typeText} to trash? You can restore it later.`,
-            'Move to Trash',
-            'Cancel'
+            typeText,
+            confirmMessage,
+            __('move_to_trash'),
+            __('cancel')
         );
         if (!confirmed) return;
                 
@@ -232,18 +234,18 @@ class FileManagerActions extends FileManagerCore {
             const data = JSON.parse(text);
             
             if (data.success) {
-                this.showMessage(`${isFolder ? 'Folder' : 'File'} deleted successfully`, 'success');
+                this.showMessage(__('delete_success'), 'success');
                 this.loadFolderContents(this.currentPath);
                 this.loadStorageInfo();
             } else {
-                this.showError(data.message);
+                this.showError(__(data.message));
             }
         } catch(e) {
-            this.showError('Failed to delete');
+            this.showError(__('delete_failed'));
         }
     }
 
-        previewFile(filePath) {
+    previewFile(filePath) {
         const ext = filePath.split('.').pop().toLowerCase();
         const previewUrl = `${this.baseUrl}?download=1&path=${encodeURIComponent(filePath)}`;
         

@@ -114,7 +114,6 @@ return [
     'uploading' => 'در حال آپلود...',
     'file_uploaded_success' => 'فایل با موفقیت آپلود شد',
     'failed_to_upload_file' => 'آپلود فایل انجام نشد',
-    'root_no_folder' => 'ریشه (بدون پوشه)',
     'image_preview' => 'پیش‌نمایش تصویر',
     'video_player' => 'پخش‌کننده ویدیو',
     'browser_no_video_support' => 'مرورگر شما تگ ویدیو را پشتیبانی نمی‌کند.',
@@ -139,8 +138,6 @@ return [
     'new_password_required' => 'رمز عبور جدید الزامی است',
     'passwords_match' => 'رمزهای عبور مطابقت دارند',
     'password_medium' => 'قدرت متوسط',
-    'password_strong' => 'رمز عبور قوی',
-    'connection_error' => 'خطا در اتصال. لطفاً دوباره تلاش کنید',
 
     // All error messages from the handler
     'not_authenticated' => 'لطفاً برای ادامه وارد شوید',
@@ -160,17 +157,43 @@ return [
     'database_error' => 'خطا در پایگاه داده',
     'update_failed' => 'به‌روزرسانی ناموفق. لطفاً دوباره تلاش کنید',
     'invalid_request' => 'درخواست نامعتبر',
-    'username_required' => 'نام کاربری الزامی است',
-    
-    'loading' => 'درحال بارگذاری...',
+
     'error_loading_image' => 'خطا در بارگذاری تصویر',
     'error_loading_video' => 'خطا در بارگذاری ویدیو',
     'error_loading_audio' => 'خطا در بارگذاری فایل صوتی',
     'error_loading_folders' => 'خطا در بارگذاری پوشه ها',
 
-    //سطل زباله
-    'trash_empty' => 'زباله‌دان خالی است.',
+
+    // ========== DELETE/CONFIRMATION DIALOGS ==========
+    'delete_folder' => 'حذف پوشه',
+    'delete_file' => 'حذف فایل',
+    'confirm_delete_folder' => 'آیا از انتقال این پوشه به سطل زباله اطمینان دارید؟ بعداً می‌توانید آن را بازیابی کنید.',
+    'confirm_delete_file' => 'آیا از انتقال این فایل به سطل زباله اطمینان دارید؟ بعداً می‌توانید آن را بازیابی کنید.',
+    'move_to_trash' => 'انتقال به سطل زباله',
+
+   // ========== DELETE ITEM MESSAGES ==========
+    'invalid_path' => 'مسیر نامعتبر است',
+    'item_not_found' => 'آیتم یافت نشد',
+    'move_to_trash_failed' => 'انتقال به سطل زباله انجام نشد',
+    'delete_success' => 'آیتم با موفقیت حذف شد',
+    'delete_failed' => 'حذف انجام نشد',
+
+    // ========== TRASH MESSAGES ==========
+    'empty_trash' => 'خالی کردن سطل زباله',
     'restore' => 'بازیابی',
-    'permanent_delete' => 'حذف دائمی',
+    'delete_permanently' => 'حذف دائمی',
+    'trash_empty' => 'سطل زباله خالی است',
+    'no_items_in_trash' => 'آیتمی در سطل زباله وجود ندارد',
+    'restore_success' => 'آیتم با موفقیت بازیابی شد',
+    'restore_failed' => 'بازیابی آیتم انجام نشد',
+    'delete_permanent_success' => 'آیتم به طور دائمی حذف شد',
+    'delete_permanent_failed' => 'حذف دائمی انجام نشد',
+    'empty_trash_success' => 'سطل زباله با موفقیت خالی شد',
+    'empty_trash_failed' => 'خالی کردن سطل زباله انجام نشد',
+    'confirm_empty_trash' => 'آیا از خالی کردن سطل زباله اطمینان دارید؟ این عمل قابل بازگشت نیست.',
+    'confirm_delete_permanent' => 'آیا از حذف دائمی این آیتم اطمینان دارید؟ این عمل قابل بازگشت نیست.',
+    'restored_at' => 'بازیابی شده در',
+    'deleted_at' => 'حذف شده در',
+    'error_loading_trash' => 'بارگذاری محتویات سطل زباله انجام نشد',
 ]
 ?>

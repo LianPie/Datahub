@@ -56,15 +56,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let filesHtml = '';
         data.recent_files.forEach(file => {
+            const viewAction = file.is_document ? `window.open('/Datahub/Dashboard/editor.php?doc=${encodeURIComponent(file.name.replace('.html', ''))}', '_blank')`
+                            : `fileManager.previewFile('${file.path}'); sessionStorage.setItem('previewFile', '${file.path}')`;
             filesHtml += `
                 <div class="file-card">
                     <div class="file-icon"><i class="ri-file-fill"></i></div>
                     <div class="file-name">${file.name}</div>
                     <div class="file-size">${file.size_formatted}</div>
                     <div class="file-actions">
-                        <button class="preview-btn" onclick="fileManager.previewFile('${file.path}')"; window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('previewFile', '${file.path}')"><i class="ri-eye-line"></i></button>
-                        <a href="/Datahub/Handlers/UploadHandler.php?download=1&path=${encodeURIComponent(file.path)}" download onclick="event.stopPropagation()"><i class="ri-download-line"></i></a>
-                        <button class="delete-btn" onclick="event.stopPropagation(); deleteFile('${file.path}', this)"><i class="ri-delete-bin-line"></i></button>
+                    <button class="preview-btn" onclick="${viewAction}"><i class="ri-eye-line"></i></button>
+                    <a href="/Datahub/Handlers/UploadHandler.php?download=1&path=${encodeURIComponent(file.path)}" download onclick="event.stopPropagation()"><i class="ri-download-line"></i></a>
+                    <button class="delete-btn" onclick="fileManager.deleteItem('${file.path}', false)"><i class="ri-delete-bin-line"></i></button>
                     </div>
                 </div>
             `;
