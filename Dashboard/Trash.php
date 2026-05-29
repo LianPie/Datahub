@@ -7,13 +7,29 @@ require_once __DIR__ . '/../Database/DbConfig.php';
 <div class="dashboard-content">
     <h2><i class="ri-delete-bin-line"></i> <?= __('trash') ?></h2>
     
-    <div class="files-section">
+    <!-- Empty trash button at top -->
+    <div id="emptyTrashBtnContainer" style="text-align: right; margin-bottom: 20px;">
+        <button class="btn-danger" onclick="emptyTrash()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
+            <i class="ri-delete-bin-2-line"></i> <?= __('empty_trash') ?>
+        </button>
+    </div>
+
+    <div class="folders-section">
+        <h3><i class="ri-folder-line"></i></i> <?= __('folders'); ?></h3>
+        <div class="folders-list" id="trashFoldersList">
+            <div class="files-grid">
+            </div>
             
-    <div class="files-section">
-        <div id="trashContainer">
-            <!-- Loader will appear here -->
         </div>
     </div>
+    
+    <div class="files-section" >
+        <h3><i class="ri-file-line"></i></i> <?= __('files'); ?></h3>
+        <div id="trashFilesGrid">
+            <div class="files-grid">
+                <!-- Loader will appear here -->
+            </div>
+        </div>
     </div>
 </div>
 
@@ -49,7 +65,10 @@ require_once __DIR__ . '/../Database/DbConfig.php';
         'empty_trash_failed': '<?= __('empty_trash_failed') ?>',
         'confirm_empty_trash': '<?= __('confirm_empty_trash') ?>',
         'confirm_delete_permanent': '<?= __('confirm_delete_permanent') ?>',
+        'confirm-restore': '<?= __('confirm-restore') ?>',
         'deleted_at': '<?= __('deleted_at') ?>',
+        'original_location': '<?= __('original_location') ?>',
+        
 };
 </script>
 <?php include 'includes/footer.php'; ?>

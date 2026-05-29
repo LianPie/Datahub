@@ -36,77 +36,30 @@ window.addEventListener('click', (e) => {
     if (e.target === modal) resolveConfirm(false);
 });
 
-// ---------- Restore ----------
-document.querySelectorAll('.restore-btn').forEach(btn => {
-    btn.addEventListener('click', async function() {
-        const fileId = this.dataset.id;
-        const confirmed = await showConfirm(
-            'Restore File',
-            'Are you sure you want to restore this file? It will reappear in your files.',
-            'Restore',
-            'Cancel'
-        );
-        if (!confirmed) return;
-        
-        try {
-            const res = await fetch('/Datahub/Handlers/restore_file.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `id=${fileId}`
-            });
-            const data = await res.json();
-            if (data.success) {
-                if (typeof showToast === 'function') showToast('File restored successfully', 'success');
-                location.reload();
-            } else {
-                if (typeof showToast === 'function') showToast('Error restoring file', 'error');
-            }
-        } catch (err) {
-            if (typeof showToast === 'function') showToast('Network error', 'error');
-        }
-    });
-});
 
-// ---------- Permanent Delete ----------
-document.querySelectorAll('.permanent-delete-btn').forEach(btn => {
-    btn.addEventListener('click', async function() {
-        const fileId = this.dataset.id;
-        const confirmed = await showConfirm(
-            'Permanent Delete',
-            '<span style="color:#f87171;">⚠️ This action cannot be undone!</span><br>Are you sure you want to permanently delete this file?',
-            'Yes, Delete Permanently',
-            'Cancel'
-        );
-        if (!confirmed) return;
-        
-        try {
-            const res = await fetch('/Datahub/Handlers/permanent_delete.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `id=${fileId}`
-            });
-            const data = await res.json();
-            if (data.success) {
-                if (typeof showToast === 'function') showToast('File deleted permanently', 'success');
-                location.reload();
-            } else {
-                if (typeof showToast === 'function') showToast('Error deleting file', 'error');
-            }
-        } catch (err) {
-            if (typeof showToast === 'function') showToast('Network error', 'error');
-        }
-    });
-});
 
 async function loadTrashContents() {
-      const container = document.getElementById('trashContainer');
-    if (!container) return;
+    const foldersContainer = document.getElementById('trashFoldersList');
+    const filesContainer = document.getElementById('trashFilesGrid');
     
-    // Show loader
-    container.innerHTML = `
-        <div class="loader-container" style="display: flex; justify-content: center; align-items: center; padding: 60px;">
-            <div class="loader-spinner"></div>
-            <span style="margin-left: 10px;">${__('loading')}</span>
+    if (!foldersContainer || !filesContainer) return;
+    
+    // Show loaders in both sections
+    foldersContainer.innerHTML = `
+        <div class="files-grid">
+            <div class="loader-container" style="display: flex; justify-content: center; align-items: center; padding: 60px; grid-column: 1/-1;">
+                <div class="loader-spinner"></div>
+                <span style="margin-left: 10px;">${__('loading')}</span>
+            </div>
+        </div>
+    `;
+    
+    filesContainer.innerHTML = `
+        <div class="files-grid">
+            <div class="loader-container" style="display: flex; justify-content: center; align-items: center; padding: 60px; grid-column: 1/-1;">
+                <div class="loader-spinner"></div>
+                <span style="margin-left: 10px;">${__('loading')}</span>
+            </div>
         </div>
     `;
     
@@ -139,120 +92,127 @@ async function loadTrashContents() {
         
         setTimeout(() => {
             if (data.success && data.trash_items && data.trash_items.length > 0) {
-                renderTrashItems(data.trash_items);
+                renderTrashContents(data.trash_items);
             } else {
-                // Show empty trash message
-                container.innerHTML = `
-                    <div class="empty-trash">
-                        <i class="ri-delete-bin-7-line"></i>
+                 // Hide both sections completely
+                const foldersSection = document.querySelector('.folders-section');
+                const filesSection = document.querySelector('.files-section');
+                const emptyTrashBtnContainer = document.getElementById('emptyTrashBtnContainer');
+                
+                if (foldersSection) foldersSection.style.display = 'none';
+                if (filesSection) filesSection.style.display = 'none';
+                if (emptyTrashBtnContainer) emptyTrashBtnContainer.style.display = 'none';
+                
+                // Show global empty message
+                const dashboard = document.querySelector('.dashboard-content');
+                if (dashboard && !document.getElementById('globalEmptyMsg')) {
+                    const emptyMsg = document.createElement('div');
+                    emptyMsg.id = 'globalEmptyMsg';
+                    emptyMsg.className = 'empty-trash';
+                    emptyMsg.style.textAlign = 'center';
+                    emptyMsg.style.padding = '60px';
+                    emptyMsg.innerHTML = `
+                        <i class="ri-delete-bin-7-line" style="font-size: 48px;"></i>
                         <p>${__('trash_empty')}</p>
-                    </div>
-                `;
+                    `;
+                    dashboard.appendChild(emptyMsg);
+                }
             }
         }, delay);
 
-    }  catch (error) {
+    } catch (error) {
         console.error('Error loading trash:', error);
         const elapsed = Date.now() - startTime;
         const delay = Math.max(0, minLoaderTime - elapsed);
         
         setTimeout(() => {
-            container.innerHTML = `
-                <div class="empty-trash">
-                    <i class="ri-error-warning-line"></i>
-                    <p>${__('error_loading_trash')}</p>
+            foldersContainer.innerHTML = `
+                <div class="files-grid">
+                    <div class="empty-trash" style="grid-column: 1/-1; text-align: center; padding: 60px;">
+                        <i class="ri-error-warning-line"></i>
+                        <p>${__('error_loading_trash')}</p>
+                    </div>
+                </div>
+            `;
+            filesContainer.innerHTML = `
+                <div class="files-grid">
+                    <div class="empty-trash" style="grid-column: 1/-1; text-align: center; padding: 60px;">
+                        <i class="ri-error-warning-line"></i>
+                        <p>${__('error_loading_trash')}</p>
+                    </div>
                 </div>
             `;
         }, delay);
     }
 }
-function renderTrashItems(items) {
+
+function renderTrashContents(items) {
+    const foldersContainer = document.getElementById('trashFoldersList');
+    const filesContainer = document.getElementById('trashFilesGrid');
+    const emptyTrashBtnContainer = document.getElementById('emptyTrashBtnContainer');
+    
     const folders = items.filter(item => item.is_folder === true || item.is_folder === 1);
     const files = items.filter(item => !(item.is_folder === true || item.is_folder === 1));
     
-    let html = '';
+    if (emptyTrashBtnContainer) {
+        emptyTrashBtnContainer.style.display = (folders.length > 0 || files.length > 0) ? 'block' : 'none';
+    }
     
-    // Empty trash button
-    html = `
-        <div style="text-align: right; margin-bottom: 20px;">
-            <button class="btn-danger" onclick="emptyTrash()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
-                <i class="ri-delete-bin-2-line"></i> ${__('empty_trash')}
-            </button>
-        </div>
-    `;
-    
-    // Folders section
-    if (folders.length) {
-        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-folder-line"></i> Folders</h3>`;
-        html += `<div class="files-grid">`;
+    // Render folders section
+    if (folders.length > 0) {
+        let foldersHtml = '<div class="files-grid">';
         folders.forEach(item => {
-            html += renderTrashCard(item, true);
+            foldersHtml += renderTrashCard(item, true);
         });
-        html += `</div>`;
+        foldersHtml += '</div>';
+        foldersContainer.innerHTML = foldersHtml;
+    } else {
+        document.querySelector('.folders-section').style.display = 'none';
     }
     
-    // Files section
-    if (files.length) {
-        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-file-line"></i> Files</h3>`;
-        html += `<div class="files-grid">`;
+    // Render files section
+    if (files.length > 0) {
+        let filesHtml = '<div class="files-grid">';
         files.forEach(item => {
-            html += renderTrashCard(item, false);
+            filesHtml += renderTrashCard(item, false);
         });
-        html += `</div>`;
+        filesHtml += '</div>';
+        filesContainer.innerHTML = filesHtml;
+    } else {
+         document.querySelector('.files-section').style.display = 'none';
     }
-    
-    container.innerHTML = html;
 }
 
-// Helper to render a single card (reuse your existing card structure)
-function renderTrashItems(items) {
+
+// Load trash items function
+function loadTrashItems() {
     const container = document.getElementById('trashContainer');
-    if (!container) return;
-    
-    // Separate folders and files
-    const folders = items.filter(item => item.is_folder === true || item.is_folder === 1);
-    const files = items.filter(item => !(item.is_folder === true || item.is_folder === 1));
-    
-    let html = '';
-    
-    // Empty trash button (always at top)
-    html += `
-        <div style="text-align: right; margin-bottom: 20px;">
-            <button class="btn-danger" onclick="emptyTrash()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
-                <i class="ri-delete-bin-2-line"></i> ${__('empty_trash')}
-            </button>
-        </div>
-    `;
-    
-    // Folders section
-    if (folders.length > 0) {
-        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-folder-line"></i> ${__('folders')}</h3>`;
-        html += `<div class="files-grid">`;
-        folders.forEach(folder => {
-            html += renderTrashCard(folder, true);
-        });
-        html += `</div>`;
+    if (container) {
+        container.innerHTML = `<div class="loading">${__('loading')}...</div>`;
     }
     
-    // Files section
-    if (files.length > 0) {
-        html += `<h3 style="margin-top: 1.5rem; color: #fed049;"><i class="ri-file-line"></i> ${__('files')}</h3>`;
-        html += `<div class="files-grid">`;
-        files.forEach(file => {
-            html += renderTrashCard(file, false);
-        });
-        html += `</div>`;
-    }
-    
-    // If both empty, show empty message
-    if (folders.length === 0 && files.length === 0) {
-        html = `<div class="empty-trash">
-                    <i class="ri-delete-bin-7-line"></i>
-                    <p>${__('trash_empty')}</p>
-                </div>`;
-    }
-    
-    container.innerHTML = html;
+    fetch('/Datahub/Handlers/FileHandler.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            'action': 'get_trash_items'
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            renderTrashItems(data.items);
+        } else {
+            container.innerHTML = `<div class="error-message">${__('error_loading_trash')}</div>`;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        container.innerHTML = `<div class="error-message">${__('error_loading_trash')}</div>`;
+    });
 }
 
 // Helper to render a single card (reuse your existing structure)
@@ -275,9 +235,48 @@ function renderTrashCard(item, isFolder) {
     `;
 }
 
+
+
+
+function emptyTrash() {
+    if (confirm(__('confirm_empty_trash'))) {
+        // Your empty trash AJAX call here
+        fetch('/Datahub/Handlers/FileHandler.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({
+                'action': 'empty_trash'
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showMessage(__('empty_trash_success'), 'success');
+                loadTrashItems(); // Reload trash
+            } else {
+                showMessage(__('empty_trash_failed'), 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage(__('empty_trash_failed'), 'error');
+        });
+    }
+}
+
+
 async function restoreItem(itemId) {
-    const confirmed = confirm(__('restore'));
-    if (!confirmed) return;
+    const userConfirmed = await showConfirm(
+        __('restore'),
+        __('confirm-restore'),
+        __('restore'),
+        __('cancel'),
+    );
+    
+    if (!userConfirmed) return;
     
     try {
         const response = await fetch('/Datahub/Handlers/UploadHandler.php', {
@@ -292,7 +291,7 @@ async function restoreItem(itemId) {
         const data = await response.json();
         
         if (data.success) {
-            showError( __('restore_success'));
+            showMessage( __('restore_success'),'success');
             loadTrashContents();
         } else {
             showError(__('restore_failed'));
@@ -303,8 +302,16 @@ async function restoreItem(itemId) {
 }
 
 async function permanentDeleteItem(itemId) {
-    const confirmed = confirm(__('confirm_delete_permanent'));
-    if (!confirmed) return;
+    
+    const userConfirmed = await showConfirm(
+        __('delete_permanently'),
+        __('confirm_delete_permanent'),
+        __('delete_permanently'),
+        __('cancel'),
+    );
+    
+    if (!userConfirmed) return;
+    
     
     try {
         const response = await fetch('/Datahub/Handlers/UploadHandler.php', {
@@ -330,8 +337,17 @@ async function permanentDeleteItem(itemId) {
 }
 
 async function emptyTrash() {
-    const confirmed = confirm(__('confirm_empty_trash'));
-    if (!confirmed) return;
+
+    
+    const userConfirmed = await showConfirm(
+        __('empty_trash'),
+        __('confirm_empty_trash'),
+        __('empty_trash'),
+        __('cancel'),
+    );
+    
+    if (!userConfirmed) return;
+
     
     try {
         const response = await fetch('/Datahub/Handlers/UploadHandler.php', {
@@ -346,13 +362,13 @@ async function emptyTrash() {
         const data = await response.json();
         
         if (data.success) {
-            showError(__('trash_emptied_successfully'));
+            showMessage(__('empty_trash_success'), 'success');
             loadTrashContents();
         } else {
-            showError(data.message || __('error_emptying_trash'));
+            showError(data.message || __('empty_trash_failed'));
         }
     } catch (error) {
-        showError(__('network_error'));
+        showError(__('empty_trash_failed'));
     }
 }
 

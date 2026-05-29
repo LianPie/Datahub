@@ -101,7 +101,7 @@ class FileManagerCore {
 
         html += `
             <div class="folder-card" data-folder-path="${folderPath}">
-                <div class="folder-info" onclick="window.fileManager?.openFolder('${folderPath}')">
+                <div class="folder-info" onclick="fileManager?.openFolder('${folderPath}')">
                     <i class="ri-folder-line"></i>
                     <span class="folder-name">${this.escapeHtml(folderName)}</span>
                     <small>${createdDate}</small>

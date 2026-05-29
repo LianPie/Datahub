@@ -195,8 +195,11 @@ return [
     'empty_trash_failed' => 'Failed to empty trash',
     'confirm_empty_trash' => 'Are you sure you want to empty trash? This action cannot be undone.',
     'confirm_delete_permanent' => 'Are you sure you want to permanently delete this item? This action cannot be undone.',
+    'confirm-restore' => 'Are you sure you want to restore this item?',
     'restored_at' => 'Restored at',
     'deleted_at' => 'Deleted at',
     'error_loading_trash' => 'Failed to load trash contents',
+    'original_location' => 'Original location',
+    'deleted_files' => 'Deleted files'
 ];
 ?>
