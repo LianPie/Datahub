@@ -103,6 +103,10 @@ function formatSize($bytes) {
 function createUserFolder($folder_name, $user_folder, $subfolder = '') {
     $safe_name = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $folder_name);
     
+     if (empty($subfolder) && in_array(strtolower($safe_name), ['docs', 'trash'])) {
+        return ["success" => false, "message" => "This folder name is reserved and cannot be used"];
+    }
+
     $target_dir = $user_folder;
     if (!empty($subfolder)) {
         $clean_subfolder = preg_replace('/[^a-zA-Z0-9_\-]/', '/', $subfolder);
@@ -252,6 +256,10 @@ function getFolderContents($user_folder, $subfolder = '') {
             continue;
         }
         
+        if (empty($subfolder) && ($item == 'docs' || $item == 'trash')) {
+                    continue;
+    }
+
         $item_path = $target_dir . '/' . $item;
         
         if (is_dir($item_path)) {
@@ -270,7 +278,7 @@ function getFolderContents($user_folder, $subfolder = '') {
                 'size' => $size,
                 'size_formatted' => formatSize($size),
                 'modified' => date('Y-m-d H:i:s', filemtime($item_path)),
-                'extension' => pathinfo($item, PATHINFO_EXTENSION)
+                'extension' => pathinfo($item, PATHINFO_EXTENSION),
             ];
         }
     }
@@ -305,6 +313,12 @@ function getRecentFiles($user_folder, $limit = 3) {
             $relative_path = str_replace($user_folder . DIRECTORY_SEPARATOR, '', $file->getPathname());
             $relative_path = str_replace('\\', '/', $relative_path);
             
+            if (strpos($relative_path, 'trash/') === 0) {
+                continue;
+            }
+
+            $is_doc = (strpos($relative_path, 'docs/') === 0 && $file->getExtension() == 'html');
+
             $recent_files[] = [
                 'name' => $file->getFilename(),
                 'path' => $relative_path,  
@@ -312,7 +326,8 @@ function getRecentFiles($user_folder, $limit = 3) {
                 'size_formatted' => formatSize($file->getSize()),
                 'modified' => $file->getMTime(),
                 'modified_formatted' => date('Y-m-d H:i:s', $file->getMTime()),
-                'extension' => strtolower($file->getExtension())
+                'extension' => strtolower($file->getExtension()),
+                'is_document' => $is_doc  
             ];
         }
     }
@@ -339,6 +354,9 @@ function getRecentFolders($user_folder, $limit = 3) {
             continue;
         }
         
+        if (($item == 'docs' || $item == 'trash')) {
+            continue;
+    }
         $item_path = $user_folder . '/' . $item;
         
         if (is_dir($item_path)) {
@@ -357,6 +375,205 @@ function getRecentFolders($user_folder, $limit = 3) {
     });
     
     return array_slice($recent_folders, 0, $limit);
+}
+
+
+//========trash and recovery
+function getTrashFolder($user_folder) {
+    $trash_path = $user_folder . '/trash';
+    if (!is_dir($trash_path)) {
+        mkdir($trash_path, 0755, true);
+    }
+    return $trash_path;
+}
+
+function getTrashMetadataPath($user_folder) {
+    return $user_folder . '/trash/.trash_metadata.json';
+}
+
+// Save item to trash
+function moveToTrash($user_folder, $item_path, $is_folder) {
+    $trash_folder = getTrashFolder($user_folder);
+    $metadata_path = getTrashMetadataPath($user_folder);
+    
+    $full_path = $user_folder . '/' . $item_path;
+    
+    if (!file_exists($full_path)) {
+        return ["success" => false, "message" => "item_not_found"];
+    }
+    
+    // Get size BEFORE moving to trash
+    $item_size = $is_folder ? getFolderSize($full_path) : filesize($full_path);
+
+    // Generate unique name for trash to avoid conflicts
+    $original_name = basename($item_path);
+    $timestamp = time();
+    $unique_name = $timestamp . '_' . $original_name;
+    $trash_dest = $trash_folder . '/' . $unique_name;
+    
+    // Move item to trash
+    if (rename($full_path, $trash_dest)) {
+        // Load existing metadata
+        $metadata = [];
+        if (file_exists($metadata_path)) {
+            $metadata = json_decode(file_get_contents($metadata_path), true);
+        }
+        
+        // Add metadata for recovery
+        $metadata[] = [
+            'id' => $timestamp,
+            'original_path' => $item_path,
+            'original_name' => $original_name,
+            'trash_name' => $unique_name,
+            'is_folder' => $is_folder,
+            'deleted_at' => date('Y-m-d H:i:s', $timestamp),
+            'size' => $item_size,
+        ];
+        
+        file_put_contents($metadata_path, json_encode($metadata, JSON_PRETTY_PRINT));
+        
+        return ["success" => true, "message" => "delete_success"];
+    } else {
+        return ["success" => false, "message" => "move_to_trash_failed"];
+    }
+}
+
+// Restore item from trash
+function restoreFromTrash($user_folder, $trash_item_id) {
+    $trash_folder = getTrashFolder($user_folder);
+    $metadata_path = getTrashMetadataPath($user_folder);
+    
+    if (!file_exists($metadata_path)) {
+        return ["success" => false, "message" => "No trash metadata found"];
+    }
+    
+    $metadata = json_decode(file_get_contents($metadata_path), true);
+    $item_meta = null;
+    $item_index = null;
+    
+    foreach ($metadata as $index => $item) {
+        if ($item['id'] == $trash_item_id) {
+            $item_meta = $item;
+            $item_index = $index;
+            break;
+        }
+    }
+    
+    if (!$item_meta) {
+        return ["success" => false, "message" => "Item not found in trash"];
+    }
+    
+    $trash_path = $trash_folder . '/' . $item_meta['trash_name'];
+    $restore_path = $user_folder . '/' . $item_meta['original_path'];
+    
+    // Check if original location exists and handle conflicts
+    if (file_exists($restore_path)) {
+        $counter = 1;
+        $path_parts = pathinfo($item_meta['original_path']);
+        $new_name = $path_parts['filename'] . '_restored_' . $counter;
+        if (isset($path_parts['extension'])) {
+            $new_name .= '.' . $path_parts['extension'];
+        }
+        $restore_path = $user_folder . '/' . dirname($item_meta['original_path']) . '/' . $new_name;
+    }
+    
+    // Create parent directory if it doesn't exist
+    $parent_dir = dirname($restore_path);
+    if (!is_dir($parent_dir)) {
+        mkdir($parent_dir, 0755, true);
+    }
+    
+    // Restore item
+    if (rename($trash_path, $restore_path)) {
+        // Remove metadata
+        unset($metadata[$item_index]);
+        $metadata = array_values($metadata);
+        file_put_contents($metadata_path, json_encode($metadata, JSON_PRETTY_PRINT));
+        
+        return ["success" => true, "message" => "Item restored successfully", "restored_path" => $item_meta['original_path']];
+    } else {
+        return ["success" => false, "message" => "Failed to restore"];
+    }
+}
+
+// Permanently delete from trash
+function permanentDelete($user_folder, $trash_item_id) {
+    $trash_folder = getTrashFolder($user_folder);
+    $metadata_path = getTrashMetadataPath($user_folder);
+    
+    if (!file_exists($metadata_path)) {
+        return ["success" => false, "message" => "No trash metadata found"];
+    }
+    
+    $metadata = json_decode(file_get_contents($metadata_path), true);
+    $item_meta = null;
+    $item_index = null;
+    
+    foreach ($metadata as $index => $item) {
+        if ($item['id'] == $trash_item_id) {
+            $item_meta = $item;
+            $item_index = $index;
+            break;
+        }
+    }
+    
+    if (!$item_meta) {
+        return ["success" => false, "message" => "Item not found in trash"];
+    }
+    
+    $trash_path = $trash_folder . '/' . $item_meta['trash_name'];
+    
+    // Delete item permanently
+    if (is_dir($trash_path)) {
+        deleteDirectory($trash_path);
+    } else {
+        unlink($trash_path);
+    }
+    
+    // Remove metadata
+    unset($metadata[$item_index]);
+    $metadata = array_values($metadata);
+    file_put_contents($metadata_path, json_encode($metadata, JSON_PRETTY_PRINT));
+    
+    return ["success" => true, "message" => "Item permanently deleted"];
+}
+
+// Delete directory recursively
+function deleteDirectory($dir) {
+    if (!file_exists($dir)) {
+        return true;
+    }
+    if (!is_dir($dir)) {
+        return unlink($dir);
+    }
+    foreach (scandir($dir) as $item) {
+        if ($item == '.' || $item == '..') {
+            continue;
+        }
+        if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+            return false;
+        }
+    }
+    return rmdir($dir);
+}
+
+// Get trash contents
+function getTrashContents($user_folder) {
+    $trash_folder = getTrashFolder($user_folder);
+    $metadata_path = getTrashMetadataPath($user_folder);
+    
+    if (!file_exists($metadata_path)) {
+        return [];
+    }
+    
+    $metadata = json_decode(file_get_contents($metadata_path), true);
+    
+    // Sort by deleted date (newest first)
+    usort($metadata, function($a, $b) {
+        return $b['id'] - $a['id'];
+    });
+    
+    return $metadata;
 }
 
 
@@ -421,6 +638,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
                 "recent_files" => $recent_files,
                 "recent_folders" => $recent_folders
             ];
+            break;
+
+         // ============ TRASH ACTIONS ============
+        
+        case 'delete_item':
+            $item_path = $_POST['item_path'] ?? '';
+            $is_folder = isset($_POST['is_folder']) && $_POST['is_folder'] == '1';
+            
+            if (empty($item_path)) {
+                $response = ["success" => false, "message" => "invalid_path"];
+            } else {
+                $response = moveToTrash($user_folder, $item_path, $is_folder);
+            }
+            break;
+
+        case 'get_trash_contents':
+            $trash_items = getTrashContents($user_folder);
+            $response = ["success" => true, "trash_items" => $trash_items];
+            break;
+
+        case 'restore_item':
+            $item_id = $_POST['item_id'] ?? '';
+            
+            if (empty($item_id)) {
+                $response = ["success" => false, "message" => "Invalid item ID"];
+            } else {
+                $response = restoreFromTrash($user_folder, $item_id);
+            }
+            break;
+
+        case 'permanent_delete':
+            $item_id = $_POST['item_id'] ?? '';
+            
+            if (empty($item_id)) {
+                $response = ["success" => false, "message" => "Invalid item ID"];
+            } else {
+                $response = permanentDelete($user_folder, $item_id);
+            }
+            break;
+
+        case 'empty_trash':
+            $trash_folder = getTrashFolder($user_folder);
+            $metadata_path = getTrashMetadataPath($user_folder);
+            
+            deleteDirectory($trash_folder);
+            mkdir($trash_folder, 0755, true);
+            
+            if (file_exists($metadata_path)) {
+                unlink($metadata_path);
+            }
+            
+            $response = ["success" => true, "message" => "Trash emptied successfully"];
             break;
 
         default:

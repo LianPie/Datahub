@@ -44,27 +44,34 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         let foldersHtml = '';
         data.recent_folders.forEach(folder => {
-            foldersHtml += `
-                <div class="folder-card" onclick="window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('redirectFolder', '${folder.path}')">
+        foldersHtml += `
+            <div class="folder-card" data-folder-path="${folder.path}">
+                <div class="folder-info" onclick="window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('redirectFolder', '${folder.path}')">
                     <i class="ri-folder-line"></i>
                     <span class="folder-name">${folder.name}</span>
                     <small>${folder.modified_formatted}</small>
                 </div>
-            `;
+                <button class="folder-delete-btn" onclick="event.stopPropagation(); window.fileManagerActions?.deleteItem('${folder.path}', true)" title="${__('delete_folder') || 'Delete folder'}">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
+        `;
         });
         document.querySelector('.recent-folders .folders-list').innerHTML = foldersHtml || `<div class="empty-message">${__('no_folders_yet')}</div>`;
         
         let filesHtml = '';
         data.recent_files.forEach(file => {
+            const viewAction = file.is_document ? `window.open('/Datahub/Dashboard/editor.php?doc=${encodeURIComponent(file.name.replace('.html', ''))}', '_blank')`
+                            : `fileManager.previewFile('${file.path}'); sessionStorage.setItem('previewFile', '${file.path}')`;
             filesHtml += `
                 <div class="file-card">
                     <div class="file-icon"><i class="ri-file-fill"></i></div>
                     <div class="file-name">${file.name}</div>
                     <div class="file-size">${file.size_formatted}</div>
                     <div class="file-actions">
-                        <button class="preview-btn" onclick="fileManager.previewFile('${file.path}')"; window.location.href='/Datahub/Dashboard/Uploads.php'; sessionStorage.setItem('previewFile', '${file.path}')"><i class="ri-eye-line"></i></button>
-                        <a href="/Datahub/Handlers/UploadHandler.php?download=1&path=${encodeURIComponent(file.path)}" download onclick="event.stopPropagation()"><i class="ri-download-line"></i></a>
-                        <button class="delete-btn" onclick="event.stopPropagation(); deleteFile('${file.path}', this)"><i class="ri-delete-bin-line"></i></button>
+                    <button class="preview-btn" onclick="${viewAction}"><i class="ri-eye-line"></i></button>
+                    <a href="/Datahub/Handlers/UploadHandler.php?download=1&path=${encodeURIComponent(file.path)}" download onclick="event.stopPropagation()"><i class="ri-download-line"></i></a>
+                    <button class="delete-btn" onclick="fileManager.deleteItem('${file.path}', false)"><i class="ri-delete-bin-line"></i></button>
                     </div>
                 </div>
             `;

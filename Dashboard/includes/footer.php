@@ -45,7 +45,8 @@
 <script src="/Datahub/assets/js/toast.js"></script>
 <script src="/Datahub/assets/js/dashboard.js"></script>
 <script>
-      window.translations = {
+      const generalTranslations = {
+        'lan': '<?= $lang ?>',
         'error_loading_files': '<?= __('error_loading_files') ?>',
         'no_folders_yet': '<?= __('no_folders_yet') ?>',
         'no_files_yet': '<?= __('no_files_yet') ?>',
@@ -57,7 +58,39 @@
         'error_loading_video': '<?= __('error_loading_video') ?>',
         'error_loading_audio': '<?= __('error_loading_audio') ?>',
         'error_loading_folders': '<?= __('error_loading_folders') ?>',
+        'root_no_folder': '<?= __('root_no_folder') ?>',
+        'all_files_folders': '<?= __('all_files_folders') ?>',
+        'please_enter_folder_name': '<?= __('please_enter_folder_name') ?>',
+        'invalid_folder_name': '<?= __('invalid_folder_name') ?>',
+        'folder_created_success': '<?= __('folder_created_success') ?>',
+        'failed_to_create_folder': '<?= __('failed_to_create_folder') ?>',
+        'please_select_file': '<?= __('please_select_file') ?>',
+        'file_too_large': '<?= __('file_too_large') ?>',
+        'uploading': '<?= __('uploading') ?>',
+        'file_uploaded_success': '<?= __('file_uploaded_success') ?>',
+        'failed_to_upload_file': '<?= __('failed_to_upload_file') ?>',
+        'failed_to_load_folders': '<?= __('failed_to_load_folders') ?>',
+        
+        'delete_folder': '<?= __('delete_folder') ?>',
+        'delete_file': '<?= __('delete_file') ?>',
+        'confirm_delete_folder': '<?= __('confirm_delete_folder') ?>',
+        'confirm_delete_file': '<?= __('confirm_delete_file') ?>',
+        'move_to_trash': '<?= __('move_to_trash') ?>',
+        'cancel': '<?= __('cancel') ?>',
+            
+        'invalid_path': '<?= __('invalid_path') ?>',
+        'item_not_found': '<?= __('item_not_found') ?>',
+        'move_to_trash_failed': '<?= __('move_to_trash_failed') ?>',
+        'delete_success': '<?= __('delete_success') ?>',
+        'delete_failed': '<?= __('delete_failed') ?>'
     };
+
+    if (window.translations) {
+        window.translations = { ...window.translations, ...generalTranslations };
+    } else {
+        window.translations = generalTranslations;
+    }
+
 function __(key) {
     return window.translations && window.translations[key] ? window.translations[key] : key;
 }

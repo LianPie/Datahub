@@ -2,52 +2,18 @@
 include 'includes/header.php';
 require_once __DIR__ . '/../Database/DbConfig.php';
 
-$user_id = $_SESSION['user_id'];
-
-// دریافت فایل‌های حذف شده
-$stmt = $conn->prepare("SELECT * FROM files WHERE user_id = ? AND is_deleted = 1 ORDER BY uploaded_at DESC");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$deletedFiles = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <div class="dashboard-content">
     <h2><i class="ri-delete-bin-line"></i> <?= __('trash') ?></h2>
     
     <div class="files-section">
-        <?php if (count($deletedFiles) === 0): ?>
-            <div class="empty-trash">
-                <i class="ri-delete-bin-7-line"></i>
-                <p><?= __('trash_empty') ?></p>
-            </div>
-        <?php else: ?>
-            <div class="files-grid">
-                <?php foreach ($deletedFiles as $file): ?>
-                    <div class="file-card" data-file-id="<?= $file['id'] ?>">
-                        <div class="file-icon">
-                            <?php
-                            $ext = pathinfo($file['filename'], PATHINFO_EXTENSION);
-                            if (in_array($ext, ['jpg','png','gif'])) echo '<i class="ri-image-line"></i>';
-                            elseif ($ext == 'pdf') echo '<i class="ri-file-pdf-line"></i>';
-                            elseif (in_array($ext, ['mp4','avi','mkv'])) echo '<i class="ri-movie-line"></i>';
-                            else echo '<i class="ri-file-copy-line"></i>';
-                            ?>
-                        </div>
-                        <div class="file-name"><?= htmlspecialchars($file['filename']) ?></div>
-                        <div class="file-size"><?= round($file['filesize'] / 1024, 2) ?> KB</div>
-                        <div class="file-actions">
-                            <button class="restore-btn" data-id="<?= $file['id'] ?>">
-                                <i class="ri-restart-line"></i>
-                            </button>
-                            <button class="permanent-delete-btn" data-id="<?= $file['id'] ?>">
-                                <i class="ri-delete-bin-7-line"></i>
-                            </button>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+            
+    <div class="files-section">
+        <div id="trashContainer">
+            <!-- Loader will appear here -->
+        </div>
+    </div>
     </div>
 </div>
 
@@ -67,4 +33,24 @@ $deletedFiles = $result->fetch_all(MYSQLI_ASSOC);
         </div>
     </div>
 </div>
+<script>
+    window.translations = {
+        // Trash messages
+        'empty_trash': '<?= __('empty_trash') ?>',
+        'restore': '<?= __('restore') ?>',
+        'delete_permanently': '<?= __('delete_permanently') ?>',
+        'trash_empty': '<?= __('trash_empty') ?>',
+        'no_items_in_trash': '<?= __('no_items_in_trash') ?>',
+        'restore_success': '<?= __('restore_success') ?>',
+        'restore_failed': '<?= __('restore_failed') ?>',
+        'delete_permanent_success': '<?= __('delete_permanent_success') ?>',
+        'delete_permanent_failed': '<?= __('delete_permanent_failed') ?>',
+        'empty_trash_success': '<?= __('empty_trash_success') ?>',
+        'empty_trash_failed': '<?= __('empty_trash_failed') ?>',
+        'confirm_empty_trash': '<?= __('confirm_empty_trash') ?>',
+        'confirm_delete_permanent': '<?= __('confirm_delete_permanent') ?>',
+        'deleted_at': '<?= __('deleted_at') ?>',
+};
+</script>
+<?php include 'includes/footer.php'; ?>
 <script src="/Datahub/assets/js/trash.js"></script>
