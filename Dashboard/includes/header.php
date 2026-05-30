@@ -37,7 +37,7 @@ $username = $_SESSION["username"];
 
 <nav class="dashboard-navbar">
     <div class="nav-left">
-        <img src="/Datahub/assets/img/cloud-icon.png" alt="DataHub Logo" style="height: 40px; width: auto;">
+        <img src="/Datahub/assets/img/Main-logo.png" alt="DataHub Logo" style="height: 60px; width: auto;">
         <a href="/Datahub/Dashboard/index.php" class="logo">DataHub</a>
     </div>
     <div class="nav-right">
