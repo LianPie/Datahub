@@ -5,14 +5,13 @@ require_once __DIR__ . '/../Database/DbConfig.php';
 ?>
 
 <div class="dashboard-content">
+<div class="page-header">
     <h2><i class="ri-delete-bin-line"></i> <?= __('trash') ?></h2>
-    
-    <!-- Empty trash button at top -->
-    <div id="emptyTrashBtnContainer" style="text-align: right; margin-bottom: 20px;">
-        <button class="btn-danger" onclick="emptyTrash()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
-            <i class="ri-delete-bin-2-line"></i> <?= __('empty_trash') ?>
-        </button>
-    </div>
+    <button class="btn-empty-trash" onclick="emptyTrash()">
+        <i class="ri-delete-bin-2-line"></i>
+        <span class="btn-text"><?= __('empty_trash') ?></span>
+    </button>
+</div>
 
     <div class="folders-section">
         <h3><i class="ri-folder-line"></i></i> <?= __('folders'); ?></h3>
