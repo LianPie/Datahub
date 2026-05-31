@@ -819,13 +819,3 @@ h2{
         max-width: calc(100% - 50px);
     }
 }
-
-[dir="rtl"] .page-header {
-    flex-direction: row-reverse;
-}
-
-@media (max-width: 640px) {
-    [dir="rtl"] .page-header {
-        flex-direction: row-reverse;
-    }
-}
