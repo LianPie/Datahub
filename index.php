@@ -6,6 +6,7 @@ require_once 'includes/init.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/Datahub/assets/img/fav.png">
     <title>Datahub - <?php echo __('home'); ?></title>
     
     <!--=============== CSS ===============-->

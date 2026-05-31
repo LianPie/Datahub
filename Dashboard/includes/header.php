@@ -16,6 +16,7 @@ $username = $_SESSION["username"];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/Datahub/assets/img/fav.png">
     <title>DataHub - <?= __('dashboard') ?></title>
 
     <link rel="stylesheet" href="/Datahub/assets/fonts/remixicon.css">
