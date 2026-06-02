@@ -158,29 +158,81 @@ function renderTrashContents(items) {
         emptyTrashBtnContainer.style.display = (folders.length > 0 || files.length > 0) ? 'block' : 'none';
     }
     
-    // Render folders section
     if (folders.length > 0) {
-        let foldersHtml = '<div class="files-grid">';
-        folders.forEach(item => {
-            foldersHtml += renderTrashCard(item, true);
+        let foldersHtml = '<div class="folders-list">';
+        folders.forEach(folder => {
+            foldersHtml += renderFolderCard(folder);
         });
         foldersHtml += '</div>';
         foldersContainer.innerHTML = foldersHtml;
+        document.querySelector('.folders-section').style.display = 'block';
     } else {
         document.querySelector('.folders-section').style.display = 'none';
     }
     
-    // Render files section
     if (files.length > 0) {
         let filesHtml = '<div class="files-grid">';
-        files.forEach(item => {
-            filesHtml += renderTrashCard(item, false);
+        files.forEach(file => {
+            filesHtml += renderFileCard(file);
         });
         filesHtml += '</div>';
         filesContainer.innerHTML = filesHtml;
+        document.querySelector('.files-section').style.display = 'block';
     } else {
-         document.querySelector('.files-section').style.display = 'none';
+        document.querySelector('.files-section').style.display = 'none';
     }
+    
+    if (folders.length === 0 && files.length === 0) {
+        const dashboard = document.querySelector('.dashboard-content');
+        if (dashboard && !document.getElementById('globalEmptyMsg')) {
+            const emptyMsg = document.createElement('div');
+            emptyMsg.id = 'globalEmptyMsg';
+            emptyMsg.className = 'empty-trash';
+            emptyMsg.innerHTML = `<i class="ri-delete-bin-7-line"></i><p>${__('trash_empty')}</p>`;
+            dashboard.appendChild(emptyMsg);
+        }
+    }
+}
+
+function renderFolderCard(folder) {
+    const folderName = folder.original_name || folder.name;
+    const deletedDate = folder.deleted_at_formatted || folder.modified || '';
+    return `
+        <div class="folder-card" data-folder-id="${folder.id}">
+            <div class="folder-info">
+                <i class="ri-folder-line"></i>
+                <span class="folder-name">${escapeHtml(folderName)}</span>
+                <small>${deletedDate}</small>
+            </div>
+            <div class="folder-actions">
+                <button class="restore-btn" onclick="restoreItem(${folder.id})" title="${__('restore')}">
+                    <i class="ri-arrow-go-back-line"></i>
+                </button>
+                <button class="permanent-delete-btn" onclick="permanentDeleteItem(${folder.id})" title="${__('delete_permanently')}">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function renderFileCard(file) {
+    const icon = getFileIcon(file.original_name);
+    const sizeFormatted = formatBytes(file.size);
+    return `
+        <div class="file-card">
+            <div class="file-icon"><i class="${icon}"></i></div>
+            <div class="file-name">${escapeHtml(file.original_name)}</div>
+            <div class="file-size">${sizeFormatted}</div>
+            <div class="file-folder">
+                <small><i class="ri-folder-line"></i> ${__('original_location')}: ${escapeHtml(file.original_path)}</small>
+            </div>
+            <div class="file-actions">
+                <button class="restore-btn" onclick="restoreItem(${file.id})" title="${__('restore')}"><i class="ri-arrow-go-back-line"></i></button>
+                <button class="delete-btn" onclick="permanentDeleteItem(${file.id})" title="${__('delete_permanently')}"><i class="ri-delete-bin-line"></i></button>
+            </div>
+        </div>
+    `;
 }
 
 
@@ -215,25 +267,6 @@ function loadTrashItems() {
     });
 }
 
-// Helper to render a single card (reuse your existing structure)
-function renderTrashCard(item, isFolder) {
-    const icon = isFolder ? 'ri-folder-line' : getFileIcon(item.original_name);
-    const sizeFormatted = isFolder ? '—' : formatBytes(item.size);
-    return `
-        <div class="file-card">
-            <div class="file-icon"><i class="${icon}"></i></div>
-            <div class="file-name">${escapeHtml(item.original_name)}</div>
-            <div class="file-size">${sizeFormatted}</div>
-            <div class="file-folder">
-                <small><i class="ri-folder-line"></i> ${__('original_location')}: <span style="word-break: break-word;">${escapeHtml(item.original_path)}</span></small>
-            </div>
-            <div class="file-actions">
-                <button class="restore-btn" onclick="restoreItem(${item.id})" title="${__('restore')}"><i class="ri-arrow-go-back-line"></i></button>
-                <button class="delete-btn" onclick="permanentDeleteItem(${item.id})" title="${__('delete_permanently')}"><i class="ri-delete-bin-line"></i></button>
-            </div>
-        </div>
-    `;
-}
 
 
 
