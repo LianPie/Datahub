@@ -3,7 +3,19 @@ include 'includes/header.php';
 ?>
 
 <div class="dashboard-content">
-    
+    <div class="storage-card">
+        <div class="storage-info">
+            <h3></h3>
+            <p> MB of  MB used (%)</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 20%;"></div>
+            </div>
+            <div class="storage-stats">
+                <span>USED X %</span>
+                <span>FREE X %</span>
+            </div>
+        </div>
+    </div>
     <div class="recent-folders">
         <h3><i class="ri-folder-line"></i><?= __('recent_folders') ?></h3>
         <div class="folders-list">
