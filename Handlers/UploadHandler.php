@@ -269,7 +269,7 @@ function getUserFiles($user_folder) {
 }
 
 // Get contents of specific folder (not recursive)
-function getFolderContents($user_folder, $subfolder = '') {
+function getFolderContents($user_folder, $subfolder = '', $search = '', $filter = '') {
     $target_dir = $user_folder;
     if (!empty($subfolder)) {
         $clean_subfolder = preg_replace('/[^a-zA-Z0-9_\-]/', '/', $subfolder);
@@ -286,6 +286,10 @@ function getFolderContents($user_folder, $subfolder = '') {
         return $result;
     }
     
+    if (!empty($search)) {
+    return searchFilesRecursive($user_folder, $search, $filter);
+    }
+
     $items = scandir($target_dir);
     
     foreach ($items as $item) {
@@ -307,6 +311,17 @@ function getFolderContents($user_folder, $subfolder = '') {
                 'modified' => date('Y-m-d H:i:s', filemtime($item_path))
             ];
         } else {
+            
+            $extension = strtolower(pathinfo($item, PATHINFO_EXTENSION));
+            
+            // Apply filter
+            if (!empty($filter) && $filter != 'all') {
+                if (!matchesFilter($extension, $filter)) {
+                    continue;
+                }
+            }
+
+
             $size = filesize($item_path);
             $result['files'][] = [
                 'name' => $item,
@@ -331,6 +346,88 @@ function getFolderContents($user_folder, $subfolder = '') {
     
     return $result;
 }
+
+// Search files recursively
+function searchFilesRecursive($user_folder, $search, $filter = '') {
+    $result = [
+        'folders' => [],
+        'files' => [],
+        'current_path' => '',
+        'is_search' => true
+    ];
+    
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($user_folder, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::SELF_FIRST
+    );
+    
+    $search_lower = strtolower($search);
+    
+    foreach ($iterator as $item) {
+        $relative_path = str_replace($user_folder . '/', '', $item->getPathname());
+        
+        // Skip docs and trash folders
+        if (strpos($relative_path, 'docs/') === 0 || strpos($relative_path, 'trash/') === 0) {
+            continue;
+        }
+        
+        $name = $item->getFilename();
+        
+        // Check if name matches search
+        if (stripos($name, $search_lower) !== false) {
+            if ($item->isDir()) {
+                // Don't show folders in search results
+                continue;
+            } else {
+                $extension = strtolower($item->getExtension());
+                
+                // Apply filter
+                if (!empty($filter) && $filter != 'all') {
+                    if (!matchesFilter($extension, $filter)) {
+                        continue;
+                    }
+                }
+                
+                $result['files'][] = [
+                    'name' => $name,
+                    'path' => $relative_path,
+                    'type' => 'file',
+                    'size' => $item->getSize(),
+                    'size_formatted' => formatSize($item->getSize()),
+                    'modified' => date('Y-m-d H:i:s', $item->getMTime()),
+                    'extension' => $extension,
+                ];
+            }
+        }
+    }
+    
+    return $result;
+}
+
+// Helper function to check if extension matches filter
+function matchesFilter($extension, $filter) {
+    $image_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'ico'];
+    $video_exts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'flv', 'wmv'];
+    $audio_exts = ['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac', 'wma'];
+    $document_exts = ['pdf', 'doc', 'docx', 'txt', 'html', 'htm', 'xls', 'xlsx', 'ppt', 'pptx'];
+    
+    switch ($filter) {
+        case 'image':
+            return in_array($extension, $image_exts);
+        case 'video':
+            return in_array($extension, $video_exts);
+        case 'audio':
+            return in_array($extension, $audio_exts);
+        case 'document':
+            return in_array($extension, $document_exts);
+        case 'other':
+            $all_exts = array_merge($image_exts, $video_exts, $audio_exts, $document_exts);
+            return !in_array($extension, $all_exts);
+        default:
+            return true;
+    }
+}
+
 
 // Get recent files 
 function getRecentFiles($user_folder, $limit = 3) {
@@ -655,7 +752,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
             
         case 'get_folder_contents':
             $folder_path = $_POST["folder_path"] ?? '';
-            $contents = getFolderContents($user_folder, $folder_path);
+            $search = $_POST["search"] ?? '';
+            $filter = $_POST["filter"] ?? 'all';
+            $contents = getFolderContents($user_folder, $folder_path, $search, $filter);
             $response = ["success" => true, "data" => $contents];
             break;
 

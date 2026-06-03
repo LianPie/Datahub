@@ -10,7 +10,7 @@ class FileManager extends FileManagerActions {
 
         if (this.isUploadsPage()) {
             await this.loadFolderContents();
-            await this.loadStorageInfo();
+            this.initSearchAndFilter();
             await this.loadFolderSelect();
         }
     }

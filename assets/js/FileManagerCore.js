@@ -5,9 +5,55 @@ class FileManagerCore {
         this.baseUrl = '/Datahub/Handlers/UploadHandler.php';
     }
     
-    async loadFolderContents(path = '') {
-        this.currentPath = path;
+    // Add these methods to your fileManager object
+
+    initSearchAndFilter() {
+        // Search input handler
+        const searchInput = document.getElementById('searchInput');
+        const searchClearIcon = document.getElementById('searchClearIcon');
+        const searchForm = document.querySelector('.search-form');
         
+        if (searchForm) {
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const searchValue = searchInput.value.trim();
+                this.currentSearch = searchValue;
+                this.loadFolderContents(this.currentPath, searchValue, this.currentFilter);
+            });
+        }
+        
+        if (searchClearIcon && searchInput) {
+            searchClearIcon.addEventListener('click', () => {
+                searchInput.value = '';
+                this.currentSearch = '';
+                this.loadFolderContents(this.currentPath, '', this.currentFilter);
+            });
+        }
+        
+        // Filter buttons handler
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filterType = btn.dataset.type;
+                
+                // Update active state
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                this.currentFilter = filterType;
+                this.loadFolderContents(this.currentPath, this.currentSearch, filterType);
+            });
+        });
+    }
+
+
+
+
+    async loadFolderContents(path = '', search = '', filter = 'all') {
+        this.currentPath = path;
+        this.currentSearch = search || this.currentSearch || '';
+        this.currentFilter = filter || this.currentFilter || 'all';
+
         // Show loader in both folders and files containers
         const foldersList = document.querySelector('.folders-list');
         const filesGrid = document.querySelector('.files-grid');
@@ -34,16 +80,28 @@ class FileManagerCore {
         const startTime = Date.now();
         
         try {
+            
+            const bodyParams = {
+                'action': 'get_folder_contents', 
+                'folder_path': this.currentPath
+            };
+            
+            // Add search and filter if they exist
+            if (this.currentSearch) {
+                bodyParams.search = this.currentSearch;
+            }
+            if (this.currentFilter && this.currentFilter !== 'all') {
+                bodyParams.filter = this.currentFilter;
+            }
+            
+
             const response = await fetch(this.baseUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded', 
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: new URLSearchParams({
-                    'action': 'get_folder_contents', 
-                    'folder_path': this.currentPath
-                })
+                body: new URLSearchParams(bodyParams)
             });
             
             const text = await response.text();
@@ -147,33 +205,7 @@ class FileManagerCore {
         filesGrid.innerHTML = html;
     }
     
-    async loadStorageInfo() {
-        try {
-            const response = await fetch(this.baseUrl, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
-                body: new URLSearchParams({'action': 'get_storage_info'})
-            });
-            
-            const text = await response.text();
-            const data = JSON.parse(text);
-            
-            if (data.success) {
-                const storageBar = document.getElementById('storageUsageBar');
-                const storageText = document.getElementById('storageUsageText');
-                
-                if (storageBar) {
-                    storageBar.style.width = data.usage_percent + '%';
-                    storageBar.style.backgroundColor = data.usage_percent > 90 ? '#dc3545' : '#28a745';
-                }
-                if (storageText) {
-                    storageText.textContent = `${data.total_size_formatted} / ${data.max_size_formatted} (${data.usage_percent}%)`;
-                }
-            }
-        } catch(e) {
-            console.error('Failed to load storage info', e);
-        }
-    }
+   
     
     
     openFolder(folderPath) {
