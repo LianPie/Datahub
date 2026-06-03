@@ -6,27 +6,27 @@ include 'includes/header.php';
         
 
     <div class="search-filter-wrapper">
-        <form method="GET" class="search-form">
-            <div class="search-input-group">
-                <div class="search-input-wrapper">
-                    <input type="text" name="search" id="searchInput" placeholder="Search files..." value="">
-                        <span class="search-clear-icon" id="searchClearIcon">
-                            <i class="ri-close-line"></i>
-                        </span>
-                </div>
-                <input type="hidden" name="folder" value="<?= $selected_folder_id ?>">
-                <button type="submit"><i class="ri-search-line"></i> Search</button>
+    <form method="GET" class="search-form">
+        <div class="search-input-group">
+            <div class="search-input-wrapper">
+                <input type="text" name="search" id="searchInput" placeholder="<?= __('search_files') ?>" value="">
+                <span class="search-clear-icon" id="searchClearIcon">
+                    <i class="ri-close-line"></i>
+                </span>
             </div>
-        </form>
-        
-        <div class="filter-buttons">
-            <button class="filter-btn active" data-type="all">all</button>
-            <button class="filter-btn" data-type="image">images</button>
-            <button class="filter-btn" data-type="video">videos</button>
-            <button class="filter-btn" data-type="audio">audio</button>
-            <button class="filter-btn" data-type="document">documents</button>
-            <button class="filter-btn" data-type="other">other</button>
+            <input type="hidden" name="folder" value="<?= $selected_folder_id ?>">
+            <button type="submit"><i class="ri-search-line"></i> <?= __('search') ?></button>
         </div>
+    </form>
+    
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-type="all"><?= __('all') ?></button>
+        <button class="filter-btn" data-type="image"><?= __('images') ?></button>
+        <button class="filter-btn" data-type="video"><?= __('videos') ?></button>
+        <button class="filter-btn" data-type="audio"><?= __('audio') ?></button>
+        <button class="filter-btn" data-type="document"><?= __('documents') ?></button>
+        <button class="filter-btn" data-type="other"><?= __('other') ?></button>
+    </div>
     </div>
     <h2><?= __('all_files_folders'); ?></h2>
 

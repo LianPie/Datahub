@@ -208,5 +208,15 @@ return [
     'used' => 'USED',
     'free' => 'FREE',
     'free_space' => 'Free',
+
+    // ========== SEARCH & FILTER ==========
+    'search_files' => 'Search files...',
+    'search' => 'Search',
+    'all' => 'All',
+    'images' => 'Images',
+    'videos' => 'Videos',
+    'audio' => 'Audio',
+    'documents' => 'Documents',
+    'other' => 'Other',
 ];
 ?>
