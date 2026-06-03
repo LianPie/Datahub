@@ -1,7 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
-      const foldersContainer = document.querySelector('.recent-folders .folders-list');
+    const foldersContainer = document.querySelector('.recent-folders .folders-list');
     const filesContainer = document.querySelector('.recent-files .files-grid');
     
     if (foldersContainer) {
@@ -81,4 +81,70 @@ document.addEventListener('DOMContentLoaded', function() {
         }, delay)
     });
 
+});
+
+async function loadStorageInfo() {
+    try {
+        const response = await fetch('/Datahub/Handlers/UploadHandler.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'action=get_storage_info'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log(data)
+            updateStorageCard(data);
+        }
+    } catch (error) {
+        console.error('Error loading storage info:', error);
+    }
+}
+
+function updateStorageCard(storage) {
+    const storageCard = document.querySelector('.storage-card');
+    if (!storageCard) return;
+    
+    const usagePercent = storage.usage_percent;
+    const usedFormatted = storage.total_size_formatted;
+    const maxFormatted = storage.max_size_formatted;
+    const freeFormatted = storage.free_formatted;
+    
+    storageCard.innerHTML = `
+        <div class="storage-info">
+            <h3><i class="ri-database-2-line"></i> ${__('storage_usage')}</h3>
+            <p>${usedFormatted} ${__('used_of')} ${maxFormatted} (${usagePercent}%)</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: ${usagePercent}%;"></div>
+            </div>
+            <div class="storage-stats">
+                <span>${__('used')} ${usagePercent}%</span>
+                <span>${__('free')} ${storage.free_percent}%</span>
+            </div>
+            <div class="storage-details">
+                <small><i class="ri-hard-drive-line"></i> ${__('free_space')}: ${freeFormatted}</small>
+            </div>
+        </div>
+    `;
+    
+    // Change progress bar color if near limit
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+        if (usagePercent >= 90) {
+            progressBar.style.backgroundColor = '#e74c3c';
+        } else if (usagePercent >= 70) {
+            progressBar.style.backgroundColor = '#f39c12';
+        } else {
+            progressBar.style.backgroundColor = '#27ae60';
+        }
+    }
+}
+
+// Call this when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadStorageInfo();
 });

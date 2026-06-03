@@ -197,5 +197,12 @@ return [
     'deleted_at' => 'حذف شده در',
     'error_loading_trash' => 'بارگذاری محتویات سطل زباله انجام نشد',
     'original_location' => 'آدرس اصلی',
+
+    // ========== STORAGE CARD ==========
+    'storage_usage' => 'میزان استفاده از فضای ذخیره‌سازی',
+    'used_of' => 'از',
+    'used' => 'استفاده شده',
+    'free' => 'آزاد',
+    'free_space' => 'فضای آزاد',
 ]
 ?>

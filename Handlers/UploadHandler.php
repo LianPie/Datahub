@@ -98,6 +98,43 @@ function formatSize($bytes) {
     return round($bytes / pow(1024, $i), 2) . ' ' . $units[$i];
 }
 
+function getUserStorageInfo($user_id, $user_folder, $conn) {
+    // Get storage data from database
+    $sql = "SELECT storage_limit, storage_used FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    
+    $storage_limit = $user['storage_limit'] ?? 1073741824;
+    $storage_used = $user['storage_used'] ?? 0;
+    
+    // Sync with actual folder size
+    $actual_size = getFolderSize($user_folder);
+    if ($actual_size != $storage_used) {
+        $update_sql = "UPDATE users SET storage_used = ? WHERE id = ?";
+        $update_stmt = $conn->prepare($update_sql);
+        $update_stmt->bind_param("ii", $actual_size, $user_id);
+        $update_stmt->execute();
+        $storage_used = $actual_size;
+    }
+    
+    $usage_percent = ($storage_used / $storage_limit) * 100;
+    
+    return [
+        "success" => true,
+        "total_size_bytes" => $storage_used,
+        "total_size_formatted" => formatSize($storage_used),
+        "max_size_bytes" => $storage_limit,
+        "max_size_formatted" => formatSize($storage_limit),
+        "usage_percent" => round($usage_percent, 2),
+        "free_percent" => round(100 - $usage_percent, 2),
+        "free_bytes" => $storage_limit - $storage_used,
+        "free_formatted" => formatSize($storage_limit - $storage_used)
+    ];
+}
+
 
 // create nested fodlers
 function createUserFolder($folder_name, $user_folder, $subfolder = '') {
@@ -588,16 +625,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
     $user_folder = getUserFolder($user_email, $base_upload_dir);
     
     switch ($action) {
-        case 'get_storage_info':
-            $total_size = getFolderSize($user_folder);
-            $response = [
-                "success" => true,
-                "total_size_bytes" => $total_size,
-                "total_size_formatted" => formatSize($total_size),
-                "max_size_bytes" => 1073741824, // 1GB limit
-                "max_size_formatted" => "1 GB",
-                "usage_percent" => round(($total_size / 1073741824) * 100, 2)
-            ];
+       case 'get_storage_info':
+            $response = getUserStorageInfo($user_id, $user_folder, $conn);
             break;
             
         case 'get_files':

@@ -5,14 +5,14 @@ include 'includes/header.php';
 <div class="dashboard-content">
     <div class="storage-card">
         <div class="storage-info">
-            <h3></h3>
-            <p> MB of  MB used (%)</p>
+            <h3><i class="ri-database-2-line"></i> <?= __('storage_usage') ?></h3>
+            <p><?= __('loading') ?>...</p>
             <div class="progress-bar-container">
                 <div class="progress-bar" style="width: 20%;"></div>
             </div>
             <div class="storage-stats">
-                <span>USED X %</span>
-                <span>FREE X %</span>
+                <span><?= __('used') ?> 0%</span>
+                <span><?= __('free') ?> 0%</span>
             </div>
         </div>
     </div>
@@ -53,7 +53,14 @@ window.translations = {
     'music_player': '<?= __('music_player') ?>',
     'browser_no_audio_support': '<?= __('browser_no_audio_support') ?>',
     'pdf_preview': '<?= __('pdf_preview') ?>',
-    'cannot_preview_download': '<?= __('cannot_preview_download') ?>'
+    'cannot_preview_download': '<?= __('cannot_preview_download') ?>',
+    
+    // Storage card
+    'storage_usage': '<?= __('storage_usage') ?>',
+    'used_of': '<?= __('used_of') ?>',
+    'used': '<?= __('used') ?>',
+    'free': '<?= __('free') ?>',
+    'free_space': '<?= __('free_space') ?>',
 };
 </script>
 <?php include 'includes/footer.php'; ?>

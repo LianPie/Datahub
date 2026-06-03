@@ -200,6 +200,13 @@ return [
     'deleted_at' => 'Deleted at',
     'error_loading_trash' => 'Failed to load trash contents',
     'original_location' => 'Original location',
-    'deleted_files' => 'Deleted files'
+    'deleted_files' => 'Deleted files',
+
+    // ========== STORAGE CARD ==========
+    'storage_usage' => 'Storage Usage',
+    'used_of' => 'used',
+    'used' => 'USED',
+    'free' => 'FREE',
+    'free_space' => 'Free',
 ];
 ?>
