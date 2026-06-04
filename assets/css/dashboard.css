@@ -872,6 +872,7 @@ h2{
     border: 1px solid #334155;
     border-radius: 40px;
     color: white;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
 }
 
 .search-input-group button {
@@ -882,6 +883,7 @@ h2{
     color: white;
     cursor: pointer;
     transition: 0.2s;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
 }
 
 /* ===== Search input with internal clear icon ===== */
@@ -928,6 +930,7 @@ h2{
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid #334155;
+    
 }
 
 .filter-btn {
@@ -939,6 +942,7 @@ h2{
     font-size: 0.8rem;
     cursor: pointer;
     transition: 0.2s;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
 }
 
 .filter-btn:hover,
