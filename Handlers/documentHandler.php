@@ -66,12 +66,14 @@ switch ($action) {
                 
                 $file_path = $docs_folder . '/' . $file;
                 $file_ext = pathinfo($file, PATHINFO_EXTENSION);
+                $relative_path = 'docs/' . $file;
                 
                 // Only show HTML files
                 if (strtolower($file_ext) === 'html') {
                     $stat = stat($file_path);
                     $documents[] = [
                         'name' => pathinfo($file, PATHINFO_FILENAME),
+                        'path' => $relative_path,
                         'file' => $file,
                         'modified' => date('Y-m-d H:i:s', filemtime($file_path)),
                         'size' => filesize($file_path),

@@ -84,7 +84,7 @@ function renderDocuments(documents) {
                 <div class="document-actions">
                     <button class="preview-btn" onclick="viewDocument('${escapeHtml(doc.name)}')"><i class="ri-eye-line"></i></button>
                     <button class="preview-btn" onclick="editDocument('${escapeHtml(doc.name)}')"><i class="ri-edit-line"></i></button>
-                    <button class="delete-btn" onclick="deleteDocument('${escapeHtml(doc.name)}')"><i class="ri-delete-bin-line"></i></button>
+                    <button class="delete-btn" onclick="deleteDocument('${doc.path}', false)"><i class="ri-delete-bin-line"></i></button>
                         
 
                 </div>
@@ -104,6 +104,53 @@ function renderDocuments(documents) {
     documentsGrid.innerHTML = createButton + html;
 }
 
+
+
+    async function deleteDocument(itemPath, isFolder) {
+        const typeText = isFolder ? __('delete_folder') : __('delete_file');
+        const confirmMessage = isFolder ? __('confirm_delete_folder') : __('confirm_delete_file');
+
+        const confirmed = await fileManager.showConfirm(
+            typeText,
+            confirmMessage,
+            __('move_to_trash'),
+            __('cancel')
+        );
+        if (!confirmed) return;
+                
+        try {
+            const response = await fetch('/Datahub/Handlers/UploadHandler.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
+                body: new URLSearchParams({'action': 'delete_item', 'item_path': itemPath, 'is_folder': isFolder ? '1' : '0'})
+            });
+            const text = await response.text();
+            const data = JSON.parse(text);
+            
+            if (data.success) {
+                showMessage(__('delete_success'), 'success');
+                loadDocuments();
+            } else {
+                showError(__(data.message));
+            }
+        } catch(e) {
+    console.error('Delete error details:', e);
+    
+    // Check for different error types
+    if (e.name === 'TypeError') {
+        showError(__('network_error') + ': ' + __('check_connection'));
+    } else if (e.name === 'SyntaxError') {
+        showError(__('server_error') + ': ' + __('invalid_server_response'));
+    } else if (e.message && e.message.includes('JSON')) {
+        showError(__('server_error') + ': ' + __('invalid_json_response'));
+    } else if (e.message) {
+        showError(__('delete_failed') + ': ' + e.message);
+    } else {
+        showError(__('delete_failed') + ': ' + __('unknown_error'));
+    }
+}
+    }
+
 // Document CRUD functions
 function createNewDocument() {
     const name = __('enter_document_name');
@@ -120,65 +167,16 @@ function editDocument(name) {
     window.location.href = `editor.php?action=edit&doc=${encodeURIComponent(name)}`;
 }
 
-function deleteDocument(name) {
-    if (confirm(`${__('confirm_delete_document')} ${name}"?`)) {
-        const minLoaderTime = 300;
-        const startTime = Date.now();
-        
-        // Show loader in the document card
-        const docCards = document.querySelectorAll('.document-card');
-        let targetCard = null;
-        for (let card of docCards) {
-            if (card.querySelector('.document-name')?.innerText === name) {
-                targetCard = card;
-                break;
-            }
-        }
-        
-        if (targetCard) {
-            targetCard.style.opacity = '0.5';
-            targetCard.style.pointerEvents = 'none';
-        }
-        
-        fetch(baseUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: `action=delete&name=${encodeURIComponent(name)}`
-        })
-        .then(res => res.json())
-        .then(data => {
-            const elapsed = Date.now() - startTime;
-            const delay = Math.max(0, minLoaderTime - elapsed);
-            
-            setTimeout(() => {
-                if (data.success) {
-                    // Reload documents list
-                    loadDocuments();
-                } else {
-                    alert(`${ __('error_deleting_document')}` + data.message);
-                    if (targetCard) {
-                        targetCard.style.opacity = '1';
-                        targetCard.style.pointerEvents = 'auto';
-                    }
-                }
-            }, delay);
-        })
-        .catch(error => {
-            const elapsed = Date.now() - startTime;
-            const delay = Math.max(0, minLoaderTime - elapsed);
-            
-            setTimeout(() => {
-                alert(`${__('error_deleting_document')}`);
-                if (targetCard) {
-                    targetCard.style.opacity = '1';
-                    targetCard.style.pointerEvents = 'auto';
-                }
-            }, delay);
-        });
+function showMessage(message, type) {
+    if (typeof showToast === 'function') {
+        showToast(message, type);
+    } else {
+        alert(message);
     }
+}
+
+function showError(message) {
+    showMessage(message, 'error');
 }
 
 
@@ -221,11 +219,6 @@ function previewFile(path) {
     console.log('Preview file:', path);
 }
 
-function deleteFile(path) {
-    if (confirm(__('confirm_delete_file'))) {
-        console.log('Delete file:', path);
-    }
-}
 
 function shareFile(path) {
     console.log('Share file:', path);

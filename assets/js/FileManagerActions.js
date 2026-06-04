@@ -236,7 +236,6 @@ class FileManagerActions extends FileManagerCore {
             if (data.success) {
                 this.showMessage(__('delete_success'), 'success');
                 this.loadFolderContents(this.currentPath);
-                this.loadStorageInfo();
             } else {
                 this.showError(__(data.message));
             }
