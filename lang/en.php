@@ -117,6 +117,8 @@ return [
     'uploading' => 'Uploading...',
     'file_uploaded_success' => 'File uploaded successfully',
     'failed_to_upload_file' => 'Failed to upload file',
+    'file_type_not_allowed_security' => 'This file type is not allowed for security reasons',
+    'file_type_not_allowed' => 'This file type is not allowed.',
     'image_preview' => 'Image Preview',
     'video_player' => 'Video Player',
     'browser_no_video_support' => 'Your browser does not support the video tag.',

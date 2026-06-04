@@ -172,9 +172,8 @@ class FileManagerActions extends FileManagerCore {
                 this.redirectToUploadsPage();
                 
                 this.loadFolderContents(this.currentPath);
-                this.loadStorageInfo();
             } else {
-                this.showError(data.message);
+                this.showError(__(data.message));
             }
         } catch(e) {
             this.showError(__('failed_to_upload_file'));

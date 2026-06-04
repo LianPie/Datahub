@@ -114,6 +114,8 @@ return [
     'uploading' => 'در حال آپلود...',
     'file_uploaded_success' => 'فایل با موفقیت آپلود شد',
     'failed_to_upload_file' => 'آپلود فایل انجام نشد',
+    'file_type_not_allowed_security' => 'آپلود این نوع فایل به دلایل امنیتی مجاز نیست.',
+    'file_type_not_allowed' => 'آپلود این نوع فایل مجاز نیست.',
     'image_preview' => 'پیش‌نمایش تصویر',
     'video_player' => 'پخش‌کننده ویدیو',
     'browser_no_video_support' => 'مرورگر شما تگ ویدیو را پشتیبانی نمی‌کند.',

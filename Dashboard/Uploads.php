@@ -81,6 +81,8 @@ include 'includes/header.php';
         'uploading': '<?= __('uploading') ?>',
         'file_uploaded_success': '<?= __('file_uploaded_success') ?>',
         'failed_to_upload_file': '<?= __('failed_to_upload_file') ?>',
+        'file_type_not_allowed_security': '<?= __('file_type_not_allowed_security') ?>',
+        'file_type_not_allowed': '<?= __('file_type_not_allowed') ?>',
         'root_no_folder': '<?= __('root_no_folder') ?>',
         'failed_to_load_folders': '<?= __('failed_to_load_folders') ?>',
         'image_preview': '<?= __('image_preview') ?>',

@@ -177,30 +177,114 @@ function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
         return ["success" => false, "message" => $storage_check['message']];
     }
     
-    $max_size = 50 * 1024 * 1024; // 50MB max per file
+    $max_size = 100 * 1024 * 1024; // 100MB max per file (increased)
     if ($file['size'] > $max_size) {
-        return ["success" => false, "message" => "File too large. Max 50MB per file"];
+        return ["success" => false, "message" => "File too large. Max 100MB per file"];
     }
+    
+    // Define allowed MIME types (expanded to accept almost everything except dangerous ones)
     $allowed_types = [
         // Images
-        'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-        // Documents
-        'application/pdf', 'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'text/plain', 'application/zip', 'application/x-zip-compressed',
+        'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/svg+xml', 'image/tiff', 'image/x-icon',
+        
+        // Adobe Files
+        'application/pdf', 'application/postscript', 'application/illustrator', 'application/x-photoshop',
+        'application/photoshop', 'image/vnd.adobe.photoshop', 'application/psd',
+        'application/x-indesign', 'application/vnd.adobe.indesign',
+        'application/x-illustrator', 'application/x-photoshop',
+        'application/x-mimearchive', 'application/x-shockwave-flash',
+
+        
+        // CorelDRAW Files
+        'application/cdr',
+        'application/coreldraw',
+        'application/vnd.corel-draw',
+        'application/x-cdr',
+        'application/x-coreldraw',
+        'image/cdr',
+        'image/x-cdr',
+        'zz-application/zz-winassoc-cdr',
+        
+        // Microsoft Office Documents
+        'application/msword', // .doc
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+        'application/vnd.ms-excel', // .xls
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+        'application/vnd.ms-powerpoint', // .ppt
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+        'application/vnd.ms-access', // .mdb
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.template', // .dotx
+        'application/vnd.ms-word.document.macroenabled.12', // .docm
+        'application/vnd.ms-excel.sheet.macroenabled.12', // .xlsm
+        'application/vnd.ms-powerpoint.presentation.macroenabled.12', // .pptm
+        
+        // Apple iWork
+        'application/vnd.apple.pages', // .pages
+        'application/vnd.apple.numbers', // .numbers
+        'application/vnd.apple.keynote', // .keynote
+        
+        // Text & Markup
+        'text/plain', 'text/html', 'text/css', 'text/csv', 'text/xml', 'application/xml', 
+        'text/markdown', 'text/rtf', 'text/richtext', 'application/rtf',
+        
+        // Archives & Compressed
+        'application/zip', 'application/x-zip-compressed', 'application/x-rar-compressed',
+        'application/x-tar', 'application/gzip', 'application/vnd.rar',
+        'application/x-7z-compressed', 'application/x-bzip2', 'application/x-xz',
+        
         // Videos
-        'video/mp4', 'video/mpeg', 'video/ogg', 'video/webm', 
-        'video/quicktime', 'video/x-msvideo', 'video/x-matroska',
-        'video/mov', 'video/avi', 'video/mkv',
-        // Music / Audio
-        'audio/mpeg','audio/mp3',   // mp3
-        'audio/wav', 'audio/x-wav', // wav
-        'audio/ogg','audio/vorbis', // ogg 
-        'audio/opus',        // opus
+        'video/mp4', 'video/mpeg', 'video/ogg', 'video/webm', 'video/quicktime',
+        'video/x-msvideo', 'video/x-matroska', 'video/mov', 'video/avi', 'video/mkv',
+        'video/3gpp', 'video/x-flv', 'video/x-ms-wmv', 'video/mp2t',
+        
+        // Audio / Music
+        'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/ogg', 'audio/vorbis',
+        'audio/opus', 'audio/flac', 'audio/m4a', 'audio/aac', 'audio/x-m4a',
+        
+        // Programming & Data
+        'application/json', 'application/javascript', 'text/javascript',
+        'text/x-python', 'text/x-php', 'text/x-java-source', 'text/x-c',
+        'text/x-c++', 'text/x-sh', 'text/x-perl', 'text/x-ruby',
+        'text/x-go', 'text/x-rust', 'text/x-swift',
+        
+        // Fonts
+        'font/ttf', 'font/otf', 'font/woff', 'font/woff2',
+        
+        // Ebooks
+        'application/epub+zip', 'application/x-mobipocket-ebook',
+        
+        // CAD & 3D
+        'application/dwg', 'image/vnd.dwg', 'application/x-autocad',
+        'model/stl', 'model/obj', 'application/x-step',
+        
+        // Database
+        'application/x-sql', 'application/sql',
+        
+        // Contact & Calendar
+        'text/vcard', 'text/calendar',
+        
+        // Generic binary files (limited - some may be dangerous)
+        'application/octet-stream'
     ];
     
-    if (!in_array($file['type'], $allowed_types)) {
-        return ["success" => false, "message" => "File type not allowed"];
+    // Add MIME type detection fallback
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $detected_type = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    
+    // Block dangerous file types
+    $dangerous_extensions = ['php', 'php3', 'php4', 'php5', 'phtml', 'exe', 'msi', 'bat', 'cmd', 'sh', 
+                             'js', 'vbs', 'ps1', 'py', 'pl', 'cgi', 'htaccess', 'htpasswd',
+                                'ini', 'cfg', 'conf', 'env', '.env'];
+    $file_ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    
+    if (in_array($file_ext, $dangerous_extensions)) {
+        return ["success" => false, "message" => "file_type_not_allowed_security"];
+    }
+    
+    // Check if file is allowed (by MIME type or extension)
+    if (!in_array($file['type'], $allowed_types) && !in_array($detected_type, $allowed_types)) {
+        return ["success" => false, "message" => "file_type_not_allowed" . $file['type']];
     }
     
     $original_name = basename($file['name']);
@@ -232,7 +316,7 @@ function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
             "size_formatted" => formatBytes($file['size'])
         ];
     } else {
-        return ["success" => false, "message" => "Failed to save file"];
+        return ["success" => false, "message" => "failed_to_upload_file"];
     }
 }
 

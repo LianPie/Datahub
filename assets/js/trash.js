@@ -407,14 +407,60 @@ async function emptyTrash() {
 
 function getFileIcon(filename) {
     const ext = filename.split('.').pop().toLowerCase();
-    const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
-    const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi'];
-    const audioExts = ['mp3', 'wav', 'ogg', 'm4a'];
     
-    if (imageExts.includes(ext)) return 'ri-image-line';
-    if (videoExts.includes(ext)) return 'ri-movie-line';
-    if (audioExts.includes(ext)) return 'ri-music-line';
-    return 'ri-file-line';
+    const iconMap = {
+        // Images
+        'jpg': 'ri-image-fill', 'jpeg': 'ri-image-fill', 'png': 'ri-image-fill',
+        'gif': 'ri-image-fill', 'webp': 'ri-image-fill', 'svg': 'ri-image-fill',
+        'bmp': 'ri-image-fill', 'ico': 'ri-image-fill',
+        
+        // Videos
+        'mp4': 'ri-video-fill', 'webm': 'ri-video-fill', 'mov': 'ri-video-fill',
+        'avi': 'ri-video-fill', 'mkv': 'ri-video-fill', 'flv': 'ri-video-fill',
+        
+        // Audio
+        'mp3': 'ri-music-fill', 'wav': 'ri-music-fill', 'm4a': 'ri-music-fill',
+        'flac': 'ri-music-fill', 'aac': 'ri-music-fill', 'wma': 'ri-music-fill',
+        
+        // Adobe
+        'pdf': 'ri-file-pdf-fill', 'psd': 'ri-image-edit-fill',
+        'ai': 'ri-brush-fill', 'indd': 'ri-layout-fill',
+        
+        // Microsoft Office
+        'doc': 'ri-file-word-fill', 'docx': 'ri-file-word-fill',
+        'xls': 'ri-file-excel-fill', 'xlsx': 'ri-file-excel-fill',
+        'ppt': 'ri-file-ppt-fill', 'pptx': 'ri-file-ppt-fill',
+        
+        // Apple iWork
+        'pages': 'ri-file-text-fill', 'numbers': 'ri-table-fill', 'key': 'ri-presentation-fill',
+        
+        // Text
+        'txt': 'ri-file-text-fill', 'rtf': 'ri-file-text-fill',
+        'md': 'ri-markdown-fill', 'html': 'ri-html5-fill', 'css': 'ri-css3-fill',
+        'js': 'ri-javascript-fill', 'json': 'ri-code-fill', 'xml': 'ri-code-fill', 'csv': 'ri-table-fill',
+        
+        // Archives
+        'zip': 'ri-file-zip-fill', 'rar': 'ri-file-zip-fill', '7z': 'ri-file-zip-fill',
+        
+        // Code
+        'py': 'ri-python-fill', 'php': 'ri-php-fill', 'java': 'ri-java-fill',
+        'cpp': 'ri-c-fill', 'c': 'ri-c-fill', 'go': 'ri-go-fill', 'rb': 'ri-ruby-fill',
+        'sql': 'ri-database-fill',
+        
+        // Fonts
+        'ttf': 'ri-font-fill', 'otf': 'ri-font-fill', 'woff': 'ri-font-fill',
+        
+        // 3D
+        'stl': 'ri-3d-print-fill', 'obj': 'ri-3d-print-fill', 'dwg': 'ri-building-fill',
+        
+        // Ebooks & Corel
+        'epub': 'ri-book-fill', 'cdr': 'ri-image-edit-fill',
+        
+        // Database
+        'db': 'ri-database-fill', 'sqlite': 'ri-database-fill'
+    };
+    
+    return iconMap[ext] || 'ri-file-fill';
 }
 
 function formatBytes(bytes) {

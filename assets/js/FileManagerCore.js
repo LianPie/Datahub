@@ -198,7 +198,6 @@ class FileManagerCore {
                             <button class="preview-btn" onclick="fileManager.previewFile('${file.path}')"><i class="ri-eye-line"></i></button>
                             <a href="${this.baseUrl}?download=1&path=${encodeURIComponent(file.path)}" download><i class="ri-download-line"></i></a>
                             <button class="delete-btn" onclick="fileManager.deleteItem('${file.path}', false)"><i class="ri-delete-bin-line"></i></button>
-                            <button class="share-btn" onclick="fileManager.shareFile('${file.path}')"><i class="ri-share-line"></i></button>
                         </div>
                     </div>`;
         });
@@ -290,14 +289,101 @@ class FileManagerCore {
     }
     
     getFileIcon(filename) {
-        const ext = filename.split('.').pop().toLowerCase();
-        const icons = {
-            'pdf': 'ri-file-pdf-fill', 'jpg': 'ri-image-fill', 'jpeg': 'ri-image-fill',
-            'png': 'ri-image-fill', 'gif': 'ri-image-fill', 'webp': 'ri-image-fill',
-            'txt': 'ri-file-text-fill', 'doc': 'ri-file-word-fill', 'docx': 'ri-file-word-fill',
-            'zip': 'ri-file-zip-fill', 'mp4': 'ri-video-fill', 'mp3': 'ri-music-fill'
-        };
-        return icons[ext] || 'ri-file-fill';
+    const ext = filename.split('.').pop().toLowerCase();
+    
+    // Complete icon mapping
+    const icons = {
+        // Images
+        'jpg': 'ri-image-fill', 'jpeg': 'ri-image-fill', 'png': 'ri-image-fill',
+        'gif': 'ri-image-fill', 'webp': 'ri-image-fill', 'bmp': 'ri-image-fill',
+        'svg': 'ri-image-fill', 'tiff': 'ri-image-fill', 'ico': 'ri-image-fill',
+        'heic': 'ri-image-fill', 'raw': 'ri-image-fill',
+        
+        // Adobe Files
+        'pdf': 'ri-file-pdf-fill',
+        'psd': 'ri-adobe-photoshop-fill',
+        'ai': 'ri-adobe-illustrator-fill',
+        'indd': 'ri-adobe-indesign-fill',
+        'eps': 'ri-adobe-after-effects-fill',
+        'ps': 'ri-adobe-photoshop-fill',
+        'xd': 'ri-adobe-xd-fill',
+        'svg': 'ri-adobe-illustrator-fill',
+
+         // CorelDRAW
+        'cdr': 'ri-image-edit-line',  // CorelDRAW vector file
+        'cdr3': 'ri-image-edit-line',
+        'cdr4': 'ri-image-edit-line',
+        'cdr5': 'ri-image-edit-line',
+        'cdr6': 'ri-image-edit-line',
+        'cdrw': 'ri-image-edit-line',
+        'cdt': 'ri-file-copy-line',   // CorelDRAW template
+        'cdx': 'ri-file-copy-line',   // CorelDRAW compressed
+        'cmx': 'ri-file-copy-line',   // Corel Exchange
+        'cpt': 'ri-image-edit-line',  // Corel Photo-Paint
+        
+        // Microsoft Office
+        'doc': 'ri-file-word-fill', 'docx': 'ri-file-word-fill',
+        'xls': 'ri-file-excel-fill', 'xlsx': 'ri-file-excel-fill',
+        'ppt': 'ri-file-ppt-fill', 'pptx': 'ri-file-ppt-fill',
+        'mdb': 'ri-database-fill', 'accdb': 'ri-database-fill',
+        'pub': 'ri-file-pdf-fill',
+        'one': 'ri-sticky-note-fill',
+        
+        // Apple iWork
+        'pages': 'ri-file-text-fill',
+        'numbers': 'ri-table-fill',
+        'key': 'ri-presentation-fill',
+        
+        // Text & Documents
+        'txt': 'ri-file-text-fill',
+        'rtf': 'ri-file-text-fill',
+        'md': 'ri-markdown-fill',
+        'csv': 'ri-table-fill',
+        'xml': 'ri-code-fill',
+        'json': 'ri-code-fill',
+        'html': 'ri-html5-fill',
+        'css': 'ri-css3-fill',
+        
+        // Archives
+        'zip': 'ri-file-zip-fill', 'rar': 'ri-file-zip-fill', '7z': 'ri-file-zip-fill',
+        'tar': 'ri-file-zip-fill', 'gz': 'ri-file-zip-fill', 'bz2': 'ri-file-zip-fill',
+        
+        // Videos
+        'mp4': 'ri-video-fill', 'avi': 'ri-video-fill', 'mkv': 'ri-video-fill',
+        'mov': 'ri-video-fill', 'wmv': 'ri-video-fill', 'flv': 'ri-video-fill',
+        'webm': 'ri-video-fill', 'm4v': 'ri-video-fill', 'mpg': 'ri-video-fill',
+        'mpeg': 'ri-video-fill', '3gp': 'ri-video-fill',
+        
+        // Audio
+        'mp3': 'ri-music-fill', 'wav': 'ri-music-fill', 'flac': 'ri-music-fill',
+        'm4a': 'ri-music-fill', 'aac': 'ri-music-fill', 'ogg': 'ri-music-fill',
+        'opus': 'ri-music-fill', 'wma': 'ri-music-fill',
+        
+        // Programming
+        'js': 'ri-javascript-fill', 'py': 'ri-python-fill', 'php': 'ri-php-fill',
+        'java': 'ri-java-fill', 'cpp': 'ri-cpp-fill', 'c': 'ri-c-fill',
+        'go': 'ri-go-fill', 'rb': 'ri-ruby-fill', 'rs': 'ri-rust-fill',
+        'swift': 'ri-swift-fill', 'kt': 'ri-kotlin-fill', 'ts': 'ri-typescript-fill',
+        'sql': 'ri-database-fill',
+        
+        // Fonts
+        'ttf': 'ri-font-fill', 'otf': 'ri-font-fill', 'woff': 'ri-font-fill',
+        'woff2': 'ri-font-fill',
+        
+        // 3D & CAD
+        'stl': 'ri-3d-print-fill', 'obj': 'ri-3d-print-fill', 'dwg': 'ri-building-fill',
+        
+        // Ebooks
+        'epub': 'ri-book-fill', 'mobi': 'ri-book-fill',
+        
+        // Databases
+        'db': 'ri-database-fill', 'sqlite': 'ri-database-fill',
+        
+        // Contacts
+        'vcf': 'ri-contacts-fill', 'ics': 'ri-calendar-fill'
+    };
+    
+    return icons[ext] || 'ri-file-fill';
     }
     
     formatBytes(bytes) {
