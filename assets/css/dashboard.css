@@ -981,6 +981,8 @@ h2{
     #trashFoldersList .folder-name {
         white-space: normal;
         word-break: break-word;
+    }
+}
 
 /* ===== styles for summernote and documents page ===== */
 .documents-section {
@@ -1305,6 +1307,4 @@ h2{
     .note-editor .note-toolbar .note-btn i {
         font-size: 12px !important;
     }
-}
-}
 }
