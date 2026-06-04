@@ -79,6 +79,13 @@ $username = $_SESSION["username"];
             <li>
                 <a href="/Datahub/Dashboard/Trash.php" >
                     <i class="ri-delete-bin-line"></i> <span><?= __('trash') ?></span>
+                <a href="/Datahub/Dashboard/Documents.php" >
+                    <i class="ri-file-line"></i> <span><?= __(key: 'docs') ?></span>
+                </a>
+            </li>
+            <li>
+                <a href="#" >
+                    <i class="ri-delete-bin-line"></i> <span><?= __(key: 'trash') ?></span>
                 </a>
             </li>
             <li>

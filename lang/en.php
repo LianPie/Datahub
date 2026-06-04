@@ -218,5 +218,31 @@ return [
     'audio' => 'Audio',
     'documents' => 'Documents',
     'other' => 'Other',
+
+
+    'all_docs' => 'All Documents',
+    'docs' => 'Documents',
+    
+    // ========== DOCUMENTS SECTION ==========
+    'loading_documents' => 'Loading documents',
+    'error_loading_documents' => 'Failed to load documents',
+    'no_documents_yet' => 'No documents yet',
+    'create_first_document' => 'Create your first document',
+    'unknown_date' => 'Unknown date',
+    'view' => 'View',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'new_document' => 'New Document',
+    'enter_document_name' => 'Enter document name:',
+    'confirm_delete_document' => 'Are you sure you want to delete document: ',
+    'error_deleting_document' => 'Failed to delete document: ',
+    'create_document' => 'Create Document',
+    'edit_document' => 'Edit Document',
+    'document_created' => 'Document created successfully',
+    'document_updated' => 'Document updated successfully',
+    'document_deleted' => 'Document deleted successfully',
+
+    'document_name' => 'Document Name',
+    'type_here' => 'write your text here....',
 ];
 ?>
