@@ -1313,3 +1313,211 @@ h2{
         font-size: 12px !important;
     }
 }
+
+/* Video Player Styles */
+.video-player-container {
+    background: #0f172a;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border: 1px solid #334155;
+}
+.video-wrapper {
+    position: relative;
+    background: #000;
+}
+video {
+    width: 100%;
+    display: block;
+}
+.custom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    flex-wrap: wrap;
+}
+.custom-controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.custom-controls button:hover {
+    color: #fed049;
+}
+#progressBar {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: #334155;
+}
+#volumeSlider, #playbackSpeed {
+    width: 80px;
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 0.2rem;
+    color: white;
+}
+.time-display {
+    color: white;
+    font-size: 0.8rem;
+}
+
+/* Library Grid */
+.library-section {
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 1.5rem;
+}
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.video-card {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid #334155;
+    text-align: center;
+}
+.video-card:hover {
+    transform: translateY(-4px);
+    border-color: #fed049;
+}
+.video-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #1e293b;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #fed049;
+    margin-bottom: 0.5rem;
+}
+.video-title {
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Music Player Styles */
+
+.music-player-container {
+    background: #1e293b;
+    border-radius: 32px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    border: 1px solid #334155;
+}
+.album-art {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 1.5rem;
+    background: #0f172a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: #fed049;
+}
+.track-info {
+    margin-bottom: 1.5rem;
+}
+.player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+.player-controls button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.player-controls button:hover {
+    color: #fed049;
+}
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+#musicProgress {
+    flex: 1;
+    height: 4px;
+}
+.music-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.music-card {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.music-card:hover {
+    background: #0f4c75;
+    transform: translateY(-2px);
+}
+.music-icon {
+    font-size: 2rem;
+    color: #fed049;
+}
+.music-info {
+    flex: 1;
+    overflow: hidden;
+}
+.music-title {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#playbackSpeedMusic{
+    width: 80px;
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 0.2rem;
+    color: white;
+}
+@media (max-width: 640px) {
+    .music-grid {
+        grid-template-columns: 1fr;
+    }
+
+        .custom-controls {
+        justify-content: center;
+    }
+    .videos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+}
