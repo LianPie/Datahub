@@ -78,9 +78,19 @@ $username = $_SESSION["username"];
             </li>
             <li>
                 <a href="/Datahub/Dashboard/Documents.php" >
-                    <i class="ri-file-line"></i> <span><?= __(key: 'docs') ?></span>
+                    <i class="ri-file-line"></i> <span><?= __('docs') ?></span>
                 </a>
             </li>
+            <li>
+            <a href="/Datahub/Dashboard/playerMusic.php">
+                <i class="ri-headphone-line"></i> <span><?= __('music_player') ?></span>
+            </a>
+        </li>
+        <li>
+            <a href="/Datahub/Dashboard/playerVideo.php">
+                <i class="ri-movie-line"></i> <span><?= __('video_player') ?></span>
+            </a>
+        </li>
             <li>
                 <a href="/Datahub/Dashboard/Trash.php" >
                     <i class="ri-delete-bin-line"></i> <span><?= __('trash') ?></span>
