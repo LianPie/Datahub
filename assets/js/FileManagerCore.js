@@ -93,6 +93,7 @@ class FileManagerCore {
             if (this.currentFilter && this.currentFilter !== 'all') {
                 bodyParams.filter = this.currentFilter;
             }
+            console.log(this.currentFilter)
             
 
             const response = await fetch(this.baseUrl, {
@@ -301,13 +302,14 @@ class FileManagerCore {
         
         // Adobe Files
         'pdf': 'ri-file-pdf-fill',
-        'psd': 'ri-adobe-photoshop-fill',
-        'ai': 'ri-adobe-illustrator-fill',
-        'indd': 'ri-adobe-indesign-fill',
-        'eps': 'ri-adobe-after-effects-fill',
-        'ps': 'ri-adobe-photoshop-fill',
-        'xd': 'ri-adobe-xd-fill',
-        'svg': 'ri-adobe-illustrator-fill',
+        'psd': 'ri-draw-fill',
+        'ai': 'ri-compasses-fill',
+        'indd': 'ri-quill-pen-fill',
+        'eps': 'ri-film-fill',
+        'prproj': 'ri-film-fill',
+        'ps': 'ri-draw-fill',
+        'xd': 'ri-pages-fill',
+        'svg': 'ri-compasses-fill',
 
          // CorelDRAW
         'cdr': 'ri-image-edit-line',  // CorelDRAW vector file
@@ -360,10 +362,10 @@ class FileManagerCore {
         'opus': 'ri-music-fill', 'wma': 'ri-music-fill',
         
         // Programming
-        'js': 'ri-javascript-fill', 'py': 'ri-python-fill', 'php': 'ri-php-fill',
-        'java': 'ri-java-fill', 'cpp': 'ri-cpp-fill', 'c': 'ri-c-fill',
+        'js': 'ri-javascript-fill', 'py': 'ri-code-box-fill', 'php': 'ri-php-fill',
+        'java': 'ri-java-fill', 'cpp': 'ri-code-box-fill', 'c': 'ri-code-box-fill',
         'go': 'ri-go-fill', 'rb': 'ri-ruby-fill', 'rs': 'ri-rust-fill',
-        'swift': 'ri-swift-fill', 'kt': 'ri-kotlin-fill', 'ts': 'ri-typescript-fill',
+        'swift': 'ri-code-box-fill', 'kt': 'ri-code-box-fill', 'ts': 'ri-code-box-fill',
         'sql': 'ri-database-fill',
         
         // Fonts
@@ -371,7 +373,7 @@ class FileManagerCore {
         'woff2': 'ri-font-fill',
         
         // 3D & CAD
-        'stl': 'ri-3d-print-fill', 'obj': 'ri-3d-print-fill', 'dwg': 'ri-building-fill',
+        'stl': 'ri-box-3-fill', 'obj': 'ri-box-3-fill', 'dwg': 'ri-box-3-fill',
         
         // Ebooks
         'epub': 'ri-book-fill', 'mobi': 'ri-book-fill',

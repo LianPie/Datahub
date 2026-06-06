@@ -139,7 +139,7 @@ class FileManagerActions extends FileManagerCore {
             this.showError(__('please_select_file'));
             return;
         }
-        if (file.size > 50 * 1024 * 1024) {
+        if (file.size > 100 * 1024 * 1024) {
             this.showError(__('file_too_large'));
             return;
         }
@@ -317,88 +317,88 @@ class FileManagerActions extends FileManagerCore {
             img.src = previewUrl;
         }
         else if (videoExts.includes(ext)) {
-    const video = document.createElement('video');
-    
-    video.oncanplay = () => {
-        const elapsed = Date.now() - startTime;
-        const delay = Math.max(0, minLoaderTime - elapsed);
-        
-        setTimeout(() => {
-            previewModal.querySelector('.custom-modal-header h3').textContent = __('video_player');
-            previewModal.querySelector('.custom-modal-body').innerHTML = `
-                <div style="position: relative;">
-                    <video id="preview-video" controls autoplay style="max-width: 100%; max-height: 70vh;">
-                        <source src="${previewUrl}" type="video/${ext === 'mp4' ? 'mp4' : ext === 'webm' ? 'webm' : 'ogg'}">
-                        ${__('browser_no_video_support')}
-                    </video>
-                    <div class="skipbtns" style="text-align: center; margin-top: 10px;">
-                        <button class="video-skip-btn" onclick="document.getElementById('preview-video').currentTime -= 10">⏪ -10s</button>
-                        <button class="video-skip-btn" onclick="document.getElementById('preview-video').currentTime += 10">+10s ⏩</button>
-                    </div>
-                </div>
-            `;
-        }, delay);
-    };
-    
-    video.onerror = () => {
-        const elapsed = Date.now() - startTime;
-        const delay = Math.max(0, minLoaderTime - elapsed);
-        
-        setTimeout(() => {
-            previewModal.querySelector('.custom-modal-body').innerHTML = `
-                <div style="color: red; padding: 40px;">
-                    <i class="ri-error-warning-line" style="font-size: 48px;"></i>
-                    <p>${__('error_loading_video') || 'Failed to load video'}</p>
-                </div>
-            `;
-        }, delay);
-    };
-    
-    video.src = previewUrl;
-}
+            const video = document.createElement('video');
+            
+            video.oncanplay = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-header h3').textContent = __('video_player');
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="position: relative;">
+                            <video id="preview-video" controls autoplay style="max-width: 100%; max-height: 70vh;">
+                                <source src="${previewUrl}" type="video/${ext === 'mp4' ? 'mp4' : ext === 'webm' ? 'webm' : 'ogg'}">
+                                ${__('browser_no_video_support')}
+                            </video>
+                            <div class="skipbtns" style="text-align: center; margin-top: 10px;">
+                                <button class="video-skip-btn" onclick="document.getElementById('preview-video').currentTime -= 10">⏪ -10s</button>
+                                <button class="video-skip-btn" onclick="document.getElementById('preview-video').currentTime += 10">+10s ⏩</button>
+                            </div>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            video.onerror = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="color: red; padding: 40px;">
+                            <i class="ri-error-warning-line" style="font-size: 48px;"></i>
+                            <p>${__('error_loading_video') || 'Failed to load video'}</p>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            video.src = previewUrl;
+        }
 
-else if (audioExts.includes(ext)) {
-    const audio = document.createElement('audio');
-    
-    audio.oncanplay = () => {
-        const elapsed = Date.now() - startTime;
-        const delay = Math.max(0, minLoaderTime - elapsed);
-        
-        setTimeout(() => {
-            previewModal.querySelector('.custom-modal-header h3').textContent = __('music_player');
-            previewModal.querySelector('.custom-modal-body').innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <i class="ri-music-fill" style="font-size: 80px; color: #6c757d;"></i>
-                    <p><strong>${this.escapeHtml(filePath.split('/').pop())}</strong></p>
-                    <audio id="preview-audio" controls autoplay style="width: 100%;">
-                        <source src="${previewUrl}" type="audio/${ext === 'mp3' ? 'mpeg' : ext === 'wav' ? 'wav' : 'ogg'}">
-                        ${__('browser_no_audio_support')}
-                    </audio>
-                    <div class="skipbtns" style="text-align: center; margin-top: 10px;">
-                        <button class="audio-skip-btn" onclick="document.getElementById('preview-audio').currentTime -= 10">⏪ -10s</button>
-                        <button class="audio-skip-btn" onclick="document.getElementById('preview-audio').currentTime += 10">+10s ⏩</button>
-                    </div>
-                </div>
-            `;
-        }, delay);
-    };
-    
-    audio.onerror = () => {
-        const elapsed = Date.now() - startTime;
-        const delay = Math.max(0, minLoaderTime - elapsed);
-        
-        setTimeout(() => {
-            previewModal.querySelector('.custom-modal-body').innerHTML = `
-                <div style="color: red; padding: 40px;">
-                    <i class="ri-error-warning-line" style="font-size: 48px;"></i>
-                    <p>${__('error_loading_audio') || 'Failed to load audio'}</p>
-                </div>
-            `;
-        }, delay);
-    };
-    
-    audio.src = previewUrl;
-}
+        else if (audioExts.includes(ext)) {
+            const audio = document.createElement('audio');
+            
+            audio.oncanplay = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-header h3').textContent = __('music_player');
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="ri-music-fill" style="font-size: 80px; color: #6c757d;"></i>
+                            <p><strong>${this.escapeHtml(filePath.split('/').pop())}</strong></p>
+                            <audio id="preview-audio" controls autoplay style="width: 100%;">
+                                <source src="${previewUrl}" type="audio/${ext === 'mp3' ? 'mpeg' : ext === 'wav' ? 'wav' : 'ogg'}">
+                                ${__('browser_no_audio_support')}
+                            </audio>
+                            <div class="skipbtns" style="text-align: center; margin-top: 10px;">
+                                <button class="audio-skip-btn" onclick="document.getElementById('preview-audio').currentTime -= 10">⏪ -10s</button>
+                                <button class="audio-skip-btn" onclick="document.getElementById('preview-audio').currentTime += 10">+10s ⏩</button>
+                            </div>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            audio.onerror = () => {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minLoaderTime - elapsed);
+                
+                setTimeout(() => {
+                    previewModal.querySelector('.custom-modal-body').innerHTML = `
+                        <div style="color: red; padding: 40px;">
+                            <i class="ri-error-warning-line" style="font-size: 48px;"></i>
+                            <p>${__('error_loading_audio') || 'Failed to load audio'}</p>
+                        </div>
+                    `;
+                }, delay);
+            };
+            
+            audio.src = previewUrl;
+        }
         
         else if (pdfExts.includes(ext)) {
             const elapsed = Date.now() - startTime;

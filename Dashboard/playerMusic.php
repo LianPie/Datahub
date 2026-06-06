@@ -16,7 +16,9 @@
             </div>
             <div class="player-controls">
                 <button id="prevTrack" disabled><i class="ri-skip-back-line"></i></button>
+                <button id="skipBack10" title="Back 10 seconds" onclick="skipBackward10()"><i class="ri-replay-10-line"></i></button>
                 <button id="playPauseMusic"><i class="ri-play-line"></i></button>
+                <button id="skipForward10" title="Forward 10 seconds" onclick="skipForward10()"><i class="ri-forward-10-line"></i></button>
                 <button id="nextTrack" disabled><i class="ri-skip-forward-line"></i></button>
                 <button id="volumeMusicBtn"><i class="ri-volume-up-line"></i></button>
                 <input type="range" id="volumeMusicSlider" min="0" max="1" step="0.01" value="0.8">
@@ -46,5 +48,5 @@
     </div>
 </div>
 
-<script src="/Datahub/assets/js/players.js"></script>
+<script src="/Datahub/assets/js/musicPlayer.js"></script>
 <?php include 'includes/footer.php'; ?>

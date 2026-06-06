@@ -595,6 +595,65 @@ function getRecentFolders($user_folder, $limit = 3) {
     return array_slice($recent_folders, 0, $limit);
 }
 
+function getUserMediaByType($user_folder, $type) {
+    $files = [];
+    
+    if (!is_dir($user_folder)) {
+        return $files;
+    }
+    
+    // Define extensions for each type
+    $extensions = [
+        'video' => ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'm4v', 'mpg', 'mpeg', '3gp'],
+        'audio' => ['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac', 'wma', 'opus'],
+    ];
+    
+    // Check if type exists
+    if (!isset($extensions[$type])) {
+        return $files;
+    }
+    
+    $allowed_extensions = $extensions[$type];
+    
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($user_folder, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
+    
+    foreach ($iterator as $file) {
+        if (!$file->isFile()) continue;
+        
+        $relative_path = str_replace($user_folder . DIRECTORY_SEPARATOR, '', $file->getPathname());
+        $relative_path = str_replace('\\', '/', $relative_path);
+        
+        // Skip files in docs and trash folders
+        if (strpos($relative_path, 'docs/') === 0 || strpos($relative_path, 'trash/') === 0) {
+            continue;
+        }
+        
+        $extension = strtolower($file->getExtension());
+        
+        if (in_array($extension, $allowed_extensions)) {
+            $files[] = [
+                'name' => $file->getFilename(),
+                'path' => $relative_path,
+                'size' => $file->getSize(),
+                'size_formatted' => formatSize($file->getSize()),
+                'modified' => date('Y-m-d H:i:s', $file->getMTime()),
+                'modified_formatted' => date('Y-m-d H:i:s', $file->getMTime()),
+                'extension' => $extension
+            ];
+        }
+    }
+    
+    // Sort by modified date, newest first
+    usort($files, function($a, $b) {
+        return strtotime($b['modified']) - strtotime($a['modified']);
+    });
+    
+    return $files;
+}
+
 
 //========trash and recovery
 function getTrashFolder($user_folder) {
@@ -842,6 +901,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
             $response = ["success" => true, "data" => $contents];
             break;
 
+        case 'get_user_videos':
+            $videos = getUserMediaByType($user_folder, 'video');
+            $response = ["success" => true, "videos" => $videos];
+            break;
+
+        case 'get_user_music':
+            $audio = getUserMediaByType($user_folder, 'audio');
+            $response = ["success" => true, "music" => $audio];
+            break;
+
+
         case 'get_recent_items':
             $recent_files = getRecentFiles($user_folder, 3);
             $recent_folders = getRecentFolders($user_folder, 3);
@@ -943,7 +1013,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['download'])) {
         $mime_type = $mime_types[$file_extension] ?? 'application/octet-stream';
         
         // files with preview modal
-        $inline_types = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mp3', 'wav', 'ogg'];
+        $inline_types = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mp3', 'wav', 'ogg', 'm4a'];
         
         header('Access-Control-Allow-Origin: *');
         header('Accept-Ranges: bytes');
