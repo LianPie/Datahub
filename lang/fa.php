@@ -242,5 +242,18 @@ return [
     'audio' => 'صدا',
     'documents' => 'اسناد',
     'other' => 'سایر',
+
+    // ========== MUSIC PLAYER ==========
+    'no_track_selected' => 'هیچ آهنگی انتخاب نشده است',
+    'select_from_library' => 'از کتابخانه خود انتخاب کنید',
+    'back_10_seconds' => '۱۰ ثانیه به عقب',
+    'forward_10_seconds' => '۱۰ ثانیه به جلو',
+    'no_music_uploaded' => 'هیچ موسیقی آپلود نشده است.',
+    'error_loading_music' => 'خطا در بارگذاری موسیقی.',
+    
+    // ========== VIDEO LIBRARY ==========
+    'no_videos_uploaded' => 'هیچ ویدیویی آپلود نشده است.',
+    'error_loading_videos' => 'خطا در بارگذاری ویدیوها.',
+    
 ]
 ?>

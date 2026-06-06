@@ -46,5 +46,13 @@
     </div>
 </div>
 
+
+<script>
+    window.translations = {
+    // Video library
+    'no_videos_uploaded': '<?= __('no_videos_uploaded') ?>',
+    'error_loading_videos': '<?= __('error_loading_videos') ?>',
+};
+</script>
 <script src="/Datahub/assets/js/players.js"></script>
 <?php include 'includes/footer.php'; ?>

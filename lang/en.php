@@ -246,5 +246,17 @@ return [
 
     'document_name' => 'Document Name',
     'type_here' => 'write your text here....',
+
+    // ========== MUSIC PLAYER ==========
+    'no_track_selected' => 'No track selected',
+    'select_from_library' => 'Select from your library',
+    'back_10_seconds' => 'Back 10 seconds',
+    'forward_10_seconds' => 'Forward 10 seconds',
+    'no_music_uploaded' => 'No music uploaded yet.',
+    'error_loading_music' => 'Error loading music.',
+    
+    // ========== VIDEO LIBRARY ==========
+    'no_videos_uploaded' => 'No videos uploaded yet.',
+    'error_loading_videos' => 'Error loading videos.',
 ];
 ?>

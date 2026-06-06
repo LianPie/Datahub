@@ -27,12 +27,12 @@ function loadUserVideos() {
         if (data.success && data.videos.length) {
             renderVideoLibrary(data.videos);
         } else {
-            grid.innerHTML = '<div class="empty-message" style="grid-column:1/-1;">No videos uploaded yet.</div>';
+            grid.innerHTML = `<div class="empty-message" style="grid-column:1/-1;">${__('no_videos_uploaded')}</div>`;
         }
     })
     .catch(err => {
         console.error(err);
-        grid.innerHTML = '<div class="empty-message" style="grid-column:1/-1;">Error loading videos.</div>';
+        grid.innerHTML = `<div class="empty-message" style="grid-column:1/-1;">${__('error_loading_videos')}</div>`;
     });
 }
 

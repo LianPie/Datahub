@@ -63,12 +63,12 @@ function loadUserMusic() {
             renderMusicLibrary(currentPlaylist);
             updateMusicNavigationButtons();
         } else {
-            grid.innerHTML = '<div class="empty-message" style="grid-column:1/-1;">No music uploaded yet.</div>';
+            grid.innerHTML = `<div class="empty-message" style="grid-column:1/-1;">${__('no_music_uploaded')}</div>`;
         }
     })
     .catch(err => {
         console.error(err);
-        grid.innerHTML = '<div class="empty-message" style="grid-column:1/-1;">Error loading music.</div>';
+        grid.innerHTML = `<div class="empty-message" style="grid-column:1/-1;">${__('error_loading_music')}</div>`;
     });
 }
 
