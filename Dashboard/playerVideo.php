@@ -18,8 +18,10 @@
                         <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
                     </div>
                     <input type="range" id="progressBar" min="0" max="100" value="0">
-                    <button id="volumeBtn"><i class="ri-volume-up-line"></i></button>
-                    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
+                    <div class="volume-control-group">
+                        <button id="volumeBtn"><i class="ri-volume-up-line"></i></button>
+                        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
+                    </div>
                     <select id="playbackSpeed">
                         <option value="0.5">0.5x</option>
                         <option value="0.75">0.75x</option>
@@ -38,7 +40,7 @@
 
     <!-- User's Video Library -->
     <div class="library-section">
-        <h3><i class="ri-video-line"></i> My Videos</h3>
+        <h3><i class="ri-video-line"></i><?= __('my_videos') ?></h3>
         <div class="videos-grid" id="videosGrid">
             <!-- Loader -->
             <div class="loader-spinner" style="grid-column:1/-1; margin:2rem auto;"></div>

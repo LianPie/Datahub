@@ -187,7 +187,7 @@ return [
     'document_updated' => 'سند با موفقیت به‌روزرسانی شد',
     'document_deleted' => 'سند با موفقیت حذف شد',
     'confirm_delete_file' => 'آیا از حذف این فایل اطمینان دارید؟',
-
+    'save' => 'ذخیره',
     'document_name' => 'عنوان سند',
     'type_here' => 'متن خود را اینجا بنویسید...',
 
@@ -250,10 +250,11 @@ return [
     'forward_10_seconds' => '۱۰ ثانیه به جلو',
     'no_music_uploaded' => 'هیچ موسیقی آپلود نشده است.',
     'error_loading_music' => 'خطا در بارگذاری موسیقی.',
-    
+    'my_music' => 'موزیک‌های من',
+
     // ========== VIDEO LIBRARY ==========
     'no_videos_uploaded' => 'هیچ ویدیویی آپلود نشده است.',
     'error_loading_videos' => 'خطا در بارگذاری ویدیوها.',
-    
+    'my_videos' => 'ویدیوهای من',
 ]
 ?>

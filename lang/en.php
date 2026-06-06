@@ -243,7 +243,7 @@ return [
     'document_created' => 'Document created successfully',
     'document_updated' => 'Document updated successfully',
     'document_deleted' => 'Document deleted successfully',
-
+    'save' => 'Save',
     'document_name' => 'Document Name',
     'type_here' => 'write your text here....',
 
@@ -254,9 +254,11 @@ return [
     'forward_10_seconds' => 'Forward 10 seconds',
     'no_music_uploaded' => 'No music uploaded yet.',
     'error_loading_music' => 'Error loading music.',
-    
+    'my_music' => 'My Music',
+
     // ========== VIDEO LIBRARY ==========
     'no_videos_uploaded' => 'No videos uploaded yet.',
     'error_loading_videos' => 'Error loading videos.',
+    'my_videos' => 'My Videos',
 ];
 ?>

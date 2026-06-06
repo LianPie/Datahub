@@ -16,12 +16,14 @@
             </div>
             <div class="player-controls">
                 <button id="prevTrack" disabled><i class="ri-skip-back-line"></i></button>
-                <button id="skipBack10" title="<?= __('back_10_seconds') ?>" onclick="skipBackward10()"><i class="ri-replay-10-line"></i></button>
                 <button id="playPauseMusic"><i class="ri-play-line"></i></button>
+                <button id="nextTrack" disabled><i class="ri-skip-forward-line"></i></button>     
+                <button id="skipBack10" title="<?= __('back_10_seconds') ?>" onclick="skipBackward10()"><i class="ri-replay-10-line"></i></button>
                 <button id="skipForward10" title="<?= __('forward_10_seconds') ?>" onclick="skipForward10()"><i class="ri-forward-10-line"></i></button>
-                <button id="nextTrack" disabled><i class="ri-skip-forward-line"></i></button>
-                <button id="volumeMusicBtn"><i class="ri-volume-up-line"></i></button>
-                <input type="range" id="volumeMusicSlider" min="0" max="1" step="0.01" value="0.8">
+                <div class="volume-control-group">
+                    <button id="volumeMusicBtn"><i class="ri-volume-up-line"></i></button>
+                    <input type="range" id="volumeMusicSlider" min="0" max="1" step="0.01" value="0.8">
+                </div>
                 <select id="playbackSpeedMusic">
                     <option value="0.5">0.5x</option>
                     <option value="0.75">0.75x</option>
@@ -40,7 +42,7 @@
 
     <!-- User's Music Library -->
     <div class="library-section">
-        <h3><i class="ri-music-line"></i> My Music</h3>
+        <h3><i class="ri-music-line"></i><?= __('my_music') ?></h3>
         <div class="music-grid" id="musicGrid">
             <div class="loader-spinner" style="grid-column:1/-1; margin:2rem auto;"></div>
         </div>
