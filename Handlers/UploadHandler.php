@@ -39,13 +39,6 @@ function checkUserStorage($user_id, $file_size, $conn) {
     return ["allowed" => true];
 }
 
-// Update storage used after upload
-function updateStorageUsed($user_id, $file_size, $conn) {
-    $sql = "UPDATE users SET storage_used = storage_used + ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("di", $file_size, $user_id);
-    return $stmt->execute();
-}
 
 // Format bytes function
 function formatBytes($bytes) {
@@ -88,14 +81,16 @@ function getFolderSize($folder_path) {
     return $total_size;
 }
 
-// Format bytes to human readable
-function formatSize($bytes) {
-    if ($bytes === 0) return '0 B';
-    
-    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-    $i = floor(log($bytes, 1024));
-    
-    return round($bytes / pow(1024, $i), 2) . ' ' . $units[$i];
+
+
+
+
+// Update storage used after upload
+function updateStorageUsed($user_id, $file_size, $conn) {
+    $sql = "UPDATE users SET storage_used = storage_used + ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("di", $file_size, $user_id);
+    return $stmt->execute();
 }
 
 function getUserStorageInfo($user_id, $user_folder, $conn) {
@@ -125,13 +120,13 @@ function getUserStorageInfo($user_id, $user_folder, $conn) {
     return [
         "success" => true,
         "total_size_bytes" => $storage_used,
-        "total_size_formatted" => formatSize($storage_used),
+        "total_size_formatted" => formatBytes($storage_used),
         "max_size_bytes" => $storage_limit,
-        "max_size_formatted" => formatSize($storage_limit),
+        "max_size_formatted" => formatBytes($storage_limit),
         "usage_percent" => round($usage_percent, 2),
         "free_percent" => round(100 - $usage_percent, 2),
         "free_bytes" => $storage_limit - $storage_used,
-        "free_formatted" => formatSize($storage_limit - $storage_used)
+        "free_formatted" => formatBytes($storage_limit - $storage_used)
     ];
 }
 
@@ -165,6 +160,7 @@ function createUserFolder($folder_name, $user_folder, $subfolder = '') {
         return ["success" => false, "message" => "Folder already exists"];
     }
 }
+
 // Handle file upload
 function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
     if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -320,37 +316,6 @@ function uploadFile($file, $user_folder, $conn, $user_id, $subfolder = '') {
     }
 }
 
-// Get user's files structure
-function getUserFiles($user_folder) {
-    $files = [];
-    
-    if (!is_dir($user_folder)) {
-        return $files;
-    }
-    
-    $iterator = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($user_folder, RecursiveDirectoryIterator::SKIP_DOTS),
-        RecursiveIteratorIterator::SELF_FIRST
-    );
-    
-    foreach ($iterator as $item) {
-        $relative_path = str_replace($user_folder . '/', '', $item->getPathname());
-        
-        if ($item->isDir()) {
-            $files['folders'][] = $relative_path;
-        } else {
-            $files['files'][] = [
-                'name' => basename($item->getPathname()),
-                'path' => $relative_path,
-                'size' => $item->getSize(),
-                'size_formatted' => formatSize($item->getSize()),
-                'modified' => date('Y-m-d H:i:s', $item->getMTime())
-            ];
-        }
-    }
-    
-    return $files;
-}
 
 // Get contents of specific folder (not recursive)
 function getFolderContents($user_folder, $subfolder = '', $search = '', $filter = '') {
@@ -383,7 +348,7 @@ function getFolderContents($user_folder, $subfolder = '', $search = '', $filter 
         
         if (empty($subfolder) && ($item == 'docs' || $item == 'trash')) {
                     continue;
-    }
+        }
 
         $item_path = $target_dir . '/' . $item;
         
@@ -412,7 +377,7 @@ function getFolderContents($user_folder, $subfolder = '', $search = '', $filter 
                 'path' => empty($subfolder) ? $item : $subfolder . '/' . $item,
                 'type' => 'file',
                 'size' => $size,
-                'size_formatted' => formatSize($size),
+                'size_formatted' => formatBytes($size),
                 'modified' => date('Y-m-d H:i:s', filemtime($item_path)),
                 'extension' => pathinfo($item, PATHINFO_EXTENSION),
             ];
@@ -477,7 +442,7 @@ function searchFilesRecursive($user_folder, $search, $filter = '') {
                     'path' => $relative_path,
                     'type' => 'file',
                     'size' => $item->getSize(),
-                    'size_formatted' => formatSize($item->getSize()),
+                    'size_formatted' => formatBytes($item->getSize()),
                     'modified' => date('Y-m-d H:i:s', $item->getMTime()),
                     'extension' => $extension,
                 ];
@@ -541,7 +506,7 @@ function getRecentFiles($user_folder, $limit = 3) {
                 'name' => $file->getFilename(),
                 'path' => $relative_path,  
                 'size' => $file->getSize(),
-                'size_formatted' => formatSize($file->getSize()),
+                'size_formatted' => formatBytes($file->getSize()),
                 'modified' => $file->getMTime(),
                 'modified_formatted' => date('Y-m-d H:i:s', $file->getMTime()),
                 'extension' => strtolower($file->getExtension()),
@@ -638,7 +603,7 @@ function getUserMediaByType($user_folder, $type) {
                 'name' => $file->getFilename(),
                 'path' => $relative_path,
                 'size' => $file->getSize(),
-                'size_formatted' => formatSize($file->getSize()),
+                'size_formatted' => formatBytes($file->getSize()),
                 'modified' => date('Y-m-d H:i:s', $file->getMTime()),
                 'modified_formatted' => date('Y-m-d H:i:s', $file->getMTime()),
                 'extension' => $extension
@@ -867,11 +832,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
     switch ($action) {
        case 'get_storage_info':
             $response = getUserStorageInfo($user_id, $user_folder, $conn);
-            break;
-            
-        case 'get_files':
-            $files = getUserFiles($user_folder);
-            $response = ["success" => true, "data" => $files];
             break;
             
         case 'create_folder':

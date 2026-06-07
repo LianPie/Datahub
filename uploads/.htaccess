@@ -1,2 +1,11 @@
 Options -Indexes
 Deny from all
+
+
+<FilesMatch "\.(php|php3|php4|php5|phtml|inc)$">
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "^\.">
+    Deny from all
+</FilesMatch>
